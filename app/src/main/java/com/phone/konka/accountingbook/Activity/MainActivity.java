@@ -1,5 +1,6 @@
 package com.phone.konka.accountingbook.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 
 import com.phone.konka.accountingbook.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private ImageView mImgSetting;
     private LinearLayout mLlDetail;
@@ -42,12 +43,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void initEven() {
 
-        mLlDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        mLlDetail.setOnClickListener(this);
+        mImgAddAccount.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent;
+        switch (v.getId()) {
+
+            case R.id.ll_main_detail:
+                intent = new Intent(MainActivity.this, DetailActivity.class);
                 startActivity(intent);
-            }
-        });
+                break;
+            case R.id.img_main_addAccount:
+                intent = new Intent(MainActivity.this, AddAccountActivity.class);
+                startActivity(intent);
+                break;
+
+        }
     }
 }
