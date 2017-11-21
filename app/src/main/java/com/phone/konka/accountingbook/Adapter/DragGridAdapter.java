@@ -23,8 +23,13 @@ public class DragGridAdapter extends BaseAdapter {
     private List<TagBean> mDatas;
     private LayoutInflater mInflater;
 
-    private int movePos;
+    private int dragPos;
     private boolean isDrag;
+
+    private OnClickListener onClickListener;
+    public void setOnClickListener(OnClickListener listener) {
+        this.onClickListener = listener;
+    }
 
     public DragGridAdapter(Context mContext, List<TagBean> mDatas) {
         this.mContext = mContext;
@@ -48,26 +53,37 @@ public class DragGridAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
-            holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.item_draggridview, null);
-            holder.tvTag = (TextView) convertView.findViewById(R.id.tv_dragGridView_item_tag);
-            holder.imgTag = (ImageView) convertView.findViewById(R.id.img_dragGridView_item_tag);
-            holder.imgOpera = (ImageView) convertView.findViewById(R.id.img_dragGridView_item_opera);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+//        if (convertView == null) {
+        holder = new ViewHolder();
+        convertView = mInflater.inflate(R.layout.item_draggridview, null);
+        holder.tvTag = (TextView) convertView.findViewById(R.id.tv_dragGridView_item_tag);
+        holder.imgTag = (ImageView) convertView.findViewById(R.id.img_dragGridView_item_tag);
+        holder.imgOpera = (ImageView) convertView.findViewById(R.id.img_dragGridView_item_opera);
+        convertView.setTag(holder);
+//        } else {
+//            holder = (ViewHolder) convertView.getTag();
+//        }
 
 
-        if (isDrag && position == movePos) {
-//            convertView.setVisibility(View.INVISIBLE);
-        }
         TagBean data = mDatas.get(position);
         holder.tvTag.setText(data.getText());
         holder.imgTag.setImageBitmap(data.getIcon());
+        holder.imgOpera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickListener.onclick(position);
+            }
+        });
+
+        if (isDrag && dragPos == position) {
+            convertView.setVisibility(View.INVISIBLE);
+        } else {
+            convertView.setVisibility(View.VISIBLE);
+        }
+
+
         return convertView;
     }
 
@@ -76,7 +92,7 @@ public class DragGridAdapter extends BaseAdapter {
         mDatas.remove(oldPos);
         mDatas.add(newPos, data);
         this.isDrag = isDrag;
-        movePos = newPos;
+        dragPos = newPos;
         notifyDataSetChanged();
     }
 
@@ -84,5 +100,9 @@ public class DragGridAdapter extends BaseAdapter {
         TextView tvTag;
         ImageView imgTag;
         ImageView imgOpera;
+    }
+
+    public interface OnClickListener {
+        void onclick(int pos);
     }
 }

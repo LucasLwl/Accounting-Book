@@ -167,6 +167,8 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
                 View nextView = getChildAt(i + 1);
                 float width = (nextView.getLeft() - view.getLeft()) * 1f / view.getWidth();
                 float height = (nextView.getTop() - view.getTop()) * 1f / view.getHeight();
+//                int width = 0;
+//                int height = 0;
                 translate = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, width,
                         Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, height);
                 translate.setInterpolator(new LinearInterpolator());
@@ -183,6 +185,8 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
                 View preView = this.getChildAt(i - 1);
                 float width = (preView.getLeft() - view.getLeft()) * 1f / view.getWidth();
                 float height = (preView.getTop() - view.getTop()) * 1f / view.getHeight();
+//                int width = 0;
+//                int height = 0;
                 translate = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, width,
                         Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, height);
                 translate.setInterpolator(new LinearInterpolator());
@@ -223,13 +227,13 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
      */
     private void closeWindow() {
 
-        if (mCusDragView != null) {
+        if (mWinDragView != null) {
             mWinManager.removeView(mWinDragView);
-            mCusDragView = null;
+            mWinDragView = null;
             mDragViewlp = null;
         }
         mode = MODE_NORMAL;
-        if (mCusDragPos == mDragPos || mDragPos == GridView.INVALID_POSITION) {
+        if (mDragPos == mCusDragPos || mDragPos == GridView.INVALID_POSITION) {
             getChildAt(mCusDragPos).setVisibility(View.VISIBLE);
         } else {
             ListAdapter adapter = getAdapter();

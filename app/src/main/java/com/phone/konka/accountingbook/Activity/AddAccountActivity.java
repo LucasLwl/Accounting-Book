@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.GridView;
 
 import com.phone.konka.accountingbook.Fragment.AddTagFragment;
 import com.phone.konka.accountingbook.Fragment.EditTagFragment;
@@ -23,6 +24,8 @@ public class AddAccountActivity extends Activity {
     private EditTagFragment mEditTagFragment;
     private AddTagFragment mAddTagFragment;
 
+    private GridView mView;
+
     private FragmentTransaction transaction;
 
     @Override
@@ -31,11 +34,18 @@ public class AddAccountActivity extends Activity {
         setContentView(R.layout.activity_add_account);
 
         transaction = getFragmentManager().beginTransaction();
-        if (mEditTagFragment == null) {
-            mEditTagFragment = new EditTagFragment();
-            transaction.add(R.id.fl_addAccount_content, mEditTagFragment);
+//        if (mEditTagFragment == null) {
+//            mEditTagFragment = new EditTagFragment();
+//            transaction.add(R.id.fl_addAccount_content, mEditTagFragment);
+//        }
+//        transaction.show(mEditTagFragment);
+//        transaction.commit();
+
+        if (mInFragment == null) {
+            mInFragment = new InFragment();
+            transaction.add(R.id.fl_addAccount_content, mInFragment);
         }
-        transaction.show(mEditTagFragment);
+        transaction.show(mInFragment);
         transaction.commit();
 
     }
