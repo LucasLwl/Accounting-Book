@@ -48,6 +48,14 @@ public class DragGridAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(mContext);
     }
 
+    public void setList(List<TagBean> mDatas) {
+        this.mDatas = mDatas;
+    }
+
+    public void setList() {
+
+    }
+
     @Override
     public int getCount() {
         return mDatas.size();
@@ -128,6 +136,7 @@ public class DragGridAdapter extends BaseAdapter {
 
     /**
      * 设置回调接口
+     *
      * @param listener
      */
     public void setOnClickListener(OnClickListener listener) {

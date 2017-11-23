@@ -24,6 +24,10 @@ public class TagGridViewAdapter extends BaseAdapter {
     private List<TagBean> mList;
     private LayoutInflater mInflater;
 
+    public void setList(List<TagBean> mList) {
+        this.mList = mList;
+    }
+
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
@@ -68,6 +72,5 @@ public class TagGridViewAdapter extends BaseAdapter {
     class ViewHolder {
         TextView tvText;
         ImageView imgIcon;
-
     }
 }

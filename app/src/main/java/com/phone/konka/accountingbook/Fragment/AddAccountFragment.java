@@ -1,8 +1,10 @@
 package com.phone.konka.accountingbook.Fragment;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -94,12 +96,14 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      */
     private int mIndex = 0;
 
+    private String TAG = "AddAccountFragment";
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-
+        Log.i("ddd", TAG + ":onCreateView");
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_account, null);
         mTouchSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
 
@@ -113,10 +117,31 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     }
 
 
+    /**
+     * 建通Fragment显示状态的改变
+     *
+     * 当状态变为显示时，修改List的内容，因为可能在EditFragment中进行了Tag的修改
+     * @param hidden
+     */
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.i("ddd", TAG + ":onHiddenChanged");
+        if (!hidden && mAdapter != null) {
+            if (mIndex == 0) {
+                mList = ((AddAccountActivity) getActivity()).mOutList;
+            } else {
+                mList = ((AddAccountActivity) getActivity()).mInList;
+            }
+            mAdapter.setList(mList);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
     private void initView() {
 
-        mGvTag = (GridView) rootView.findViewById(R.id.gv_inFragment_tag);
-        mTvDate = (TextView) rootView.findViewById(R.id.tv_inFragment_date);
+        mGvTag = (GridView) rootView.findViewById(R.id.gv_fragment_tag);
+        mTvDate = (TextView) rootView.findViewById(R.id.tv_fragment_date);
 
         mPopupCalculator = mCalculator.getPopCalculator();
     }
@@ -126,6 +151,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             mList = ((AddAccountActivity) getActivity()).mOutList;
         else
             mList = ((AddAccountActivity) getActivity()).mInList;
+
+        mAdapter = new TagGridViewAdapter(getActivity(), mList);
 
         mGvTag.setAdapter(mAdapter);
     }
@@ -178,6 +205,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             case R.id.tv_fragment_out:
                 if (mIndex == 1) {
                     mList = ((AddAccountActivity) getActivity()).mOutList;
+                    mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
                     mIndex = 0;
                 }
@@ -185,6 +213,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             case R.id.tv_fragment_in:
                 if (mIndex == 0) {
                     mList = ((AddAccountActivity) getActivity()).mInList;
+                    mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
                     mIndex = 1;
                 }
@@ -193,7 +222,12 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.img_fragment_edit:
-                ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_ACCOUNT_FRAGMENT, AddAccountActivity.EDIT_TAG_FRAGMENT);
+                if (mIndex == 0) {
+                    ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT, AddAccountActivity.EDIT_TAG_FRAGMENT);
+                } else {
+                    ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN, AddAccountActivity.EDIT_TAG_FRAGMENT);
+                }
+
                 break;
 
         }
