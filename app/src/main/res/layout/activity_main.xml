@@ -78,6 +78,7 @@
             android:paddingTop="10dp">
 
             <TextView
+                android:id="@+id/tv_main_moonIn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -94,6 +95,7 @@
             </View>
 
             <TextView
+                android:id="@+id/tv_main_moonOut"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -110,6 +112,7 @@
             </View>
 
             <TextView
+                android:id="@+id/tv_main_moonLeft"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

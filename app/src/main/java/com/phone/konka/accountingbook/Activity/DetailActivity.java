@@ -53,7 +53,7 @@ public class DetailActivity extends Activity {
         List<DetailTagBean> tagList = new ArrayList<>();
         DetailTagBean tag = new DetailTagBean();
         tag.setTag("买手机");
-        tag.setMoney("-5388");
+        tag.setMoney(-5388);
 
         tagList.add(tag);
         tagList.add(tag);

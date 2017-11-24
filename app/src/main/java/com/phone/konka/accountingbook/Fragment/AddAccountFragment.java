@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.view.menu.ShowableListMenu;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -94,7 +96,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      * 0--支出
      * 1--收入
      */
-    private int mIndex = 0;
+    private int mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
 
     private String TAG = "AddAccountFragment";
 
@@ -119,8 +121,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
     /**
      * 建通Fragment显示状态的改变
-     *
+     * <p>
      * 当状态变为显示时，修改List的内容，因为可能在EditFragment中进行了Tag的修改
+     *
      * @param hidden
      */
     @Override
@@ -158,6 +161,21 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     }
 
 
+    private void showPopupCalculator() {
+        if (!isShow && mPopupCalculator != null) {
+            mPopupCalculator.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+            isShow = true;
+        }
+    }
+
+    private void dismissPopupCalculator() {
+        if (isShow && mPopupCalculator.isShowing()) {
+            mPopupCalculator.dismiss();
+            isShow = false;
+        }
+    }
+
+
     private void initEven() {
 
 
@@ -178,15 +196,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                     case MotionEvent.ACTION_MOVE:
                         mCusY = event.getY();
                         if (mCusY - mFirstY > mTouchSlop) {
-                            if (!isShow && mPopupCalculator != null) {
-                                mPopupCalculator.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
-                                isShow = true;
-                            }
+                            showPopupCalculator();
                         } else if (mFirstY - mCusY > mTouchSlop) {
-                            if (isShow && mPopupCalculator.isShowing()) {
-                                mPopupCalculator.dismiss();
-                                isShow = false;
-                            }
+                            dismissPopupCalculator();
                         }
                         break;
 
@@ -197,39 +209,48 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             }
         };
         mGvTag.setOnTouchListener(touchListener);
+
+        mGvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position == mList.size() - 1) {
+                    ((AddAccountActivity) getActivity()).showFragment(mIndex,
+                            AddAccountActivity.ADD_TAG_FRAGMENT);
+                } else {
+                    showPopupCalculator();
+                    mCalculator.setTagText(mList.get(position).getText());
+                }
+            }
+        });
     }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_fragment_out:
-                if (mIndex == 1) {
+                if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN) {
                     mList = ((AddAccountActivity) getActivity()).mOutList;
                     mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
-                    mIndex = 0;
+                    mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
                 }
                 break;
             case R.id.tv_fragment_in:
-                if (mIndex == 0) {
+                if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
                     mList = ((AddAccountActivity) getActivity()).mInList;
                     mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
-                    mIndex = 1;
+                    mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN;
                 }
                 break;
             case R.id.tv_fragment_date:
                 break;
 
             case R.id.img_fragment_edit:
-                if (mIndex == 0) {
-                    ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT, AddAccountActivity.EDIT_TAG_FRAGMENT);
-                } else {
-                    ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN, AddAccountActivity.EDIT_TAG_FRAGMENT);
-                }
+                ((AddAccountActivity) getActivity()).showFragment(mIndex, AddAccountActivity.EDIT_TAG_FRAGMENT);
 
                 break;
-
         }
     }
 }
