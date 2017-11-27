@@ -4,26 +4,40 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.DataBase.DBHelper;
 
 import java.net.Inet4Address;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 /**
+ * 数据库管理类
+ * <p>
  * Created by 廖伟龙 on 2017/11/24.
  */
 
 public class DBManager {
 
+
     private SQLiteOpenHelper mHelper;
+
+    /**
+     * 数据库
+     */
     private SQLiteDatabase mDataBase;
     private Context mContext;
 
+
+    /**
+     * 日历类
+     */
     private Calendar mCalendar;
 
     public DBManager(Context mContext) {
@@ -32,6 +46,11 @@ public class DBManager {
     }
 
 
+    /**
+     * 判断数据库是否为空
+     *
+     * @return
+     */
     public boolean isDBEmpty() {
         mDataBase = mHelper.getReadableDatabase();
         Cursor cursor = mDataBase.rawQuery("select * from account", new String[]{});
@@ -42,6 +61,11 @@ public class DBManager {
     }
 
 
+    /**
+     * 添加账单
+     *
+     * @param bean
+     */
     public void insertAccount(DetailTagBean bean) {
         mDataBase = mHelper.getWritableDatabase();
         mDataBase.execSQL("insert into account(year,month,day,tag,money) values(?,?,?,?,?)",
@@ -50,10 +74,17 @@ public class DBManager {
     }
 
 
-    public double getMoonIn(int year, int moon) {
+    /**
+     * 获取月份的总收入
+     *
+     * @param year
+     * @param month
+     * @return
+     */
+    public double getMoonIn(int year, int month) {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account where year = ? and month = ? and money > ?", new String[]{year + "", moon + "", 0 + ""});
+        Cursor cursor = mDataBase.rawQuery("select * from account where year = ? and month = ? and money > ?", new String[]{year + "", month + "", 0 + ""});
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
         }
@@ -61,6 +92,13 @@ public class DBManager {
         return res;
     }
 
+    /**
+     * 获取月份的总支出
+     *
+     * @param year
+     * @param moon
+     * @return
+     */
     public double getMoonOut(int year, int moon) {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
@@ -74,6 +112,15 @@ public class DBManager {
         return -res;
     }
 
+
+    /**
+     * 获取当日的支出
+     *
+     * @param year
+     * @param moon
+     * @param day
+     * @return
+     */
     public double getDayOut(int year, int moon, int day) {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
@@ -89,10 +136,15 @@ public class DBManager {
     }
 
 
+    /**
+     * 获取最近的支出
+     *
+     * @return
+     */
     public double getLeastOut() {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account where  money < ? order  by _id desc",
+        Cursor cursor = mDataBase.rawQuery("select * from account where  money < ? order  by year desc,month desc,day desc ",
                 new String[]{0 + ""});
         if (cursor.moveToNext()) {
             res = cursor.getDouble(cursor.getColumnIndex("money"));
@@ -103,27 +155,40 @@ public class DBManager {
         return -res;
     }
 
+
+    /**
+     * 获取当前时间所在星期的支出
+     *
+     * @return
+     */
     public double getWeekOut() {
-
         double res = 0;
-
+        List<Calendar> list = dateToCurrentWeek();
+        for (Calendar d : list) {
+            res += getDayOut(d.get(Calendar.YEAR), d.get(Calendar.MONTH) + 1, d.get(Calendar.DAY_OF_MONTH));
+        }
         return res;
     }
 
-    public static List<Date> dateToCurrentWeek(Date mdate) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(mdate);
 
+    /**
+     * 获取当前时间所在的星期的日期
+     * 以星期一开始，星期日结束
+     *
+     * @return
+     */
+    public static List<Calendar> dateToCurrentWeek() {
+        Calendar cal = Calendar.getInstance();
         int b = cal.get(Calendar.DAY_OF_WEEK) - 1;
         if (b == 0) {
             b = 7;
         }
-        Date fdate;
-        List<Date> list = new ArrayList<Date>();
-        Long fTime = mdate.getTime() - b * 24 * 3600000;
+        Calendar fdate;
+        List<Calendar> list = new ArrayList<Calendar>();
+        Long fTime = cal.getTime().getTime() - b * 24 * 3600000;
         for (int a = 1; a <= 7; a++) {
-            fdate = new Date();
-            fdate.setTime(fTime + (a * 24 * 3600000));
+            fdate = Calendar.getInstance();
+            fdate.setTime(new Date(fTime + (a * 24 * 3600000)));
             list.add(a - 1, fdate);
         }
         return list;

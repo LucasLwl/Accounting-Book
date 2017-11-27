@@ -1,10 +1,12 @@
 package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.Fragment.AddTagFragment;
@@ -93,6 +95,8 @@ public class AddAccountActivity extends Activity {
      */
     private FragmentTransaction transaction;
 
+    public static final String TAG = "AddAccountActivity";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +107,8 @@ public class AddAccountActivity extends Activity {
 
 //        显示初始的Fragment
         showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
+
+        Log.i("ddd", TAG + " :onCreate");
     }
 
     /**

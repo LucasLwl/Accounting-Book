@@ -58,11 +58,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mTvTodayOut.setText(DoubleTo2Decimal.doubleTo2Decimal(mDBManager.getDayOut(mCalendar.get(Calendar.YEAR),
                 mCalendar.get(Calendar.MONTH) + 1, mCalendar.get(Calendar.DAY_OF_MONTH))));
         mTvLeastOut.setText(DoubleTo2Decimal.doubleTo2Decimal(mDBManager.getLeastOut()));
-
+        mTvWeekOut.setText(DoubleTo2Decimal.doubleTo2Decimal(mDBManager.getWeekOut()));
 
         Log.i("ddd", "DAY_OF_WEEK: " + mCalendar.get(Calendar.DAY_OF_WEEK));
         Log.i("ddd", "getFirstDayOfWeek: " + mCalendar.getFirstDayOfWeek() + "");
-
     }
 
 

@@ -1,11 +1,9 @@
 package com.phone.konka.accountingbook.Fragment;
 
+import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.view.menu.ShowableListMenu;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -29,7 +28,6 @@ import com.phone.konka.accountingbook.View.PopupCalculator;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
  * Created by 廖伟龙 on 2017/11/18.
@@ -110,6 +108,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private int mYear;
     private int mMonth;
     private int mDay;
+
+    private DatePickerDialog mDialog;
 
 
     private String TAG = "AddAccountFragment";
@@ -283,12 +283,20 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.tv_fragment_date:
 
-
+                mDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        mYear = i;
+                        mMonth = ++i1;
+                        mDay = i2;
+                        mTvDate.setText(mMonth + "月" + mDay + "日");
+                    }
+                }, mYear, mMonth - 1, mDay);
+                mDialog.show();
                 break;
 
             case R.id.img_fragment_edit:
                 ((AddAccountActivity) getActivity()).showFragment(mIndex, AddAccountActivity.EDIT_TAG_FRAGMENT);
-
                 break;
         }
     }
