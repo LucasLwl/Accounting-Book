@@ -55,10 +55,11 @@
             android:hint="请输入类别名称" />
     </LinearLayout>
 
-    <view
+
+    <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#eee"></view>
+        android:background="#eee"></View>
 
     <GridView
         android:id="@+id/gv_addTagFragment_tag"

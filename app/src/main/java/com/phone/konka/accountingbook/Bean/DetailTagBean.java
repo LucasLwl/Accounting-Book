@@ -26,7 +26,19 @@ public class DetailTagBean {
     /**
      * 收入金额
      */
-    private int money;
+    private double money;
+
+
+    public DetailTagBean() {
+    }
+
+    public DetailTagBean(int year, int moon, int day, String tag, double money) {
+        this.year = year;
+        this.moon = moon;
+        this.day = day;
+        this.tag = tag;
+        this.money = money;
+    }
 
 
     public int getYear() {
@@ -61,11 +73,11 @@ public class DetailTagBean {
         this.tag = tag;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 }

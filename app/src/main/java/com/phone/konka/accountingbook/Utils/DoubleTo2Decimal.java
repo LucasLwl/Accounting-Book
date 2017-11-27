@@ -3,7 +3,6 @@ package com.phone.konka.accountingbook.Utils;
 import java.text.DecimalFormat;
 
 /**
- *
  * 格式化数字
  * Created by 廖伟龙 on 2017/11/22.
  */
@@ -12,6 +11,9 @@ public class DoubleTo2Decimal {
     public static String doubleTo2Decimal(double num) {
         DecimalFormat df = new DecimalFormat("#.00");
         String str;
+        if (num == 0)
+            return "0.00 ";
+
         if (num > 99999999) {
             int head = (int) (num / 100000000);
             num %= 100000000;

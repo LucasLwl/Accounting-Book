@@ -11,6 +11,7 @@ import com.phone.konka.accountingbook.Bean.DayDetailBean;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.MoonDetailBean;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.DBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class DetailActivity extends Activity {
     private ExpandableListView mListView;
     private DetailMoonAdapter mAdapter;
     private List<MoonDetailBean> mDatas;
+
+    private DBManager mDBManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -11,6 +11,7 @@ import com.phone.konka.accountingbook.Fragment.AddTagFragment;
 import com.phone.konka.accountingbook.Fragment.EditTagFragment;
 import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.DBManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class AddAccountActivity extends Activity {
 
 
     /**
-     * Fragment的事物管理
+     * Fragment的事务管理
      */
     private FragmentTransaction transaction;
 
@@ -120,6 +121,8 @@ public class AddAccountActivity extends Activity {
                 mInRecomList = mEditTagFragment.getRecomTagList();
             }
             showFragment(EDIT_TAG_FRAGMENT, mIndex);
+        } else if (mAddTagFragment != null && !mAddTagFragment.isHidden()) {
+
         } else {
             super.onBackPressed();
         }
@@ -135,6 +138,8 @@ public class AddAccountActivity extends Activity {
     }
 
     private void initData() {
+
+
         mOutList = new ArrayList<>();
         mInList = new ArrayList<>();
         mOutRecomList = new ArrayList<>();

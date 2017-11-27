@@ -140,7 +140,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
             TextView tvTag = (TextView) ll.findViewById(R.id.tv_detail_tag);
             TextView tvMoney = (TextView) ll.findViewById(R.id.tv_detail_money);
             tvTag.setText(data.getTagList().get(i).getTag());
-            tvMoney.setText(data.getTagList().get(i).getMoney());
+            tvMoney.setText(data.getTagList().get(i).getMoney()+"");
             holder.ll.addView(ll);
         }
 

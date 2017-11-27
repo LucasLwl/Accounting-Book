@@ -1,7 +1,10 @@
 package com.phone.konka.accountingbook.Utils;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.widget.Toast;
+
+import com.phone.konka.accountingbook.Bean.DetailTagBean;
 
 /**
  * 计算器管理类
@@ -32,6 +35,7 @@ public class CalculatorManager {
 
     public CalculatorManager(Context mContext) {
         this.mContext = mContext;
+
     }
 
     /**
@@ -99,6 +103,7 @@ public class CalculatorManager {
 
     /**
      * 处理小数点
+     *
      * @return
      */
     public String addPoint() {
@@ -117,6 +122,7 @@ public class CalculatorManager {
 
     /**
      * 处理OK键
+     *
      * @return
      */
     public String pressOK() {
@@ -126,14 +132,17 @@ public class CalculatorManager {
             }
             return left + operator + right;
         } else if (!left.equals("")) {
-
+            if (!left.equals("0")) {
+                left = "";
+                return "save";
+            }
         }
         return "";
-
     }
 
     /**
      * 删除一个字符
+     *
      * @return
      */
     public String delOne() {
@@ -149,6 +158,7 @@ public class CalculatorManager {
 
     /**
      * 删除所有字符
+     *
      * @return
      */
     public String delAll() {
@@ -178,4 +188,5 @@ public class CalculatorManager {
         operator = "";
         right = "";
     }
+
 }

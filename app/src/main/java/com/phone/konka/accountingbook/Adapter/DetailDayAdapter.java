@@ -94,7 +94,7 @@ public class DetailDayAdapter extends BaseExpandableListAdapter {
 
         DetailTagBean data = mDatas.get(groupPosition).getTagList().get(childPosition);
         holder.tvTag.setText(data.getTag());
-        holder.tvMoney.setText(data.getMoney());
+        holder.tvMoney.setText(data.getMoney()+"");
         return convertView;
     }
 

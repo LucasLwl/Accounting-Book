@@ -2,14 +2,16 @@ package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.DBManager;
+import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
+
+import java.util.Calendar;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -23,6 +25,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView mTvTodayOut;
     private TextView mTvWeekOut;
 
+    private DBManager mDBManager;
+    private Calendar mCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +35,40 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         initView();
         initEven();
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    private void initData() {
+
+        mCalendar = Calendar.getInstance();
+
+        mDBManager = new DBManager(this);
+        double in = mDBManager.getMoonIn(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
+        double out = mDBManager.getMoonOut(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
+        mTvMoonIn.setText(DoubleTo2Decimal.doubleTo2Decimal(in));
+        mTvMoonOut.setText(DoubleTo2Decimal.doubleTo2Decimal(out));
+        mTvMoonLeft.setText((DoubleTo2Decimal.doubleTo2Decimal(in - out)));
+        mTvTodayOut.setText(DoubleTo2Decimal.doubleTo2Decimal(mDBManager.getDayOut(mCalendar.get(Calendar.YEAR),
+                mCalendar.get(Calendar.MONTH) + 1, mCalendar.get(Calendar.DAY_OF_MONTH))));
+        mTvLeastOut.setText(DoubleTo2Decimal.doubleTo2Decimal(mDBManager.getLeastOut()));
+
+
+        Log.i("ddd", "DAY_OF_WEEK: " + mCalendar.get(Calendar.DAY_OF_WEEK));
+        Log.i("ddd", "getFirstDayOfWeek: " + mCalendar.getFirstDayOfWeek() + "");
+
     }
 
 
     private void initView() {
 
-        mTvLeastOut = (TextView) findViewById(R.id.tv_main_moonOut);
+        mTvMoonOut = (TextView) findViewById(R.id.tv_main_moonOut);
         mTvMoonIn = (TextView) findViewById(R.id.tv_main_moonIn);
         mTvMoonLeft = (TextView) findViewById(R.id.tv_main_moonLeft);
 

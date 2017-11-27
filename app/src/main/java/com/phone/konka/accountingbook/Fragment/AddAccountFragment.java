@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.view.menu.ShowableListMenu;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,14 +17,19 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
 import com.phone.konka.accountingbook.Adapter.TagGridViewAdapter;
+import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.DBManager;
 import com.phone.konka.accountingbook.View.PopupCalculator;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 /**
  * Created by 廖伟龙 on 2017/11/18.
@@ -98,6 +104,14 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      */
     private int mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
 
+    private DBManager mDBManager;
+    private Calendar mCalendar;
+
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+
+
     private String TAG = "AddAccountFragment";
 
 
@@ -150,6 +164,15 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     }
 
     private void initData() {
+
+
+        mDBManager = new DBManager(getActivity());
+        mCalendar = Calendar.getInstance();
+        mYear = mCalendar.get(Calendar.YEAR);
+        mMonth = mCalendar.get(Calendar.MONTH) + 1;
+        mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+        mTvDate.setText(mMonth + "月" + mDay + "日");
+
         if (mIndex == 0)
             mList = ((AddAccountActivity) getActivity()).mOutList;
         else
@@ -177,7 +200,20 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
 
     private void initEven() {
-
+        mCalculator.setAddAccountListener(new PopupCalculator.AddAccountListener() {
+            @Override
+            public void addAccount(String tag, double money) {
+                if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
+                    DetailTagBean bean = new DetailTagBean(mYear, mMonth, mDay, tag, -money);
+                    mDBManager.insertAccount(bean);
+                    Toast.makeText(getActivity(), "支出 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
+                } else {
+                    DetailTagBean bean = new DetailTagBean(mYear, mMonth, mDay, tag, money);
+                    mDBManager.insertAccount(bean);
+                    Toast.makeText(getActivity(), "收入 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         rootView.findViewById(R.id.tv_fragment_out).setOnClickListener(this);
         rootView.findViewById(R.id.tv_fragment_in).setOnClickListener(this);
@@ -214,6 +250,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == mList.size() - 1) {
+                    dismissPopupCalculator();
                     ((AddAccountActivity) getActivity()).showFragment(mIndex,
                             AddAccountActivity.ADD_TAG_FRAGMENT);
                 } else {
@@ -245,6 +282,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.tv_fragment_date:
+
+
                 break;
 
             case R.id.img_fragment_edit:

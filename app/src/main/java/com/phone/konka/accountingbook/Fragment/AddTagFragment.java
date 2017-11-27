@@ -32,7 +32,6 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
 
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_tag, null);
 
-
         initView();
 
         initEven();

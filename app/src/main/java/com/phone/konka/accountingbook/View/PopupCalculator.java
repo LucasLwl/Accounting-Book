@@ -1,14 +1,18 @@
 package com.phone.konka.accountingbook.View;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.CalculatorManager;
+import com.phone.konka.accountingbook.Utils.DBManager;
 
 /**
  * 显示计算器的PopupWindow
@@ -49,13 +53,13 @@ public class PopupCalculator implements View.OnClickListener {
      * 结果
      */
     private TextView mTvRes;
-
-
+    
     public PopupCalculator(Context context) {
 
         mContext = context;
 
         mCalculator = new CalculatorManager(context);
+
 
         mCalView = LayoutInflater.from(context).inflate(R.layout.popup_calculator, null);
         mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, 600, false);
@@ -63,6 +67,7 @@ public class PopupCalculator implements View.OnClickListener {
         mPopCalculator.setTouchable(true);
         mPopCalculator.setAnimationStyle(R.style.popupCalculatorStyle);
         initView();
+
     }
 
 
@@ -101,6 +106,11 @@ public class PopupCalculator implements View.OnClickListener {
     public void setTagText(String text) {
         mTvTag.setText(text);
     }
+
+    public String getTagText() {
+        return mTvTag.getText().toString();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -146,11 +156,27 @@ public class PopupCalculator implements View.OnClickListener {
                 mTvRes.setText(mCalculator.addPoint());
                 break;
             case R.id.tv_popup_calculator_ok:
-                mTvRes.setText(mCalculator.pressOK());
+                String res = mCalculator.pressOK();
+                if (res.equals("save")) {
+                    mListener.addAccount(getTagText(), Double.parseDouble(mTvRes.getText().toString()));
+                    mTvRes.setText("");
+                } else {
+                    mTvRes.setText(res);
+                }
                 break;
             case R.id.img_popup_calculator_del:
                 mTvRes.setText(mCalculator.delOne());
                 break;
         }
+    }
+
+    private AddAccountListener mListener;
+
+    public void setAddAccountListener(AddAccountListener listener) {
+        mListener = listener;
+    }
+
+    public interface AddAccountListener {
+        void addAccount(String tag, double money);
     }
 }

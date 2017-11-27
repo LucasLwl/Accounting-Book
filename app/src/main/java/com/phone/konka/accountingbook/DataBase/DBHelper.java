@@ -17,8 +17,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static DBHelper mInstance;
 
-    private static final String CREATE_TABLE = "create table if not exits account(_id integer primary key autoincrement," +
-            "year integer,moon integer,day integer,tag text,money integer)";
+    private static final String CREATE_TABLE = "create table if not exists account(_id integer primary key autoincrement," +
+            "year integer,month integer,day integer,tag text,money text)";
 
     private static final String DROP_TABLE = "drop table if exits account";
 
