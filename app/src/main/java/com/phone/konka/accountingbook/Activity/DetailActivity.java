@@ -1,15 +1,17 @@
 package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.view.Window;
 import android.widget.ExpandableListView;
 
 import com.phone.konka.accountingbook.Adapter.DetailMoonAdapter;
 import com.phone.konka.accountingbook.Bean.DayDetailBean;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
-import com.phone.konka.accountingbook.Bean.MoonDetailBean;
+import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DBManager;
 
@@ -28,7 +30,7 @@ public class DetailActivity extends Activity {
 
     private ExpandableListView mListView;
     private DetailMoonAdapter mAdapter;
-    private List<MoonDetailBean> mDatas;
+    private List<MonthDetailBean> mDatas;
 
     private DBManager mDBManager;
 
@@ -40,59 +42,22 @@ public class DetailActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_detail);
 
-        mDatas = new ArrayList<>();
+        findViewById(R.id.img_detail_addAccount).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailActivity.this, AddAccountActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        MoonDetailBean moon = new MoonDetailBean();
-        moon.setYear("2017");
-        moon.setMoon(1 + "");
-        moon.setIn("10000");
-        moon.setOut("2000");
-        moon.setLeft("8000");
+        mDBManager = new DBManager(this);
 
-        List<DayDetailBean> dayList = new ArrayList<>();
-        DayDetailBean day = new DayDetailBean();
-        day.setDate(1 + "");
-
-        List<DetailTagBean> tagList = new ArrayList<>();
-        DetailTagBean tag = new DetailTagBean();
-        tag.setTag("买手机");
-        tag.setMoney(-5388);
-
-        tagList.add(tag);
-        tagList.add(tag);
-        tagList.add(tag);
-
-        day.setTagList(tagList);
-        dayList.add(day);
-        dayList.add(day);
-        dayList.add(day);
-        dayList.add(day);
-
-
-        moon.setDayList(dayList);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-        mDatas.add(moon);
-
+        mDatas = mDBManager.getDetailList();
 
         mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
         mAdapter = new DetailMoonAdapter(this, mDatas);
         mListView.setAdapter(mAdapter);
+
 
     }
 }

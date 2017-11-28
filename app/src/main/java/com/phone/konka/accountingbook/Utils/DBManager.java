@@ -4,14 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
+import com.phone.konka.accountingbook.Bean.DayDetailBean;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
+import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.DataBase.DBHelper;
 
-import java.net.Inet4Address;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +51,7 @@ public class DBManager {
      */
     public boolean isDBEmpty() {
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account", new String[]{});
+        Cursor cursor = mDataBase.rawQuery("select money from account", new String[]{});
         mDataBase.close();
         if (cursor.moveToNext())
             return false;
@@ -81,10 +79,10 @@ public class DBManager {
      * @param month
      * @return
      */
-    public double getMoonIn(int year, int month) {
+    public double getMonthIn(int year, int month) {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account where year = ? and month = ? and money > ?", new String[]{year + "", month + "", 0 + ""});
+        Cursor cursor = mDataBase.rawQuery("select money from account where year = ? and month = ? and money > ?", new String[]{year + "", month + "", 0 + ""});
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
         }
@@ -99,10 +97,10 @@ public class DBManager {
      * @param moon
      * @return
      */
-    public double getMoonOut(int year, int moon) {
+    public double getMonthOut(int year, int moon) {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account where year = ? and month = ? and money < ?", new String[]{year + "", moon + "", 0 + ""});
+        Cursor cursor = mDataBase.rawQuery("select money from account where year = ? and month = ? and money < ?", new String[]{year + "", moon + "", 0 + ""});
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
         }
@@ -124,7 +122,7 @@ public class DBManager {
     public double getDayOut(int year, int moon, int day) {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account where year = ? and month = ? and day = ? and money < ?",
+        Cursor cursor = mDataBase.rawQuery("select money from account where year = ? and month = ? and day = ? and money < ?",
                 new String[]{year + "", moon + "", day + "", 0 + ""});
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
@@ -144,7 +142,7 @@ public class DBManager {
     public double getLeastOut() {
         double res = 0;
         mDataBase = mHelper.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account where  money < ? order  by year desc,month desc,day desc ",
+        Cursor cursor = mDataBase.rawQuery("select money from account where  money < ? order  by year desc,month desc,day desc ",
                 new String[]{0 + ""});
         if (cursor.moveToNext()) {
             res = cursor.getDouble(cursor.getColumnIndex("money"));
@@ -153,6 +151,68 @@ public class DBManager {
         if (res == 0)
             return res;
         return -res;
+    }
+
+
+    /**
+     * 获取账单详情数据
+     *
+     * @return
+     */
+    public List<MonthDetailBean> getDetailList() {
+
+        mDataBase = mHelper.getReadableDatabase();
+
+        Cursor cursor = mDataBase.rawQuery("select * from account order by year desc , month desc , day desc", new String[]{});
+
+        List<MonthDetailBean> list = new ArrayList<>();
+
+        int lastYear = 0;
+        int lastMonth = 0;
+        int lastDay = 0;
+
+        int nowYear;
+        int nowMonth;
+        int nowDay;
+
+
+        MonthDetailBean monthBean = null;
+        DayDetailBean dayBean = null;
+        DetailTagBean detailBean = null;
+
+        while (cursor.moveToNext()) {
+            nowYear = cursor.getInt(cursor.getColumnIndex("year"));
+            nowMonth = cursor.getInt(cursor.getColumnIndex("month"));
+            nowDay = cursor.getInt(cursor.getColumnIndex("day"));
+
+            if (nowMonth != lastMonth || lastYear != nowYear) {
+                monthBean = new MonthDetailBean();
+                monthBean.setYear(nowYear);
+                monthBean.setMonth(nowMonth);
+                monthBean.setDayList(new ArrayList<DayDetailBean>());
+                monthBean.setIn(getMonthIn(nowYear, nowMonth));
+                monthBean.setOut(getMonthOut(nowYear, nowMonth));
+                list.add(monthBean);
+            }
+            if (nowDay != lastDay || nowMonth != lastMonth || nowDay != lastDay) {
+                dayBean = new DayDetailBean();
+                dayBean.setDate(nowDay);
+                dayBean.setTagList(new ArrayList<DetailTagBean>());
+                monthBean.getDayList().add(dayBean);
+            }
+            lastMonth = nowMonth;
+            lastYear = nowYear;
+            lastDay = nowDay;
+
+            detailBean = new DetailTagBean();
+            detailBean.setTag(cursor.getString(cursor.getColumnIndex("tag")));
+            detailBean.setMoney(cursor.getDouble(cursor.getColumnIndex("money")));
+            dayBean.getTagList().add(detailBean);
+        }
+
+        mDataBase.close();
+
+        return list;
     }
 
 

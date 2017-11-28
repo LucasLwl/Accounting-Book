@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="220dp"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bbb"></View>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,6 +19,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
@@ -32,8 +37,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="111" />
+            android:paddingRight="5dp"
+            android:text="0" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#bbb"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,33 +56,50 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
+            android:clickable="true"
             android:gravity="center"
-            android:text="1" />
+            android:text="1"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
+
 
         <TextView
             android:id="@+id/tv_popup_calculator_two"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="2" />
+            android:text="2"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
+
 
         <TextView
             android:id="@+id/tv_popup_calculator_three"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="3" />
+            android:text="3"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
+
 
         <TextView
             android:id="@+id/tv_popup_calculator_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="+" />
+            android:text="+"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,33 +111,46 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="4" />
+            android:text="4"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_five"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="5" />
+            android:text="5"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_six"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="6" />
+            android:text="6"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_sub"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="-" />
+            android:text="-"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -132,26 +173,36 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/calculator_bg"
                     android:gravity="center"
-                    android:text="7" />
+                    android:text="7"
+                    android:textColor="@color/calculator"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_eight"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/calculator_bg"
                     android:gravity="center"
-                    android:text="8" />
+                    android:text="8"
+                    android:textColor="@color/calculator"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_nine"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/calculator_bg"
                     android:gravity="center"
-                    android:text="9" />
+                    android:text="9"
+                    android:textColor="@color/calculator"
+                    android:textSize="18sp" />
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -163,24 +214,31 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/calculator_bg"
                     android:gravity="center"
-                    android:text="." />
+                    android:text="."
+                    android:textColor="@color/calculator"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_zero"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/calculator_bg"
                     android:gravity="center"
-                    android:text="0" />
+                    android:text="0"
+                    android:textColor="@color/calculator"
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/img_popup_calculator_del"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:background="@drawable/calculator_bg"
                     android:gravity="center"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/icon_calculator_del" />
 
             </LinearLayout>
 
@@ -192,8 +250,12 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/calculator_bg"
             android:gravity="center"
-            android:text="OK" />
+            android:text="OK"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
     </LinearLayout>
+
 
 </LinearLayout>

@@ -1,6 +1,8 @@
 package com.phone.konka.accountingbook.Fragment;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.phone.konka.accountingbook.Activity.AddAccountActivity;
+import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
 
 /**
@@ -24,7 +28,11 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
 
     private ImageView mImgTag;
     private EditText mEtTag;
+
     private GridView mGvTag;
+    private Adapter mAdapter;
+
+    private int mIndex;
 
     @Nullable
     @Override
@@ -33,9 +41,23 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_tag, null);
 
         initView();
-
+        initData();
         initEven();
         return rootView;
+    }
+
+    private void initData() {
+        mIndex = ((AddAccountActivity) getActivity()).getIndex();
+        mAdapter = new Adapter();
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden && mAdapter != null) {
+            mIndex = ((AddAccountActivity) getActivity()).getIndex();
+        }
     }
 
     private void initView() {
@@ -54,7 +76,7 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         mGvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                mImgTag.setImageDrawable(((ImageView) view).getDrawable());
             }
         });
     }
@@ -62,9 +84,18 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.img_addTagFragment_back:
-                break;
+
             case R.id.img_addTagFragment_save:
+                TagBean bean = new TagBean();
+                bean.setText(mEtTag.getText().toString());
+                if (mIndex == 0) {
+                    ((AddAccountActivity) getActivity()).mOutList.add(((AddAccountActivity) getActivity()).mOutList.size() - 1, bean);
+                } else {
+                    ((AddAccountActivity) getActivity()).mInList.add(((AddAccountActivity) getActivity()).mOutList.size() - 1, bean);
+                }
+            case R.id.img_addTagFragment_back:
+                ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
+
                 break;
         }
     }

@@ -4,8 +4,8 @@ import java.util.List;
 
 /**
  * Created by 廖伟龙 on 2017/11/16.
- *
- *
+ * <p>
+ * <p>
  * 每天的账单
  */
 
@@ -15,7 +15,7 @@ public class DayDetailBean {
     /**
      * 日期
      */
-    private String date;
+    private int date;
 
 
     /**
@@ -23,11 +23,11 @@ public class DayDetailBean {
      */
     private List<DetailTagBean> tagList;
 
-    public String getDate() {
+    public int getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(int date) {
         this.date = date;
     }
 

@@ -50,8 +50,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mCalendar = Calendar.getInstance();
 
         mDBManager = new DBManager(this);
-        double in = mDBManager.getMoonIn(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
-        double out = mDBManager.getMoonOut(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
+        double in = mDBManager.getMonthIn(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
+        double out = mDBManager.getMonthOut(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
         mTvMoonIn.setText(DoubleTo2Decimal.doubleTo2Decimal(in));
         mTvMoonOut.setText(DoubleTo2Decimal.doubleTo2Decimal(out));
         mTvMoonLeft.setText((DoubleTo2Decimal.doubleTo2Decimal(in - out)));

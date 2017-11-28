@@ -225,6 +225,7 @@ public class AddAccountActivity extends Activity {
                 }
                 hideAllFragment();
                 transaction.show(mAddTagFragment);
+                mIndex = from;
                 transaction.commit();
                 break;
         }

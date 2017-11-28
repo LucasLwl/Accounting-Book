@@ -20,18 +20,17 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tv_detail"
         android:divider="@null"
-        android:groupIndicator="@null"
-        ></ExpandableListView>
+        android:groupIndicator="@null"></ExpandableListView>
 
     <ImageView
-        android:id="@+id/img_add_account"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:id="@+id/img_detail_addAccount"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="20dp"
         android:layout_marginRight="15dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/icon_main_add" />
 
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.phone.konka.accountingbook.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.GridView;
@@ -27,6 +29,7 @@ import com.phone.konka.accountingbook.Utils.DBManager;
 import com.phone.konka.accountingbook.View.PopupCalculator;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -112,6 +115,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private DatePickerDialog mDialog;
 
 
+//    private TagBean mBeanAdd;
+
+
     private String TAG = "AddAccountFragment";
 
 
@@ -150,6 +156,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             } else {
                 mList = ((AddAccountActivity) getActivity()).mInList;
             }
+//            mList.add(mBeanAdd);
             mAdapter.setList(mList);
             mAdapter.notifyDataSetChanged();
         }
@@ -166,6 +173,10 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private void initData() {
 
 
+//        mBeanAdd = new TagBean();
+//        mBeanAdd.setText("添加");
+////        mBeanAdd.setIcon();
+
         mDBManager = new DBManager(getActivity());
         mCalendar = Calendar.getInstance();
         mYear = mCalendar.get(Calendar.YEAR);
@@ -177,6 +188,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             mList = ((AddAccountActivity) getActivity()).mOutList;
         else
             mList = ((AddAccountActivity) getActivity()).mInList;
+//        mList.add(mBeanAdd);
 
         mAdapter = new TagGridViewAdapter(getActivity(), mList);
 
@@ -268,6 +280,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             case R.id.tv_fragment_out:
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN) {
                     mList = ((AddAccountActivity) getActivity()).mOutList;
+//                    mList.add(mBeanAdd);
                     mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
                     mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
@@ -276,6 +289,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             case R.id.tv_fragment_in:
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
                     mList = ((AddAccountActivity) getActivity()).mInList;
+//                    mList.add(mBeanAdd);
                     mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
                     mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN;
@@ -292,6 +306,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                         mTvDate.setText(mMonth + "月" + mDay + "日");
                     }
                 }, mYear, mMonth - 1, mDay);
+                mDialog.getDatePicker().setMaxDate(new Date().getTime());
                 mDialog.show();
                 break;
 

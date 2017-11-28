@@ -1,23 +1,19 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.phone.konka.accountingbook.Bean.DayDetailBean;
-import com.phone.konka.accountingbook.Bean.MoonDetailBean;
+import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +26,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
     /**
      * 月份账单详情
      */
-    private List<MoonDetailBean> mDatas;
+    private List<MonthDetailBean> mDatas;
 
 
     /**
@@ -43,7 +39,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
      */
     private LayoutInflater mInflater;
 
-    public DetailMoonAdapter(Context mContext, List<MoonDetailBean> mDatas) {
+    public DetailMoonAdapter(Context mContext, List<MonthDetailBean> mDatas) {
         this.mDatas = mDatas;
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
@@ -84,6 +80,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder holder;
@@ -91,7 +88,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
             holder = new GroupViewHolder();
             convertView = mInflater.inflate(R.layout.item_detail_one, null);
             holder.llHead = convertView.findViewById(R.id.view_divider);
-            holder.tvMoon = (TextView) convertView.findViewById(R.id.tv_detail_moon);
+            holder.tvMonth = (TextView) convertView.findViewById(R.id.tv_detail_moon);
             holder.tvIn = (TextView) convertView.findViewById(R.id.tv_detain_moon_in);
             holder.tvOut = (TextView) convertView.findViewById(R.id.tv_detail_moon_out);
             holder.tvLeft = (TextView) convertView.findViewById(R.id.tv_detail_moon_left);
@@ -100,12 +97,12 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
-        MoonDetailBean moonData = mDatas.get(groupPosition);
+        MonthDetailBean moonData = mDatas.get(groupPosition);
 
-        holder.tvMoon.setText(moonData.getMoon());
-        holder.tvIn.setText(moonData.getIn());
-        holder.tvOut.setText(moonData.getOut());
-        holder.tvLeft.setText(moonData.getLeft());
+        holder.tvMonth.setText(moonData.getMonth() + "月");
+        holder.tvIn.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getIn()));
+        holder.tvOut.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getOut()));
+        holder.tvLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getIn() - moonData.getOut()));
 
         /**
          * 设置父ListView的Divider
@@ -134,29 +131,22 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
         }
         holder.ll.removeAllViews();
         DayDetailBean data = mDatas.get(groupPosition).getDayList().get(childPosition);
+
         for (int i = 0; i < data.getTagList().size(); i++) {
             RelativeLayout ll = (RelativeLayout) mInflater.inflate(R.layout.item_detail_three, null);
 //            ImageView imgDate = (ImageView) ll.findViewById(R.id.img_detail_date);
             TextView tvTag = (TextView) ll.findViewById(R.id.tv_detail_tag);
             TextView tvMoney = (TextView) ll.findViewById(R.id.tv_detail_money);
             tvTag.setText(data.getTagList().get(i).getTag());
-            tvMoney.setText(data.getTagList().get(i).getMoney()+"");
+
+            if (data.getTagList().get(i).getMoney() > 0) {
+                tvMoney.setText("收入+" + DoubleTo2Decimal.doubleTo2Decimal(data.getTagList().get(i).getMoney()));
+            } else {
+                tvMoney.setText("支出" + DoubleTo2Decimal.doubleTo2Decimal(data.getTagList().get(i).getMoney()));
+            }
             holder.ll.addView(ll);
         }
 
-
-//        LinearLayout linearLayout = (LinearLayout) mInflater.inflate(R.layout.item_detail_two, null);
-//
-//        DayDetailBean data = mDatas.get(groupPosition).getDayList().get(childPosition);
-//        for (int i = 0; i < data.getTagList().size(); i++) {
-//            RelativeLayout ll = (RelativeLayout) mInflater.inflate(R.layout.item_detail_three, null);
-////            ImageView imgDate = (ImageView) ll.findViewById(R.id.img_detail_date);
-//            TextView tvTag = (TextView) ll.findViewById(R.id.tv_detail_tag);
-//            TextView tvMoney = (TextView) ll.findViewById(R.id.tv_detail_money);
-//            tvTag.setText(data.getTagList().get(i).getTag());
-//            tvMoney.setText(data.getTagList().get(i).getMoney());
-//            linearLayout.addView(ll);
-//        }
         return convertView;
     }
 
@@ -168,7 +158,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
 
 class GroupViewHolder {
     View llHead;
-    TextView tvMoon;
+    TextView tvMonth;
     TextView tvIn;
     TextView tvOut;
     TextView tvLeft;

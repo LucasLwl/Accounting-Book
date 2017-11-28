@@ -62,7 +62,7 @@ public class PopupCalculator implements View.OnClickListener {
 
 
         mCalView = LayoutInflater.from(context).inflate(R.layout.popup_calculator, null);
-        mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, 600, false);
+        mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, 650, false);
         mPopCalculator.setOutsideTouchable(true);
         mPopCalculator.setTouchable(true);
         mPopCalculator.setAnimationStyle(R.style.popupCalculatorStyle);

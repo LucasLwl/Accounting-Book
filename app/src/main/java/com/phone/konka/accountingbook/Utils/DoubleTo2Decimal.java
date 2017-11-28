@@ -12,7 +12,7 @@ public class DoubleTo2Decimal {
         DecimalFormat df = new DecimalFormat("#.00");
         String str;
         if (num == 0)
-            return "0.00 ";
+            return "0.00";
 
         if (num > 99999999) {
             int head = (int) (num / 100000000);

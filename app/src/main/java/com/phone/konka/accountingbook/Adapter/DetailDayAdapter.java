@@ -70,7 +70,7 @@ public class DetailDayAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-        if (convertView==null){
+        if (convertView == null) {
 //            convertView =
         }
 
@@ -94,7 +94,12 @@ public class DetailDayAdapter extends BaseExpandableListAdapter {
 
         DetailTagBean data = mDatas.get(groupPosition).getTagList().get(childPosition);
         holder.tvTag.setText(data.getTag());
-        holder.tvMoney.setText(data.getMoney()+"");
+
+        if (data.getMoney() > 0) {
+            holder.tvMoney.setText("收入+" + data.getMoney());
+        } else {
+            holder.tvMoney.setText("支出" + data.getMoney());
+        }
         return convertView;
     }
 

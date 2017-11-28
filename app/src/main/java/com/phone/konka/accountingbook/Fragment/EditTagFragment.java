@@ -206,27 +206,31 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
         getActivity().getWindow().setAttributes(lp);
     }
 
+
+    public void onBackPress() {
+        if (mPopupSave == null) {
+            mPopupSave = new PopupWindow(mPopupView, ViewGroup.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT, true);
+            mPopupSave.setBackgroundDrawable(new BitmapDrawable());
+            mPopupSave.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    setBackgroundAlpha(1.0f);
+                }
+            });
+
+        }
+        setBackgroundAlpha(0.5f);
+        mPopupSave.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+    }
+
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
 
             case R.id.img_edit_fragment_save:
-                if (mPopupSave == null) {
-                    mPopupSave = new PopupWindow(mPopupView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                            WindowManager.LayoutParams.WRAP_CONTENT, true);
-                    mPopupSave.setBackgroundDrawable(new BitmapDrawable());
-                    mPopupSave.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            setBackgroundAlpha(1.0f);
-                        }
-                    });
-
-                }
-                setBackgroundAlpha(0.5f);
-                mPopupSave.showAtLocation(rootView, Gravity.CENTER, 0, 0);
-                break;
+//                ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.EDIT_TAG_FRAGMENT, mIndex);
 
             case R.id.tv_popup_editFragment_yes:
                 if (mIndex == 0) {
@@ -236,15 +240,17 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
                     ((AddAccountActivity) getActivity()).mInList = mMyTagList;
                     ((AddAccountActivity) getActivity()).mInRecomList = mRecomTagList;
                 }
-
             case R.id.tv_popup_editFragment_no:
-                if (mPopupSave.isShowing()) {
+                if (mPopupSave != null && mPopupSave.isShowing()) {
                     mPopupSave.dismiss();
                 }
-            case R.id.img_edit_fragment_back:
                 ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.EDIT_TAG_FRAGMENT, mIndex);
+                break;
+            case R.id.img_edit_fragment_back:
+                onBackPress();
                 break;
         }
 
     }
+
 }
