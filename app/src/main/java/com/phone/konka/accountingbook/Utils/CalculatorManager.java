@@ -47,7 +47,7 @@ public class CalculatorManager {
         if (operator.equals("")) {
             if (left.equals("0")) {
                 left = num + "";
-            } else if (left.length() <= 12) {
+            } else if (left.length() < 12) {
                 if (left.indexOf(".") != -1) {
                     if (left.indexOf(".") + 2 >= left.length()) {
                         left += num;

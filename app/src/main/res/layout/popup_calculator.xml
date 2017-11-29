@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="220dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <View
         android:layout_width="match_parent"
@@ -26,25 +29,28 @@
             android:id="@+id/tv_popup_calculator_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_alignBaseline="@+id/tv_popup_calculator_res"
+            android:layout_alignBottom="@+id/tv_popup_calculator_res"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/img_popup_calculator_tag"
             android:layout_toRightOf="@+id/img_popup_calculator_tag"
-            android:text="123" />
+            android:text="123"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_res"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="5dp"
-            android:text="0" />
+            android:text="0"
+            android:textColor="@color/calculator"
+            android:textSize="18sp" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#bbb"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,6 +74,7 @@
             android:id="@+id/tv_popup_calculator_two"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
@@ -80,6 +87,7 @@
             android:id="@+id/tv_popup_calculator_three"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
@@ -92,6 +100,7 @@
             android:id="@+id/tv_popup_calculator_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
@@ -104,6 +113,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="1">
 
         <TextView
@@ -121,6 +131,7 @@
             android:id="@+id/tv_popup_calculator_five"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
@@ -132,6 +143,7 @@
             android:id="@+id/tv_popup_calculator_six"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
@@ -143,6 +155,7 @@
             android:id="@+id/tv_popup_calculator_sub"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
@@ -155,6 +168,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="2">
 
         <LinearLayout
@@ -172,6 +186,7 @@
                     android:id="@+id/tv_popup_calculator_seven"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
@@ -183,6 +198,7 @@
                     android:id="@+id/tv_popup_calculator_eight"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
@@ -207,12 +223,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginRight="0.5dp"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_point"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
@@ -224,6 +243,7 @@
                     android:id="@+id/tv_popup_calculator_zero"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
@@ -249,6 +269,7 @@
             android:id="@+id/tv_popup_calculator_ok"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
