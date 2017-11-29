@@ -67,7 +67,7 @@ public class DBManager {
     public void insertAccount(DetailTagBean bean) {
         mDataBase = mHelper.getWritableDatabase();
         mDataBase.execSQL("insert into account(year,month,day,tag,money) values(?,?,?,?,?)",
-                new Object[]{bean.getYear(), bean.getMoon(), bean.getDay(), bean.getTag(), bean.getMoney()});
+                new Object[]{bean.getYear(), bean.getMonth(), bean.getDay(), bean.getTag(), bean.getMoney()});
         mDataBase.close();
     }
 
@@ -151,6 +151,25 @@ public class DBManager {
         if (res == 0)
             return res;
         return -res;
+    }
+
+
+    public List<DetailTagBean> getAllData() {
+
+        mDataBase = mHelper.getReadableDatabase();
+        Cursor cursor = mDataBase.rawQuery("select * from account", new String[]{});
+
+        List<DetailTagBean> list = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            DetailTagBean bean = new DetailTagBean();
+            bean.setYear(cursor.getInt(cursor.getColumnIndex("year")));
+            bean.setMonth(cursor.getInt(cursor.getColumnIndex("month")));
+            bean.setDay(cursor.getInt(cursor.getColumnIndex("day")));
+            bean.setTag(cursor.getString(cursor.getColumnIndex("tag")));
+            bean.setMoney(cursor.getInt(cursor.getColumnIndex("money")));
+            list.add(bean);
+        }
+        return list;
     }
 
 

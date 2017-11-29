@@ -12,7 +12,7 @@ public class DetailTagBean {
 
     private int year;
 
-    private int moon;
+    private int month;
 
     private int day;
 
@@ -32,9 +32,9 @@ public class DetailTagBean {
     public DetailTagBean() {
     }
 
-    public DetailTagBean(int year, int moon, int day, String tag, double money) {
+    public DetailTagBean(int year, int month, int day, String tag, double money) {
         this.year = year;
-        this.moon = moon;
+        this.month = month;
         this.day = day;
         this.tag = tag;
         this.money = money;
@@ -49,12 +49,12 @@ public class DetailTagBean {
         this.year = year;
     }
 
-    public int getMoon() {
-        return moon;
+    public int getMonth() {
+        return month;
     }
 
-    public void setMoon(int moon) {
-        this.moon = moon;
+    public void setMonth(int moon) {
+        this.month = moon;
     }
 
     public int getDay() {
