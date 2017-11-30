@@ -1,7 +1,6 @@
 package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import com.phone.konka.accountingbook.Fragment.AddTagFragment;
 import com.phone.konka.accountingbook.Fragment.EditTagFragment;
 import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBManager;
 
 import java.util.ArrayList;
 import java.util.List;

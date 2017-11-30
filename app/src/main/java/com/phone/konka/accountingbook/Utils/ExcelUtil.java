@@ -1,6 +1,7 @@
 package com.phone.konka.accountingbook.Utils;
 
 import android.os.Environment;
+import android.os.Looper;
 import android.util.Log;
 
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
@@ -32,10 +33,9 @@ public class ExcelUtil {
     public static final String[] TAG_NAME = {"year", "month", "day", "tag", "money"};
 
 
-    public static void writeExcel(String excelName, String sheetName, List<DetailTagBean> list) {
+    public static void writeExcel(final String excelName, final String sheetName, final List<DetailTagBean> list) {
 
         try {
-
             File dir = new File(BILL_PATH);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -80,23 +80,28 @@ public class ExcelUtil {
                     }
                 }
             }
-
             wb.write(os);
             wb.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
     public static List<DetailTagBean> readExcel(String excelName) {
 
         List<DetailTagBean> list = new ArrayList<>();
 
-
         try {
-            InputStream is = new FileInputStream(BILL_PATH + excelName);
-            POIFSFileSystem poi = new POIFSFileSystem(is);
+            InputStream is;
+            if (excelName.indexOf(BILL_PATH) != -1) {
+                is = new FileInputStream(excelName);
+            } else {
+                is = new FileInputStream(BILL_PATH + excelName);
+            }
 
+            POIFSFileSystem poi = new POIFSFileSystem(is);
             HSSFWorkbook wb = new HSSFWorkbook(poi);
             Sheet sheet = wb.getSheetAt(0);
             Iterator<Row> rowIterator = sheet.rowIterator();
@@ -128,16 +133,9 @@ public class ExcelUtil {
                 }
                 list.add(bean);
             }
-
         } catch (Exception e) {
-
-            Log.i("ddd", "捕获到异常:" + e);
             e.printStackTrace();
         }
-
         return list;
-
     }
-
-
 }

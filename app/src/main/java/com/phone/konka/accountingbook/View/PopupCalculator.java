@@ -1,18 +1,14 @@
 package com.phone.konka.accountingbook.View;
 
 import android.content.Context;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.CalculatorManager;
-import com.phone.konka.accountingbook.Utils.DBManager;
 
 /**
  * 显示计算器的PopupWindow

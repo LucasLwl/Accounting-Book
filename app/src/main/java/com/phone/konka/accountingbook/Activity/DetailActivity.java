@@ -9,13 +9,10 @@ import android.view.Window;
 import android.widget.ExpandableListView;
 
 import com.phone.konka.accountingbook.Adapter.DetailMoonAdapter;
-import com.phone.konka.accountingbook.Bean.DayDetailBean;
-import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBManager;
+import com.phone.konka.accountingbook.Utils.DBOperator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +29,7 @@ public class DetailActivity extends Activity {
     private DetailMoonAdapter mAdapter;
     private List<MonthDetailBean> mDatas;
 
-    private DBManager mDBManager;
+    private DBOperator mDBOperator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,9 +47,9 @@ public class DetailActivity extends Activity {
             }
         });
 
-        mDBManager = new DBManager(this);
+        mDBOperator = new DBOperator(this);
 
-        mDatas = mDBManager.getDetailList();
+        mDatas = mDBOperator.getDetailList();
 
         mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
         mAdapter = new DetailMoonAdapter(this, mDatas);

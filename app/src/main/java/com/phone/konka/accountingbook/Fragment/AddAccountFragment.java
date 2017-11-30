@@ -2,7 +2,6 @@ package com.phone.konka.accountingbook.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.GridView;
@@ -25,7 +23,7 @@ import com.phone.konka.accountingbook.Adapter.TagGridViewAdapter;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBManager;
+import com.phone.konka.accountingbook.Utils.DBOperator;
 import com.phone.konka.accountingbook.View.PopupCalculator;
 
 import java.util.Calendar;
@@ -105,7 +103,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      */
     private int mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
 
-    private DBManager mDBManager;
+    private DBOperator mDBOperator;
     private Calendar mCalendar;
 
     private int mYear;
@@ -177,7 +175,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 //        mBeanAdd.setText("添加");
 ////        mBeanAdd.setIcon();
 
-        mDBManager = new DBManager(getActivity());
+        mDBOperator = new DBOperator(getActivity());
         mCalendar = Calendar.getInstance();
         mYear = mCalendar.get(Calendar.YEAR);
         mMonth = mCalendar.get(Calendar.MONTH) + 1;
@@ -217,11 +215,11 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             public void addAccount(String tag, double money) {
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
                     DetailTagBean bean = new DetailTagBean(mYear, mMonth, mDay, tag, -money);
-                    mDBManager.insertAccount(bean);
+                    mDBOperator.insertAccount(bean);
                     Toast.makeText(getActivity(), "支出 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
                 } else {
                     DetailTagBean bean = new DetailTagBean(mYear, mMonth, mDay, tag, money);
-                    mDBManager.insertAccount(bean);
+                    mDBOperator.insertAccount(bean);
                     Toast.makeText(getActivity(), "收入 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
                 }
             }
