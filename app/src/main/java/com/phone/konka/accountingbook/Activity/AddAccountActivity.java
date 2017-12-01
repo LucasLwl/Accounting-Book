@@ -8,9 +8,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.phone.konka.accountingbook.Bean.TagBean;
+import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
 import com.phone.konka.accountingbook.Fragment.AddTagFragment;
 import com.phone.konka.accountingbook.Fragment.EditTagFragment;
-import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
 import com.phone.konka.accountingbook.R;
 
 import java.util.ArrayList;

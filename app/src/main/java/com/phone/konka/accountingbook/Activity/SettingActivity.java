@@ -69,6 +69,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
         mDBOperator = new DBOperator(this);
 
+        //        获取今日日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         mTodayDate = sdf.format(new Date());
     }
@@ -81,6 +82,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     }
 
+
+    /**
+     * 点击选中的Excel后回调
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -88,6 +97,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
             final Uri uri = data.getData();
 
+            // 弹出是否覆盖提示框
             new AlertDialog.Builder(this)
                     .setMessage("是否覆盖之前记录")
                     .setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -99,7 +109,11 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(SettingActivity.this, "文件正在导入", Toast.LENGTH_SHORT).show();
+
+//                            根据返回的Uri获取Excel表格的文件路径
                             final String path = getFilePathFromUri(uri);
+
+//                           在线程池中进行IO操作和写数据库操作
                             mThreadPool.execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -158,6 +172,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
 
+//            点击导入Excel表格
             case R.id.tv_setting_inAccount:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/vnd.ms-excel");
@@ -171,9 +186,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 }
                 break;
 
+
+//            点击导出Excel表格
             case R.id.tv_setting_outAccount:
-//                Ecxel表名
+//                根据当前日期获取Ecxel表名
                 final String excelName = mTodayDate + (++mIndex) + ".xls";
+
+//                弹出是否保存对话框
                 new AlertDialog.Builder(this)
                         .setMessage("系统会将您的账本导入到以下文件：内部存储设备/Bill/" + excelName)
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -185,23 +204,34 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(SettingActivity.this, "文件正在导出", Toast.LENGTH_SHORT).show();
+
+//                              在线程池中执行IO操作以及读数据库操作
                                 mThreadPool.execute(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ExcelUtil.writeExcel(excelName, "content", mDBOperator.getAllData());
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Toast.makeText(SettingActivity.this, "文件已导出至：内部存储设备/Bill/" + excelName,
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                        if (mDBOperator.isDBEmpty()) {
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(SettingActivity.this, "文件导出失败：您还没账单信息",
+                                                            Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        } else {
+                                            ExcelUtil.writeExcel(excelName, "content", mDBOperator.getAllData());
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(SettingActivity.this, "文件已导出至：内部存储设备/Bill/" + excelName,
+                                                            Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        }
                                     }
                                 });
                             }
                         }).show();
                 break;
-
             case R.id.tv_setting_aboutMe:
 
                 break;

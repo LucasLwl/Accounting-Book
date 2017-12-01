@@ -28,7 +28,7 @@ public class DetailActivity extends Activity {
 
     private ExpandableListView mListView;
     private DetailMoonAdapter mAdapter;
-    private List<MonthDetailBean> mDatas;
+    private List<MonthDetailBean> mData;
 
     /**
      * 数据库操作类
@@ -69,8 +69,8 @@ public class DetailActivity extends Activity {
         mThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                mDatas = mDBOperator.getDetailList();
-                mAdapter = new DetailMoonAdapter(DetailActivity.this, mDatas);
+                mData = mDBOperator.getDetailList();
+                mAdapter = new DetailMoonAdapter(DetailActivity.this, mData);
                 mListView.setAdapter(mAdapter);
             }
         });

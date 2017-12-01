@@ -140,6 +140,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mTvLeastOut = (TextView) findViewById(R.id.tv_main_leastOut);
         mTvTodayOut = (TextView) findViewById(R.id.tv_main_todayOut);
         mTvWeekOut = (TextView) findViewById(R.id.tv_main_weekOut);
+
     }
 
 

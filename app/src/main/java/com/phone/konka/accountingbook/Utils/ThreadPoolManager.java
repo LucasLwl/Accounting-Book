@@ -20,13 +20,13 @@ public class ThreadPoolManager {
     /**
      * 核心线程数
      */
-    private static final int CORE_COUNT = CPU_COUNT;
+    private static final int CORE_COUNT = CPU_COUNT + 1;
 
 
     /**
      * 线程池最大线程数
      */
-    private static final int MAX_POOL_SIZE = 2 * CPU_COUNT;
+    private static final int MAX_POOL_SIZE = 2 * CPU_COUNT + 1;
 
 
     /**
@@ -53,7 +53,8 @@ public class ThreadPoolManager {
     private ThreadPoolManager() {
 
         mExecutor = new ThreadPoolExecutor(CORE_COUNT, MAX_POOL_SIZE, KEEP_ALIVE,
-                java.util.concurrent.TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+                java.util.concurrent.TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(128));
+
     }
 
 

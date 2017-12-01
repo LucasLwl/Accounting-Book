@@ -43,12 +43,13 @@ public class DBOperator {
      * @return
      */
     public boolean isDBEmpty() {
+        boolean temp = true;
         mDataBase = mDBManager.getReadableDatabase();
         Cursor cursor = mDataBase.rawQuery("select money from account", new String[]{});
-        mDBManager.closeDatabase();
         if (cursor.moveToNext())
-            return false;
-        return true;
+            temp = false;
+        mDBManager.closeDatabase();
+        return temp;
     }
 
 
