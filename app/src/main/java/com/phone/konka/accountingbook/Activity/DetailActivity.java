@@ -12,6 +12,7 @@ import com.phone.konka.accountingbook.Adapter.DetailMoonAdapter;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DBOperator;
+import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.List;
 
@@ -29,7 +30,16 @@ public class DetailActivity extends Activity {
     private DetailMoonAdapter mAdapter;
     private List<MonthDetailBean> mDatas;
 
+    /**
+     * 数据库操作类
+     */
     private DBOperator mDBOperator;
+
+
+    /**
+     * 线程池
+     */
+    private ThreadPoolManager mThreadPool;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +49,35 @@ public class DetailActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_detail);
 
+        initView();
+        initData();
+        initEvent();
+
+
+    }
+
+    private void initView() {
+        mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
+    }
+
+    private void initData() {
+
+        mDBOperator = new DBOperator(this);
+
+        mThreadPool = ThreadPoolManager.getInstance();
+
+        mThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatas = mDBOperator.getDetailList();
+                mAdapter = new DetailMoonAdapter(DetailActivity.this, mDatas);
+                mListView.setAdapter(mAdapter);
+            }
+        });
+    }
+
+    private void initEvent() {
+
         findViewById(R.id.img_detail_addAccount).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,15 +85,5 @@ public class DetailActivity extends Activity {
                 startActivity(intent);
             }
         });
-
-        mDBOperator = new DBOperator(this);
-
-        mDatas = mDBOperator.getDetailList();
-
-        mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
-        mAdapter = new DetailMoonAdapter(this, mDatas);
-        mListView.setAdapter(mAdapter);
-
-
     }
 }

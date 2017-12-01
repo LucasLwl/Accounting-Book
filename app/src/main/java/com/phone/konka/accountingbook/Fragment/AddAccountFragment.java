@@ -24,6 +24,7 @@ import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DBOperator;
+import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 import com.phone.konka.accountingbook.View.PopupCalculator;
 
 import java.util.Calendar;
@@ -103,6 +104,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      */
     private int mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
 
+
+    private ThreadPoolManager mThreadPool;
+
     private DBOperator mDBOperator;
     private Calendar mCalendar;
 
@@ -170,12 +174,13 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
     private void initData() {
 
+        //初始化线程池
+        mThreadPool = ThreadPoolManager.getInstance();
 
-//        mBeanAdd = new TagBean();
-//        mBeanAdd.setText("添加");
-////        mBeanAdd.setIcon();
-
+        //初始化数据库操作类
         mDBOperator = new DBOperator(getActivity());
+
+        //获取日历
         mCalendar = Calendar.getInstance();
         mYear = mCalendar.get(Calendar.YEAR);
         mMonth = mCalendar.get(Calendar.MONTH) + 1;
@@ -210,18 +215,28 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
 
     private void initEven() {
+
+        /**
+         * 设置计算器的保存账单回调
+         *
+         */
         mCalculator.setAddAccountListener(new PopupCalculator.AddAccountListener() {
             @Override
             public void addAccount(String tag, double money) {
+                final DetailTagBean bean;
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
-                    DetailTagBean bean = new DetailTagBean(mYear, mMonth, mDay, tag, -money);
-                    mDBOperator.insertAccount(bean);
+                    bean = new DetailTagBean(mYear, mMonth, mDay, tag, -money);
                     Toast.makeText(getActivity(), "支出 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
                 } else {
-                    DetailTagBean bean = new DetailTagBean(mYear, mMonth, mDay, tag, money);
-                    mDBOperator.insertAccount(bean);
+                    bean = new DetailTagBean(mYear, mMonth, mDay, tag, money);
                     Toast.makeText(getActivity(), "收入 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
                 }
+                mThreadPool.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDBOperator.insertAccount(bean);
+                    }
+                });
             }
         });
 
@@ -230,6 +245,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         rootView.findViewById(R.id.tv_fragment_date).setOnClickListener(this);
         rootView.findViewById(R.id.img_fragment_edit).setOnClickListener(this);
 
+        /**
+         * 监听gridview的触摸事件，用于显示下滑显示计算器，上滑隐藏计算器
+         */
         touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -256,6 +274,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         };
         mGvTag.setOnTouchListener(touchListener);
 
+        /**
+         * gridview的itme点击事件，用于点击item显示计算器
+         */
         mGvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

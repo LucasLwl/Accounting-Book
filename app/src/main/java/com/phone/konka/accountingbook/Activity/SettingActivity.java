@@ -160,8 +160,8 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
             case R.id.tv_setting_inAccount:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("application/vnd.ms-excel");
-                intent.setType("application/*");
+                intent.setType("application/vnd.ms-excel");
+//                intent.setType("application/*");
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 try {
                     startActivityForResult(intent, 1);
