@@ -10,4 +10,8 @@
 
     <color name="calculator">#707070</color>
 
+    <color name="item_text">#555555</color>
+
+    <color name="item_line">#aaa</color>
+
 </resources>

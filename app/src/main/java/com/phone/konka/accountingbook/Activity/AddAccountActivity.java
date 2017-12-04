@@ -153,7 +153,7 @@ public class AddAccountActivity extends Activity {
         for (int i = 0; i < 15; i++) {
             TagBean bean = new TagBean();
             bean.setText("in" + i);
-            bean.setIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            bean.setIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_diet));
             mInList.add(bean);
             mInRecomList.add(bean);
         }
@@ -162,7 +162,7 @@ public class AddAccountActivity extends Activity {
         for (int i = 0; i < 15; i++) {
             TagBean bean = new TagBean();
             bean.setText("out" + i);
-            bean.setIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+            bean.setIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_diet));
             mOutList.add(bean);
             mOutRecomList.add(bean);
         }

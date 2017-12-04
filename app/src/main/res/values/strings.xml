@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Accounting Book</string>
+
+    <!--主界面-->
+    <string name="month_out">本月支出</string>
+    <string name="month_in">本月收入</string>
+    <string name="month_left">本月结余</string>
+    <string name="least_out">最近支出</string>
+    <string name="today_out">今日支出</string>
+    <string name="week_out">本周支出</string>
+    <string name="initial">--</string>
+
+    <!--设置-->
+    <string name="setting">设置</string>
+    <string name="out_account">导出账本</string>
+    <string name="in_account">导入账本</string>
+    <string name="about_me">关于我们</string>
+
+
+    <!--编辑Tag-->
+    <string name="edit_tag">编辑</string>
+    <string name="my_tag">我的选项</string>
+    <string name="recommend_tag">推荐选项</string>
 </resources>

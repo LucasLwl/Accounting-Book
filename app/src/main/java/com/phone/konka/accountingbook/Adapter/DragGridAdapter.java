@@ -1,6 +1,8 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,20 +42,28 @@ public class DragGridAdapter extends BaseAdapter {
      */
     private OnClickListener onClickListener;
 
+    private int mIndex;
 
-    public DragGridAdapter(Context mContext, List<TagBean> mDatas) {
+
+    private final Bitmap DEL_BITMAP;
+    private final Bitmap ADD_BITMAP;
+
+
+    public DragGridAdapter(Context mContext, List<TagBean> mDatas, int index) {
         this.mContext = mContext;
         this.mDatas = mDatas;
         mInflater = LayoutInflater.from(mContext);
+
+        mIndex = index;
+
+        DEL_BITMAP = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_del_tag);
+        ADD_BITMAP = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_add_tag);
     }
 
     public void setList(List<TagBean> mDatas) {
         this.mDatas = mDatas;
     }
 
-    public void setList() {
-
-    }
 
     @Override
     public int getCount() {
@@ -88,6 +98,12 @@ public class DragGridAdapter extends BaseAdapter {
         TagBean data = mDatas.get(position);
         holder.tvTag.setText(data.getText());
         holder.imgTag.setImageBitmap(data.getIcon());
+        if (mIndex == 0) {
+            holder.imgOpera.setImageBitmap(DEL_BITMAP);
+        } else {
+            holder.imgOpera.setImageBitmap(ADD_BITMAP);
+        }
+
         holder.imgOpera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

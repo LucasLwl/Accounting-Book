@@ -24,6 +24,8 @@ public class TagGridViewAdapter extends BaseAdapter {
     private List<TagBean> mList;
     private LayoutInflater mInflater;
 
+    private int mSelected = 0;
+
     public void setList(List<TagBean> mList) {
         this.mList = mList;
     }
@@ -54,9 +56,10 @@ public class TagGridViewAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = mInflater.inflate(R.layout.item_draggridview, null);
-            holder.tvText = (TextView) convertView.findViewById(R.id.tv_dragGridView_item_tag);
-            holder.imgIcon = (ImageView) convertView.findViewById(R.id.img_dragGridView_item_tag);
+            convertView = mInflater.inflate(R.layout.item_add_account, null);
+            holder.tvText = (TextView) convertView.findViewById(R.id.tv_addAccount_tag);
+            holder.imgIcon = (ImageView) convertView.findViewById(R.id.img_addAccount_item);
+            holder.imgSelected = (ImageView) convertView.findViewById(R.id.img_addAccount_item_selected);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -64,13 +67,23 @@ public class TagGridViewAdapter extends BaseAdapter {
 
         TagBean bean = mList.get(position);
         holder.tvText.setText(bean.getText());
-//        holde
 
+        if (position == mSelected)
+            holder.imgSelected.setVisibility(View.VISIBLE);
+        else
+            holder.imgSelected.setVisibility(View.GONE);
         return convertView;
+    }
+
+
+    public void setSelected(int selected) {
+        mSelected = selected;
+        notifyDataSetChanged();
     }
 
     class ViewHolder {
         TextView tvText;
         ImageView imgIcon;
+        ImageView imgSelected;
     }
 }

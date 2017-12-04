@@ -76,9 +76,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
     private void initEven() {
         findViewById(R.id.img_setting_back).setOnClickListener(this);
-        findViewById(R.id.tv_setting_inAccount).setOnClickListener(this);
-        findViewById(R.id.tv_setting_outAccount).setOnClickListener(this);
-        findViewById(R.id.tv_setting_aboutMe).setOnClickListener(this);
+        findViewById(R.id.ll_setting_inAccount).setOnClickListener(this);
+        findViewById(R.id.ll_setting_outAccount).setOnClickListener(this);
+        findViewById(R.id.ll_setting_aboutMe).setOnClickListener(this);
 
     }
 
@@ -173,7 +173,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 break;
 
 //            点击导入Excel表格
-            case R.id.tv_setting_inAccount:
+            case R.id.ll_setting_inAccount:
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/vnd.ms-excel");
 //                intent.setType("application/*");
@@ -188,7 +188,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
 
 //            点击导出Excel表格
-            case R.id.tv_setting_outAccount:
+            case R.id.ll_setting_outAccount:
 //                根据当前日期获取Ecxel表名
                 final String excelName = mTodayDate + (++mIndex) + ".xls";
 
@@ -232,7 +232,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                             }
                         }).show();
                 break;
-            case R.id.tv_setting_aboutMe:
+            case R.id.ll_setting_aboutMe:
 
                 break;
         }

@@ -162,6 +162,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             mAdapter.setList(mList);
             mAdapter.notifyDataSetChanged();
         }
+
+        if (hidden && mPopupCalculator != null && mPopupCalculator.isShowing())
+            dismissPopupCalculator();
     }
 
     private void initView() {
@@ -196,21 +199,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         mAdapter = new TagGridViewAdapter(getActivity(), mList);
 
         mGvTag.setAdapter(mAdapter);
-    }
-
-
-    private void showPopupCalculator() {
-        if (!isShow && mPopupCalculator != null) {
-            mPopupCalculator.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
-            isShow = true;
-        }
-    }
-
-    private void dismissPopupCalculator() {
-        if (isShow && mPopupCalculator.isShowing()) {
-            mPopupCalculator.dismiss();
-            isShow = false;
-        }
     }
 
 
@@ -285,6 +273,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                     ((AddAccountActivity) getActivity()).showFragment(mIndex,
                             AddAccountActivity.ADD_TAG_FRAGMENT);
                 } else {
+                    mAdapter.setSelected(position);
                     showPopupCalculator();
                     mCalculator.setTagText(mList.get(position).getText());
                 }
@@ -292,6 +281,19 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         });
     }
 
+    private void showPopupCalculator() {
+        if (!isShow && mPopupCalculator != null) {
+            mPopupCalculator.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+            isShow = true;
+        }
+    }
+
+    private void dismissPopupCalculator() {
+        if (isShow && mPopupCalculator.isShowing()) {
+            mPopupCalculator.dismiss();
+            isShow = false;
+        }
+    }
 
     @Override
     public void onClick(View v) {

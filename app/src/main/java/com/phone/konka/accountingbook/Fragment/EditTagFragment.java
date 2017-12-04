@@ -135,8 +135,8 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
 
         setList();
 
-        mMyTagAdapter = new DragGridAdapter(getActivity(), mMyTagList);
-        mRecomTagAdapter = new DragGridAdapter(getActivity(), mRecomTagList);
+        mMyTagAdapter = new DragGridAdapter(getActivity(), mMyTagList, 0);
+        mRecomTagAdapter = new DragGridAdapter(getActivity(), mRecomTagList, 1);
 
         mMyTagAdapter.setOnClickListener(new DragGridAdapter.OnClickListener() {
             @Override

@@ -6,7 +6,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:background="#778899">
 
         <ImageView
             android:id="@+id/img_edit_fragment_back"
@@ -14,13 +15,16 @@
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/icon_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="编辑" />
+            android:text="@string/edit_tag"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/img_edit_fragment_save"
@@ -28,14 +32,18 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginRight="10dp"
+            android:src="@drawable/icon_save" />
 
     </RelativeLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="我的选项" />
+        android:layout_marginLeft="15dp"
+        android:text="@string/my_tag"
+        android:textColor="@color/item_text"
+        android:textSize="18sp" />
 
     <com.phone.konka.accountingbook.View.DragGridView
         android:id="@+id/dgv_edit_mytag"
@@ -47,15 +55,18 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:background="#888888">
+        android:layout_height="10dp"
+        android:background="#eee">
 
     </View>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="推荐选项" />
+        android:layout_marginLeft="15dp"
+        android:text="@string/recommend_tag"
+        android:textColor="@color/item_text"
+        android:textSize="18sp" />
 
     <com.phone.konka.accountingbook.View.DragGridView
         android:id="@+id/dgv_edit_recomtag"

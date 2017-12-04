@@ -41,15 +41,17 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/icon_edit_tag" />
 
         <TextView
             android:id="@+id/tv_fragment_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:padding="2dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/img_fragment_edit"
+            android:background="@drawable/calculator_bg"
             android:text="0" />
     </RelativeLayout>
 

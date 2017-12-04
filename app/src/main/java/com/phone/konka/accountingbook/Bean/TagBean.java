@@ -11,6 +11,8 @@ public class TagBean {
     private String text;
     private Bitmap icon;
 
+//    private int
+
     public String getText() {
         return text;
     }
