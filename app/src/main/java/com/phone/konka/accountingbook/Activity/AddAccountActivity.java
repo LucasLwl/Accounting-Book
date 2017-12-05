@@ -2,6 +2,7 @@ package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -150,21 +151,23 @@ public class AddAccountActivity extends Activity {
         mInRecomList = new ArrayList<>();
 
 
-        for (int i = 0; i < 15; i++) {
-            TagBean bean = new TagBean();
-            bean.setText("in" + i);
-            bean.setIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_diet));
-            mInList.add(bean);
-            mInRecomList.add(bean);
-        }
+        String[] strArr = getResources().getStringArray(R.array.out_tag_text);
+        TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
 
-
-        for (int i = 0; i < 15; i++) {
-            TagBean bean = new TagBean();
-            bean.setText("out" + i);
-            bean.setIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_diet));
+        TagBean bean;
+        for (int i = 0; i < strArr.length; i++) {
+            bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
             mOutList.add(bean);
             mOutRecomList.add(bean);
+        }
+
+        strArr = getResources().getStringArray(R.array.in_tag_text);
+        ta = getResources().obtainTypedArray(R.array.in_tag_icon);
+
+        for (int i = 0; i < strArr.length; i++) {
+            bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+            mInList.add(bean);
+            mInRecomList.add(bean);
         }
     }
 

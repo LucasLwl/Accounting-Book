@@ -21,4 +21,98 @@
     <string name="edit_tag">编辑</string>
     <string name="my_tag">我的选项</string>
     <string name="recommend_tag">推荐选项</string>
+
+    <string-array name="out_tag_text">
+        <item>餐饮</item>
+        <item>交通</item>
+        <item>水果</item>
+        <item>零食</item>
+        <item>买菜</item>
+        <item>健身</item>
+        <item>美容</item>
+        <item>服饰</item>
+        <item>话费</item>
+        <item>学习</item>
+        <item>宠物</item>
+        <item>房租</item>
+        <item>医疗</item>
+        <item>数码</item>
+        <item>化妆品</item>
+        <item>电影</item>
+        <item>网购</item>
+        <item>红包</item>
+        <item>其他</item>
+        <item>添加</item>
+    </string-array>
+
+    <string-array name="in_tag_text">
+        <item>工资</item>
+        <item>生活费</item>
+        <item>红包</item>
+        <item>兼职</item>
+        <item>奖金</item>
+        <item>现金</item>
+        <item>报销</item>
+        <item>退款</item>
+        <item>礼金</item>
+        <item>福利</item>
+        <item>租金</item>
+        <item>房租</item>
+        <item>利息</item>
+        <item>分红</item>
+        <item>社保金</item>
+        <item>公积金</item>
+        <item>借入款</item>
+        <item>中奖</item>
+        <item>其他</item>
+        <item>添加</item>
+    </string-array>
+
+    <integer-array name="out_tag_icon">
+        <item>@drawable/icon_diet</item>
+        <item>@drawable/icon_traffic</item>
+        <item>@drawable/icon_fruit</item>
+        <item>@drawable/icon_snack</item>
+        <item>@drawable/icon_vegetable</item>
+        <item>@drawable/icon_bodybuilding</item>
+        <item>@drawable/icon_cosmetology</item>
+        <item>@drawable/icon_clothes</item>
+        <item>@drawable/icon_bill</item>
+        <item>@drawable/icon_study</item>
+        <item>@drawable/icon_pet</item>
+        <item>@drawable/icon_houserent</item>
+        <item>@drawable/icon_treat</item>
+        <item>@drawable/icon_digital</item>
+        <item>@drawable/icon_cosmetics</item>
+        <item>@drawable/icon_movie</item>
+        <item>@drawable/icon_onlineshopping</item>
+        <item>@drawable/icon_luckymoney</item>
+        <item>@drawable/icon_other</item>
+        <item>@drawable/icon_add</item>
+    </integer-array>
+
+    <integer-array name="in_tag_icon">
+        <item>@drawable/icon_salary</item>
+        <item>@drawable/icon_livingexpenses</item>
+        <item>@drawable/icon_luckymoney</item>
+        <item>@drawable/icon_parttime</item>
+        <item>@drawable/icon_bonus</item>
+        <item>@drawable/icon_cash</item>
+        <item>@drawable/icon_reimbursement</item>
+        <item>@drawable/icon_refund</item>
+        <item>@drawable/icon_cashgift</item>
+        <item>@drawable/icon_welfare</item>
+        <item>@drawable/icon_rent</item>
+        <item>@drawable/icon_houserent</item>
+        <item>@drawable/icon_interest</item>
+        <item>@drawable/icon_share_bonus</item>
+        <item>@drawable/icon_social_security</item>
+        <item>@drawable/icon_accumulation_fund</item>
+        <item>@drawable/icon_loan</item>
+        <item>@drawable/icon_winning</item>
+        <item>@drawable/icon_other</item>
+        <item>@drawable/icon_add</item>
+    </integer-array>
+
+
 </resources>

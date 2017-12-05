@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -44,12 +45,14 @@ public class PopupCalculator implements View.OnClickListener {
      */
     private TextView mTvTag;
 
+    private ImageView mImgTag;
+
 
     /**
      * 结果
      */
     private TextView mTvRes;
-    
+
     public PopupCalculator(Context context) {
 
         mContext = context;
@@ -73,6 +76,7 @@ public class PopupCalculator implements View.OnClickListener {
 
     private void initView() {
 
+        mImgTag = (ImageView) mCalView.findViewById(R.id.img_popup_calculator_tag);
         mTvTag = (TextView) mCalView.findViewById(R.id.tv_popup_calculator_tag);
         mTvRes = (TextView) mCalView.findViewById(R.id.tv_popup_calculator_res);
         mCalView.findViewById(R.id.tv_popup_calculator_one).setOnClickListener(this);
@@ -97,6 +101,10 @@ public class PopupCalculator implements View.OnClickListener {
                 return false;
             }
         });
+    }
+
+    public void setTagIcon(int iconID) {
+        mImgTag.setImageResource(iconID);
     }
 
     public void setTagText(String text) {

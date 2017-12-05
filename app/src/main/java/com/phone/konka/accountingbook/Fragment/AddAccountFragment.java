@@ -276,6 +276,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                     mAdapter.setSelected(position);
                     showPopupCalculator();
                     mCalculator.setTagText(mList.get(position).getText());
+                    mCalculator.setTagIcon(mList.get(position).getIconID());
+
                 }
             }
         });
@@ -284,6 +286,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private void showPopupCalculator() {
         if (!isShow && mPopupCalculator != null) {
             mPopupCalculator.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+            mCalculator.setTagText(mList.get(mAdapter.getSelected()).getText());
+            mCalculator.setTagIcon(mList.get(mAdapter.getSelected()).getIconID());
             isShow = true;
         }
     }
@@ -301,16 +305,18 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             case R.id.tv_fragment_out:
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN) {
                     mList = ((AddAccountActivity) getActivity()).mOutList;
-//                    mList.add(mBeanAdd);
+
                     mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
+
                     mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
+
                 }
                 break;
             case R.id.tv_fragment_in:
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
                     mList = ((AddAccountActivity) getActivity()).mInList;
-//                    mList.add(mBeanAdd);
+
                     mAdapter.setList(mList);
                     mAdapter.notifyDataSetChanged();
                     mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN;

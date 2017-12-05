@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.BitmapLrucache;
 
 import java.util.List;
 
@@ -48,6 +49,8 @@ public class DragGridAdapter extends BaseAdapter {
     private final Bitmap DEL_BITMAP;
     private final Bitmap ADD_BITMAP;
 
+    private BitmapLrucache mCache;
+
 
     public DragGridAdapter(Context mContext, List<TagBean> mDatas, int index) {
         this.mContext = mContext;
@@ -55,6 +58,8 @@ public class DragGridAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(mContext);
 
         mIndex = index;
+
+        mCache = BitmapLrucache.getInstance(mContext);
 
         DEL_BITMAP = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_del_tag);
         ADD_BITMAP = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_add_tag);
@@ -95,9 +100,9 @@ public class DragGridAdapter extends BaseAdapter {
         }
 
 
-        TagBean data = mDatas.get(position);
-        holder.tvTag.setText(data.getText());
-        holder.imgTag.setImageBitmap(data.getIcon());
+        TagBean bean = mDatas.get(position);
+        holder.tvTag.setText(bean.getText());
+//        holder.imgTag.setImageBitmap(mCache.getBitmap(bean.getIconID()));
         if (mIndex == 0) {
             holder.imgOpera.setImageBitmap(DEL_BITMAP);
         } else {

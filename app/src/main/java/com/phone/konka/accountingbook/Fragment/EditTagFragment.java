@@ -77,6 +77,8 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
      */
     private int mIndex = 0;
 
+    private boolean isEdit = false;
+
 
     public List<TagBean> getMyTagList() {
         return mMyTagList;
@@ -176,7 +178,6 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
                 mMyTagList.add(bean);
             for (TagBean bean : ((AddAccountActivity) getActivity()).mOutRecomList)
                 mRecomTagList.add(bean);
-
         } else {
             for (TagBean bean : ((AddAccountActivity) getActivity()).mInList)
                 mMyTagList.add(bean);
