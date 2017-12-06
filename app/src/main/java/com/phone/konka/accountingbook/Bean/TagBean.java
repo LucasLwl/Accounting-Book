@@ -11,15 +11,9 @@ import java.util.Iterator;
 public class TagBean {
 
     private String text;
-    private Bitmap icon;
     private int iconID;
 
     public TagBean() {
-    }
-
-    public TagBean(String text, Bitmap icon) {
-        this.text = text;
-        this.icon = icon;
     }
 
     public TagBean(String text, int iconID) {
@@ -27,8 +21,6 @@ public class TagBean {
         this.iconID = iconID;
     }
 
-
-    //    private int
 
     public String getText() {
         return text;
@@ -38,13 +30,6 @@ public class TagBean {
         this.text = text;
     }
 
-    public Bitmap getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Bitmap icon) {
-        this.icon = icon;
-    }
 
     public int getIconID() {
         return iconID;

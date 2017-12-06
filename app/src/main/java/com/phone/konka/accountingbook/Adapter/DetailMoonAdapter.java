@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,7 +13,9 @@ import android.widget.TextView;
 import com.phone.konka.accountingbook.Bean.DayDetailBean;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.ImageLoader;
 import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
+import com.phone.konka.accountingbook.View.DateView;
 
 import java.util.List;
 
@@ -39,10 +42,13 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
      */
     private LayoutInflater mInflater;
 
+    private ImageLoader mCache;
+
     public DetailMoonAdapter(Context mContext, List<MonthDetailBean> mDatas) {
         this.mDatas = mDatas;
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
+        mCache = ImageLoader.getInstance(mContext);
     }
 
     @Override
@@ -80,7 +86,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    
+
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder holder;
@@ -134,9 +140,17 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
 
         for (int i = 0; i < data.getTagList().size(); i++) {
             RelativeLayout ll = (RelativeLayout) mInflater.inflate(R.layout.item_detail_three, null);
-//            ImageView imgDate = (ImageView) ll.findViewById(R.id.img_detail_date);
+            DateView imgDate = (DateView) ll.findViewById(R.id.img_detail_date);
+            ImageView imgTag = (ImageView) ll.findViewById(R.id.img_detail_tag);
             TextView tvTag = (TextView) ll.findViewById(R.id.tv_detail_tag);
             TextView tvMoney = (TextView) ll.findViewById(R.id.tv_detail_money);
+
+            if (i == 0)
+                imgDate.setDate(data.getTagList().get(i).getDay());
+            else
+                imgDate.setDate(0);
+
+            imgTag.setImageBitmap(mCache.getBitmap(data.getTagList().get(i).getIconID()));
             tvTag.setText(data.getTagList().get(i).getTag());
 
             if (data.getTagList().get(i).getMoney() > 0) {

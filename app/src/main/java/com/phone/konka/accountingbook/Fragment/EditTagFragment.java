@@ -77,10 +77,11 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
      */
     private int mIndex = 0;
 
-    private boolean isEdit = false;
 
+    private TagBean mAddTag = null;
 
     public List<TagBean> getMyTagList() {
+        addTagBean();
         return mMyTagList;
     }
 
@@ -184,6 +185,7 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
             for (TagBean bean : ((AddAccountActivity) getActivity()).mInRecomList)
                 mRecomTagList.add(bean);
         }
+        mAddTag = mMyTagList.remove(mMyTagList.size() - 1);
     }
 
     private void initEvent() {
@@ -225,15 +227,22 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
         mPopupSave.showAtLocation(rootView, Gravity.CENTER, 0, 0);
     }
 
+
+    private void addTagBean() {
+        if (!mMyTagList.contains(mAddTag))
+            mMyTagList.add(mAddTag);
+    }
+
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
 
             case R.id.img_edit_fragment_save:
-//                ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.EDIT_TAG_FRAGMENT, mIndex);
 
             case R.id.tv_popup_editFragment_yes:
+
+                addTagBean();
                 if (mIndex == 0) {
                     ((AddAccountActivity) getActivity()).mOutList = mMyTagList;
                     ((AddAccountActivity) getActivity()).mOutRecomList = mRecomTagList;

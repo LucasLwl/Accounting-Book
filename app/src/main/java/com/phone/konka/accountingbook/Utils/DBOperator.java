@@ -60,8 +60,8 @@ public class DBOperator {
      */
     public synchronized void insertAccount(DetailTagBean bean) {
         mDataBase = mDBManager.getWritableDatabase();
-        mDataBase.execSQL("insert into account(year,month,day,tag,money) values(?,?,?,?,?)",
-                new Object[]{bean.getYear(), bean.getMonth(), bean.getDay(), bean.getTag(), bean.getMoney()});
+        mDataBase.execSQL("insert into account(year,month,day,tag ,iconID,money) values(?,?,?,?,?,?)",
+                new Object[]{bean.getYear(), bean.getMonth(), bean.getDay(), bean.getTag(), bean.getIconID(), bean.getMoney()});
         mDBManager.closeDatabase();
     }
 
@@ -160,6 +160,7 @@ public class DBOperator {
             bean.setMonth(cursor.getInt(cursor.getColumnIndex("month")));
             bean.setDay(cursor.getInt(cursor.getColumnIndex("day")));
             bean.setTag(cursor.getString(cursor.getColumnIndex("tag")));
+            bean.setIconID(cursor.getInt(cursor.getColumnIndex("iconID")));
             bean.setMoney(cursor.getInt(cursor.getColumnIndex("money")));
             list.add(bean);
         }
@@ -227,7 +228,9 @@ public class DBOperator {
 
             detailBean = new DetailTagBean();
             detailBean.setTag(cursor.getString(cursor.getColumnIndex("tag")));
+            detailBean.setIconID(cursor.getInt(cursor.getColumnIndex("iconID")));
             detailBean.setMoney(cursor.getDouble(cursor.getColumnIndex("money")));
+            detailBean.setDay(nowDay);
             dayBean.getTagList().add(detailBean);
         }
 

@@ -232,8 +232,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                             }
                         }).show();
                 break;
-            case R.id.ll_setting_aboutMe:
 
+            case R.id.ll_setting_aboutMe:
+                Intent intent1 = new Intent(SettingActivity.this, AboutMe.class);
+                startActivity(intent1);
                 break;
         }
     }

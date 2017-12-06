@@ -67,5 +67,6 @@
         android:id="@+id/gv_addTagFragment_tag"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numColumns="5"></GridView>
+        android:numColumns="5"
+        android:verticalSpacing="10dp"></GridView>
 </LinearLayout>

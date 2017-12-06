@@ -22,6 +22,8 @@
     <string name="my_tag">我的选项</string>
     <string name="recommend_tag">推荐选项</string>
 
+
+    <!--支出Tag-->
     <string-array name="out_tag_text">
         <item>餐饮</item>
         <item>交通</item>
@@ -45,6 +47,8 @@
         <item>添加</item>
     </string-array>
 
+
+    <!--收入Tag-->
     <string-array name="in_tag_text">
         <item>工资</item>
         <item>生活费</item>
@@ -68,6 +72,58 @@
         <item>添加</item>
     </string-array>
 
+
+    <!--支出推荐Tag-->
+    <string-array name="out_recom_tag_text">
+        <item>机票</item>
+        <item>酒店</item>
+        <item>邮费</item>
+        <item>养宠</item>
+        <item>装修</item>
+        <item>KTV</item>
+        <item>结婚</item>
+        <item>清洁</item>
+        <item>保姆</item>
+        <item>维修</item>
+        <item>汽车</item>
+        <item>电器</item>
+        <item>家居</item>
+        <item>还钱</item>
+        <item>生意</item>
+        <item>教育</item>
+        <item>水电费</item>
+        <item>礼金</item>
+        <item>奶粉</item>
+        <item>尿布</item>
+    </string-array>
+
+
+    <!--收入推荐Tag-->
+    <string-array name="in_recom_tag_text">
+        <item>机票</item>
+        <item>酒店</item>
+        <item>邮费</item>
+        <item>养宠</item>
+        <item>装修</item>
+        <item>KTV</item>
+        <item>结婚</item>
+        <item>清洁</item>
+        <item>保姆</item>
+        <item>维修</item>
+        <item>汽车</item>
+        <item>电器</item>
+        <item>家具</item>
+        <item>还钱</item>
+        <item>生意</item>
+        <item>教育</item>
+        <item>水电费</item>
+        <item>礼金</item>
+        <item>奶粉</item>
+        <item>尿布</item>
+    </string-array>
+
+
+    <!--支出Tag的icon-->
     <integer-array name="out_tag_icon">
         <item>@drawable/icon_diet</item>
         <item>@drawable/icon_traffic</item>
@@ -91,6 +147,8 @@
         <item>@drawable/icon_add</item>
     </integer-array>
 
+
+    <!--收入Tag的icon-->
     <integer-array name="in_tag_icon">
         <item>@drawable/icon_salary</item>
         <item>@drawable/icon_livingexpenses</item>
@@ -114,5 +172,28 @@
         <item>@drawable/icon_add</item>
     </integer-array>
 
+    <!--支出推荐Tag的icon-->
+    <integer-array name="out_recom_tag_icon">
+        <item>@drawable/icon_plane</item>
+        <item>@drawable/icon_hotel</item>
+        <item>@drawable/icon_mail</item>
+        <item>@drawable/icon_pet</item>
+        <item>@drawable/icon_renovation</item>
+        <item>@drawable/icon_ktv</item>
+        <item>@drawable/icon_marry</item>
+        <item>@drawable/icon_clean</item>
+        <item>@drawable/icon_nanny</item>
+        <item>@drawable/icon_repair</item>
+        <item>@drawable/icon_car</item>
+        <item>@drawable/icon_electrical</item>
+        <item>@drawable/icon_furniture</item>
+        <item>@drawable/icon_repay</item>
+        <item>@drawable/icon_business</item>
+        <item>@drawable/icon_education</item>
+        <item>@drawable/icon_water_electricity</item>
+        <item>@drawable/icon_cashgift</item>
+        <item>@drawable/icon_milk</item>
+        <item>@drawable/icon_diaper</item>
+    </integer-array>
 
 </resources>

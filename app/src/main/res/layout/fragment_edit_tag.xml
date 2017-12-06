@@ -48,9 +48,11 @@
     <com.phone.konka.accountingbook.View.DragGridView
         android:id="@+id/dgv_edit_mytag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
-        android:numColumns="5"></com.phone.konka.accountingbook.View.DragGridView>
+        android:numColumns="5"
+        android:verticalSpacing="10dp"></com.phone.konka.accountingbook.View.DragGridView>
 
 
     <View
@@ -71,8 +73,10 @@
     <com.phone.konka.accountingbook.View.DragGridView
         android:id="@+id/dgv_edit_recomtag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
-        android:numColumns="5"></com.phone.konka.accountingbook.View.DragGridView>
+        android:numColumns="5"
+        android:verticalSpacing="10dp"></com.phone.konka.accountingbook.View.DragGridView>
 
 </LinearLayout>

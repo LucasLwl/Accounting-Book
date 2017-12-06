@@ -30,7 +30,7 @@ import java.util.List;
 public class ExcelUtil {
 
     public static final String BILL_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Bill/";
-    public static final String[] TAG_NAME = {"year", "month", "day", "tag", "money"};
+    public static final String[] TAG_NAME = {"year", "month", "day", "tag", "iconID", "money"};
 
 
     public static void writeExcel(final String excelName, final String sheetName, final List<DetailTagBean> list) {
@@ -51,7 +51,7 @@ public class ExcelUtil {
             Sheet sheet = wb.createSheet(sheetName);
 
             Row titleRow = sheet.createRow(0);
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < TAG_NAME.length; i++) {
                 Cell cell = titleRow.createCell(i);
                 cell.setCellValue(TAG_NAME[i]);
             }
@@ -59,7 +59,7 @@ public class ExcelUtil {
             for (int i = 0; i < list.size(); i++) {
                 Row contentRow = sheet.createRow(i + 1);
                 DetailTagBean bean = list.get(i);
-                for (int j = 0; j < 5; j++) {
+                for (int j = 0; j < TAG_NAME.length; j++) {
                     Cell cell = contentRow.createCell(j);
                     switch (j) {
                         case 0:
@@ -75,6 +75,9 @@ public class ExcelUtil {
                             cell.setCellValue(bean.getTag());
                             break;
                         case 4:
+                            cell.setCellValue(bean.getIconID());
+                            break;
+                        case 5:
                             cell.setCellValue(bean.getMoney());
                             break;
                     }
@@ -127,6 +130,9 @@ public class ExcelUtil {
                             bean.setTag(cell.getStringCellValue());
                             break;
                         case 4:
+                            bean.setIconID((int) cell.getNumericCellValue());
+                            break;
+                        case 5:
                             bean.setMoney(cell.getNumericCellValue());
                             break;
                     }

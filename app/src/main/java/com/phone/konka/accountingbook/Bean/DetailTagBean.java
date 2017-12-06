@@ -22,6 +22,8 @@ public class DetailTagBean {
      */
     private String tag;
 
+    private int iconID;
+
 
     /**
      * 收入金额
@@ -32,11 +34,12 @@ public class DetailTagBean {
     public DetailTagBean() {
     }
 
-    public DetailTagBean(int year, int month, int day, String tag, double money) {
+    public DetailTagBean(int year, int month, int day, String tag, int iconID, double money) {
         this.year = year;
         this.month = month;
         this.day = day;
         this.tag = tag;
+        this.iconID = iconID;
         this.money = money;
     }
 
@@ -71,6 +74,14 @@ public class DetailTagBean {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public int getIconID() {
+        return iconID;
+    }
+
+    public void setIconID(int iconID) {
+        this.iconID = iconID;
     }
 
     public double getMoney() {

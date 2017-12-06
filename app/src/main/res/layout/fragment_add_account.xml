@@ -17,6 +17,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="支出"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -26,6 +27,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="收入"
+            android:alpha="0.5"
+            android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
 

@@ -2,8 +2,8 @@ package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,6 +13,9 @@ import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
 import com.phone.konka.accountingbook.Fragment.AddTagFragment;
 import com.phone.konka.accountingbook.Fragment.EditTagFragment;
 import com.phone.konka.accountingbook.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,9 @@ import java.util.List;
 public class AddAccountActivity extends Activity {
 
 
+    /**
+     * 表示Activity本身
+     */
     public static final int FROM_ACTIVITY = -1;
 
     /**
@@ -48,7 +54,7 @@ public class AddAccountActivity extends Activity {
     public static final int ADD_TAG_FRAGMENT = 3;
 
     /**
-     * 标志位，标志是支出还是收入
+     * 标志位，表示正在显示的Fragment
      */
     private int mIndex;
 
@@ -94,7 +100,35 @@ public class AddAccountActivity extends Activity {
      */
     private FragmentTransaction transaction;
 
-    public static final String TAG = "AddAccountActivity";
+
+    /**
+     * SharedPreferences中存数据的文件名
+     */
+    private static final String TAG_NAME = "tag";
+
+
+    /**
+     * 存储收入Tag的key
+     */
+    private static final String IN_TAG = "in";
+
+
+    /**
+     * 存储支出Tag的key
+     */
+    private static final String OUT_TAG = "out";
+
+
+    /**
+     * 存储收入推荐Tag的key
+     */
+    private static final String IN_RECOM_TAG = "inrecom";
+
+
+    /**
+     * 存储支出推荐Tag的key
+     */
+    private static final String OUT_RECOM_TAG = "outrecom";
 
 
     @Override
@@ -106,8 +140,19 @@ public class AddAccountActivity extends Activity {
 
 //        显示初始的Fragment
         showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
+        mIndex = ADD_ACCOUNT_FRAGMENT_OUT;
+    }
 
-        Log.i("ddd", TAG + " :onCreate");
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //存储Tag的信息
+        writeToSharedPreferences(OUT_TAG, mOutList);
+        writeToSharedPreferences(IN_TAG, mInList);
+        writeToSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
+        writeToSharedPreferences(IN_RECOM_TAG, mInRecomList);
     }
 
     /**
@@ -135,6 +180,7 @@ public class AddAccountActivity extends Activity {
 
     /**
      * 返回是支出还是收入标志位
+     * 返回当前显示的fragment标志
      *
      * @return
      */
@@ -151,25 +197,98 @@ public class AddAccountActivity extends Activity {
         mInRecomList = new ArrayList<>();
 
 
-        String[] strArr = getResources().getStringArray(R.array.out_tag_text);
-        TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
+        /**
+         * 获取用户Tag的信息
+         */
+        readFromSharedPreferences(OUT_TAG, mOutList);
+        readFromSharedPreferences(IN_TAG, mInList);
+        readFromSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
+        readFromSharedPreferences(IN_RECOM_TAG, mInRecomList);
 
-        TagBean bean;
-        for (int i = 0; i < strArr.length; i++) {
-            bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
-            mOutList.add(bean);
-            mOutRecomList.add(bean);
+
+        /**
+         * 当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
+         */
+        if (mOutList.size() == 0) {
+
+            Log.i("ddd", "fromArray");
+            String[] strArr = getResources().getStringArray(R.array.out_tag_text);
+            TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
+
+            TagBean bean;
+            for (int i = 0; i < strArr.length; i++) {
+                bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+                mOutList.add(bean);
+            }
+
+            strArr = getResources().getStringArray(R.array.in_tag_text);
+            ta = getResources().obtainTypedArray(R.array.in_tag_icon);
+
+            for (int i = 0; i < strArr.length; i++) {
+                bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+                mInList.add(bean);
+            }
+
+            strArr = getResources().getStringArray(R.array.out_recom_tag_text);
+            ta = getResources().obtainTypedArray(R.array.out_recom_tag_icon);
+
+            for (int i = 0; i < strArr.length; i++) {
+                bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+                mOutRecomList.add(bean);
+                mInRecomList.add(bean);
+            }
         }
 
-        strArr = getResources().getStringArray(R.array.in_tag_text);
-        ta = getResources().obtainTypedArray(R.array.in_tag_icon);
+    }
 
-        for (int i = 0; i < strArr.length; i++) {
-            bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
-            mInList.add(bean);
-            mInRecomList.add(bean);
+
+    /**
+     * 读取啥redPreferences中的Tag数据
+     *
+     * @param key
+     * @param list
+     */
+    public void readFromSharedPreferences(String key, List<TagBean> list) {
+        SharedPreferences spf = getSharedPreferences(TAG_NAME, MODE_PRIVATE);
+        String str = spf.getString(key, "");
+        try {
+            JSONObject jo = new JSONObject(str);
+            for (int i = 0; i < jo.length() / 2; i++) {
+                TagBean bean = new TagBean();
+                bean.setText(jo.getString("text" + i));
+                bean.setIconID(jo.getInt("icon" + i));
+                list.add(bean);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i("ddd", "readFromSharedPreferences:  " + e.toString());
         }
     }
+
+
+    /**
+     * 向sharedPreferences写入Tag数据
+     *
+     * @param key
+     * @param list
+     */
+    public void writeToSharedPreferences(String key, List<TagBean> list) {
+
+        SharedPreferences.Editor editor = getSharedPreferences(TAG_NAME, MODE_PRIVATE).edit();
+        try {
+            JSONObject jo = new JSONObject();
+            for (int i = 0; i < list.size(); i++) {
+                jo.put("text" + i, list.get(i).getText());
+                jo.put("icon" + i, list.get(i).getIconID());
+            }
+            editor.putString(key, jo.toString());
+            editor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i("ddd", "writeToSharedPreferences:  " + e.toString());
+        }
+    }
+
 
     /**
      * 隐藏所有Frgament
@@ -193,8 +312,6 @@ public class AddAccountActivity extends Activity {
     public void showFragment(int from, int to) {
         transaction = getFragmentManager().beginTransaction();
         switch (to) {
-
-
             case ADD_ACCOUNT_FRAGMENT_IN:
             case ADD_ACCOUNT_FRAGMENT_OUT:
                 if (mAddAccountFragment == null) {
@@ -206,7 +323,6 @@ public class AddAccountActivity extends Activity {
                 transaction.commit();
                 break;
 
-
             case EDIT_TAG_FRAGMENT:
                 if (mEditTagFragment == null) {
                     mEditTagFragment = new EditTagFragment();
@@ -217,7 +333,6 @@ public class AddAccountActivity extends Activity {
                 mIndex = from;
                 transaction.commit();
                 break;
-
 
             case ADD_TAG_FRAGMENT:
                 if (mAddTagFragment == null) {

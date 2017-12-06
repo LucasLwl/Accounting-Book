@@ -1,6 +1,7 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.BitmapLrucache;
+import com.phone.konka.accountingbook.Utils.ImageLoader;
 
 import java.util.List;
 
@@ -25,20 +26,19 @@ public class TagGridViewAdapter extends BaseAdapter {
     private List<TagBean> mList;
     private LayoutInflater mInflater;
 
-    private BitmapLrucache mCache;
+    private ImageLoader mCache;
 
     private int mSelected = 0;
 
     public void setList(List<TagBean> mList) {
         this.mList = mList;
-        mCache.displayAllData();
     }
 
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
         mInflater = LayoutInflater.from(mContext);
-        mCache = BitmapLrucache.getInstance(mContext);
+        mCache = ImageLoader.getInstance(mContext);
     }
 
     @Override
@@ -72,12 +72,16 @@ public class TagGridViewAdapter extends BaseAdapter {
 
         TagBean bean = mList.get(position);
         holder.tvText.setText(bean.getText());
-        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(), bean.getText()));
+        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID()));
 
-        if (position == mSelected)
+        if (position == mSelected) {
             holder.imgSelected.setVisibility(View.VISIBLE);
-        else
+            holder.tvText.setTextColor(Color.parseColor("#FD9801"));
+        } else {
             holder.imgSelected.setVisibility(View.GONE);
+            holder.tvText.setTextColor(Color.parseColor("#555555"));
+        }
+
         return convertView;
     }
 

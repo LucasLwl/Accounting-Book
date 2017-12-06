@@ -1,6 +1,7 @@
 package com.phone.konka.accountingbook.View;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,9 @@ import com.phone.konka.accountingbook.Utils.CalculatorManager;
 public class PopupCalculator implements View.OnClickListener {
 
 
+    /**
+     * 上下文
+     */
     private Context mContext;
 
 
@@ -45,6 +49,9 @@ public class PopupCalculator implements View.OnClickListener {
      */
     private TextView mTvTag;
 
+    /**
+     * 标签的icon
+     */
     private ImageView mImgTag;
 
 
@@ -53,12 +60,18 @@ public class PopupCalculator implements View.OnClickListener {
      */
     private TextView mTvRes;
 
+
+    /**
+     * 标签icon的资源id
+     */
+    private int mIconID;
+
+
     public PopupCalculator(Context context) {
 
         mContext = context;
 
         mCalculator = new CalculatorManager(context);
-
 
         mCalView = LayoutInflater.from(context).inflate(R.layout.popup_calculator, null);
         mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, 650, false);
@@ -70,9 +83,49 @@ public class PopupCalculator implements View.OnClickListener {
     }
 
 
+    /**
+     * 获取Popup计算器
+     *
+     * @return
+     */
     public PopupWindow getPopCalculator() {
         return mPopCalculator;
     }
+
+
+    /**
+     * 显示Popup计算器
+     *
+     * @param rootView
+     */
+    public void showPopCalculator(View rootView) {
+        if (mPopCalculator != null && !mPopCalculator.isShowing()) {
+            mPopCalculator.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+        }
+    }
+
+
+    /**
+     * 隐藏Popup计算器
+     */
+    public void dismissPopCalculator() {
+        if (mPopCalculator != null && mPopCalculator.isShowing()) {
+            mPopCalculator.dismiss();
+        }
+    }
+
+
+    /**
+     * 返回是否显示了Popup计算器
+     *
+     * @return
+     */
+    public boolean isPopCalculatorShow() {
+        if (mPopCalculator != null && mPopCalculator.isShowing())
+            return true;
+        return false;
+    }
+
 
     private void initView() {
 
@@ -104,7 +157,12 @@ public class PopupCalculator implements View.OnClickListener {
     }
 
     public void setTagIcon(int iconID) {
+        mIconID = iconID;
         mImgTag.setImageResource(iconID);
+    }
+
+    public int getTagIconID() {
+        return mIconID;
     }
 
     public void setTagText(String text) {
@@ -162,7 +220,7 @@ public class PopupCalculator implements View.OnClickListener {
             case R.id.tv_popup_calculator_ok:
                 String res = mCalculator.pressOK();
                 if (res.equals("save")) {
-                    mListener.addAccount(getTagText(), Double.parseDouble(mTvRes.getText().toString()));
+                    mListener.addAccount(getTagText(), mIconID, Double.parseDouble(mTvRes.getText().toString()));
                     mTvRes.setText("");
                 } else {
                     mTvRes.setText(res);
@@ -181,6 +239,6 @@ public class PopupCalculator implements View.OnClickListener {
     }
 
     public interface AddAccountListener {
-        void addAccount(String tag, double money);
+        void addAccount(String tag, int iconID, double money);
     }
 }

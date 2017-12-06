@@ -3,17 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <com.phone.konka.accountingbook.View.DateView
         android:id="@+id/img_detail_date"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="20dp"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="20dp" />
 
     <ImageView
         android:id="@+id/img_detail_tag"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="30dp"
         android:layout_toRightOf="@+id/img_detail_date"
@@ -26,7 +25,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/img_detail_tag"
-        android:textColor="#000000"
+        android:textColor="@color/item_text"
         android:textSize="14sp" />
 
     <TextView
@@ -37,7 +36,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
         android:gravity="center"
-        android:textColor="#000000"
+        android:textColor="@color/item_text"
         android:textSize="14sp" />
 
 
