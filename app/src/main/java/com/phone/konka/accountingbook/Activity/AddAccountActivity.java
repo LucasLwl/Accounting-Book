@@ -172,7 +172,7 @@ public class AddAccountActivity extends Activity {
             }
             showFragment(EDIT_TAG_FRAGMENT, mIndex);
         } else if (mAddTagFragment != null && !mAddTagFragment.isHidden()) {
-
+            showFragment(ADD_TAG_FRAGMENT, mIndex);
         } else {
             super.onBackPressed();
         }

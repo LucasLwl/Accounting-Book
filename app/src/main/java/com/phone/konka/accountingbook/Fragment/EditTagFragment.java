@@ -212,8 +212,7 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
 
     public void onBackPress() {
         if (mPopupSave == null) {
-            mPopupSave = new PopupWindow(mPopupView, ViewGroup.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT, true);
+            mPopupSave = new PopupWindow(mPopupView, 500, 300, true);
             mPopupSave.setBackgroundDrawable(new BitmapDrawable());
             mPopupSave.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override

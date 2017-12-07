@@ -136,7 +136,7 @@ public class DBOperator {
     public double getLeastOut() {
         double res = 0;
         mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select money from account where  money < ?",
+        Cursor cursor = mDataBase.rawQuery("select money from account where  money < ? order by year ,month,day",
                 new String[]{0 + ""});
         if (cursor.moveToLast()) {
             res = cursor.getDouble(cursor.getColumnIndex("money"));

@@ -32,6 +32,7 @@ public class TagGridViewAdapter extends BaseAdapter {
 
     public void setList(List<TagBean> mList) {
         this.mList = mList;
+        mSelected = 0;
     }
 
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
