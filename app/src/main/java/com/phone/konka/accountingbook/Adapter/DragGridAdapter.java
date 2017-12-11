@@ -102,7 +102,7 @@ public class DragGridAdapter extends BaseAdapter {
 
         TagBean bean = mDatas.get(position);
         holder.tvTag.setText(bean.getText());
-        holder.imgTag.setImageBitmap(mCache.getBitmap(bean.getIconID()));
+        holder.imgTag.setImageBitmap(mCache.getBitmap(bean.getIconID(), holder.imgTag.getWidth(), holder.imgTag.getHeight()));
         if (mIndex == 0) {
             holder.imgOpera.setImageBitmap(DEL_BITMAP);
         } else {

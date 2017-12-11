@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.PopupWindow;
 
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
@@ -189,6 +190,8 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initEvent() {
+        
+
         rootView.findViewById(R.id.img_edit_fragment_back).setOnClickListener(this);
         rootView.findViewById(R.id.img_edit_fragment_save).setOnClickListener(this);
 

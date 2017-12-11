@@ -73,7 +73,7 @@ public class TagGridViewAdapter extends BaseAdapter {
 
         TagBean bean = mList.get(position);
         holder.tvText.setText(bean.getText());
-        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID()));
+        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(),holder.imgIcon.getWidth(),holder.imgIcon.getHeight()));
 
         if (position == mSelected) {
             holder.imgSelected.setVisibility(View.VISIBLE);

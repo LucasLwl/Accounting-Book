@@ -26,6 +26,13 @@
         <activity android:name=".Activity.SettingActivity"></activity>
         <activity android:name=".Activity.AboutMe"></activity>
 
+        <provider
+            android:name=".Utils.AccountProvider"
+            android:authorities="com.phone.konka.accountingbook.Utils.AccountProvider"
+            android:exported="true">
+
+        </provider>
+
                   
     </application>
 

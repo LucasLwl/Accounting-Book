@@ -5,10 +5,21 @@
     android:background="#eee"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/ll_setting_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#778899"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#778899">
+        android:background="#778899"
+        android:fitsSystemWindows="true">
 
         <ImageView
             android:id="@+id/img_setting_back"
@@ -23,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="@string/setting"
             android:textColor="@color/white"
             android:textSize="18sp" />

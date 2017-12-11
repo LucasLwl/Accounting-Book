@@ -4,15 +4,40 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/ll_detail_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#aabbcc"
+        android:orientation="vertical"></LinearLayout>
+
+
+    <RelativeLayout
         android:id="@+id/tv_detail"
+        android:layout_below="@+id/ll_detail_bar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="#aabbcc"
-        android:gravity="center"
-        android:text="明细"
-        android:textColor="#ffffff"
-        android:textSize="20sp" />
+        android:background="#aabbcc">
+
+        <ImageView
+            android:id="@+id/img_detail_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="#aabbcc"
+            android:gravity="center"
+            android:text="明细"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
 
     <ExpandableListView
         android:id="@+id/lv_detail_one"

@@ -1,5 +1,6 @@
 package com.phone.konka.accountingbook.Utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -168,6 +169,33 @@ public class DBOperator {
         return list;
     }
 
+    public Cursor query(String tableName, String[] projection, String selection, String[] selectionArgs, String groupBy, String having, String sortOrder, String limit) {
+        mDataBase = mDBManager.getReadableDatabase();
+        Cursor cursor = mDataBase.query(tableName, projection, selection, selectionArgs, groupBy, having, sortOrder, limit);
+//        mDBManager.closeDatabase();
+        return cursor;
+    }
+
+    public synchronized void insert(String table, String nullColumn, ContentValues values) {
+        mDataBase = mDBManager.getWritableDatabase();
+        mDataBase.insert(table, nullColumn, values);
+        mDBManager.closeDatabase();
+    }
+
+    public synchronized int delete(String table, String selection, String[] selectionArgs) {
+        mDataBase = mDBManager.getWritableDatabase();
+        int count = mDataBase.delete(table, selection, selectionArgs);
+        mDBManager.closeDatabase();
+        return count;
+    }
+
+    public synchronized int update(String table, ContentValues values, String selection, String[] selectionArgs) {
+        mDataBase = mDBManager.getWritableDatabase();
+        int count = mDataBase.update(table, values, selection, selectionArgs);
+        mDBManager.closeDatabase();
+        return count;
+    }
+
 
     public synchronized void removeAllData() {
         mDataBase = mDBManager.getWritableDatabase();
@@ -277,4 +305,6 @@ public class DBOperator {
         }
         return list;
     }
+
+
 }

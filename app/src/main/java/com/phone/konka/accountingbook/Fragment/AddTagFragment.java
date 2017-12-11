@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
 import com.phone.konka.accountingbook.Bean.TagBean;
@@ -97,14 +98,21 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.img_addTagFragment_save:
-                TagBean bean = new TagBean();
-                bean.setText(mEtTag.getText().toString());
-                bean.setIconID(mIconID);
-                if (mIndex == 0) {
-                    ((AddAccountActivity) getActivity()).mOutList.add(((AddAccountActivity) getActivity()).mOutList.size() - 1, bean);
+
+                if (mEtTag.getText().toString().isEmpty()) {
+                    Toast.makeText(getActivity(), "类别名不能为空", Toast.LENGTH_SHORT).show();
+                    break;
                 } else {
-                    ((AddAccountActivity) getActivity()).mInList.add(((AddAccountActivity) getActivity()).mInList.size() - 1, bean);
+                    TagBean bean = new TagBean();
+                    bean.setText(mEtTag.getText().toString());
+                    bean.setIconID(mIconID);
+                    if (mIndex == 0) {
+                        ((AddAccountActivity) getActivity()).mOutList.add(((AddAccountActivity) getActivity()).mOutList.size() - 1, bean);
+                    } else {
+                        ((AddAccountActivity) getActivity()).mInList.add(((AddAccountActivity) getActivity()).mInList.size() - 1, bean);
+                    }
                 }
+
             case R.id.img_addTagFragment_back:
                 ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
                 break;
@@ -112,6 +120,7 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
     }
 
     class Adapter extends BaseAdapter {
+
 
         private List<TagBean> mlist;
 

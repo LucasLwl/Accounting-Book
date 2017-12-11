@@ -11,8 +11,15 @@ public class DoubleTo2Decimal {
     public static String doubleTo2Decimal(double num) {
         DecimalFormat df = new DecimalFormat("#.00");
         String str;
+        boolean isNegative = false;
         if (num == 0)
             return "0.00";
+
+        if (num < 0) {
+            num = Math.abs(num);
+            isNegative = true;
+        }
+
 
         if (num > 99999999) {
             int head = (int) (num / 100000000);
@@ -29,6 +36,8 @@ public class DoubleTo2Decimal {
         } else {
             str = df.format(num);
         }
+        if (isNegative)
+            return "-" + str;
         return str;
     }
 }

@@ -146,11 +146,11 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
             TextView tvMoney = (TextView) ll.findViewById(R.id.tv_detail_money);
 
             if (i == 0)
-                imgDate.setDate(data.getTagList().get(i).getDay() + "");
+                imgDate.setDate(String.valueOf(data.getTagList().get(i).getDay()));
             else
                 imgDate.setDate("");
 
-            imgTag.setImageBitmap(mCache.getBitmap(data.getTagList().get(i).getIconID()));
+            imgTag.setImageBitmap(mCache.getBitmap(data.getTagList().get(i).getIconID(), imgTag.getWidth(), imgTag.getHeight()));
             tvTag.setText(data.getTagList().get(i).getTag());
 
             if (data.getTagList().get(i).getMoney() > 0) {

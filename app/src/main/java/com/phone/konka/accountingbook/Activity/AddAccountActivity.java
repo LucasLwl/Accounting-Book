@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
@@ -136,11 +140,36 @@ public class AddAccountActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_account);
 
+        initState();
+
         initData();
 
 //        显示初始的Fragment
         showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
         mIndex = ADD_ACCOUNT_FRAGMENT_OUT;
+    }
+
+    private void initState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+
+            LinearLayout ll = (LinearLayout) findViewById(R.id.ll_addAccount_bar);
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll.getLayoutParams();
+            lp.height = getStatusBarHeight();
+            ll.setLayoutParams(lp);
+        }
+    }
+
+    private int getStatusBarHeight() {
+
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
 

@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.phone.konka.accountingbook.R;
 
@@ -53,6 +54,7 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
         mDate = date;
     }
 
+
     @Override
 
     protected void onDraw(Canvas canvas) {
@@ -67,7 +69,8 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
             paint.setStyle(Paint.Style.FILL);
             canvas.drawCircle(x / 2, y / 2, r / 2, paint);
 
-            canvas.drawText(mDate, (getMeasuredWidth() - mTextRect.width()) / 2, (getMeasuredHeight() + mTextRect.height()) / 2, mTextPaint);
+            canvas.drawText(mDate, (x - mTextRect.width()) / 2, (y + mTextRect.height()) / 2, mTextPaint);
+
 
         } else {
             paint = new Paint();
@@ -76,7 +79,5 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
             canvas.drawLine(x / 2, 0, x / 2, y * 3 / 4, paint);
             canvas.drawCircle(x / 2, y * 3 / 4, y / 4, paint);
         }
-
-
     }
 }
