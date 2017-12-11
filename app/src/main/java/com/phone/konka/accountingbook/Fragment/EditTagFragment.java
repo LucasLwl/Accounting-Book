@@ -142,26 +142,6 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
         mMyTagAdapter = new DragGridAdapter(getActivity(), mMyTagList, 0);
         mRecomTagAdapter = new DragGridAdapter(getActivity(), mRecomTagList, 1);
 
-        mMyTagAdapter.setOnClickListener(new DragGridAdapter.OnClickListener() {
-            @Override
-            public void onclick(int pos) {
-                mRecomTagList.add(mMyTagList.get(pos));
-                mMyTagList.remove(pos);
-                mMyTagAdapter.notifyDataSetChanged();
-                mRecomTagAdapter.notifyDataSetChanged();
-            }
-        });
-
-        mRecomTagAdapter.setOnClickListener(new DragGridAdapter.OnClickListener() {
-            @Override
-            public void onclick(int pos) {
-                mMyTagList.add(mRecomTagList.get(pos));
-                mRecomTagList.remove(pos);
-                mMyTagAdapter.notifyDataSetChanged();
-                mRecomTagAdapter.notifyDataSetChanged();
-            }
-        });
-
         mGvMyTag.setAdapter(mMyTagAdapter);
         mGvRecomTag.setAdapter(mRecomTagAdapter);
 
@@ -190,7 +170,27 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initEvent() {
-        
+
+
+        mGvMyTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mRecomTagList.add(mMyTagList.get(position));
+                mMyTagList.remove(position);
+                mMyTagAdapter.notifyDataSetChanged();
+                mRecomTagAdapter.notifyDataSetChanged();
+            }
+        });
+
+        mGvRecomTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mMyTagList.add(mRecomTagList.get(position));
+                mRecomTagList.remove(position);
+                mMyTagAdapter.notifyDataSetChanged();
+                mRecomTagAdapter.notifyDataSetChanged();
+            }
+        });
 
         rootView.findViewById(R.id.img_edit_fragment_back).setOnClickListener(this);
         rootView.findViewById(R.id.img_edit_fragment_save).setOnClickListener(this);

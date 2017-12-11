@@ -38,10 +38,6 @@ public class DragGridAdapter extends BaseAdapter {
      */
     private boolean isDrag;
 
-    /**
-     * 回调接口的响应
-     */
-    private OnClickListener onClickListener;
 
     private int mIndex;
 
@@ -109,13 +105,6 @@ public class DragGridAdapter extends BaseAdapter {
             holder.imgOpera.setImageBitmap(ADD_BITMAP);
         }
 
-        holder.imgOpera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickListener.onclick(position);
-            }
-        });
-
         /**
          * 消除移动视图动画效果，避免显示错乱
          */
@@ -153,20 +142,4 @@ public class DragGridAdapter extends BaseAdapter {
         ImageView imgOpera;
     }
 
-
-    /**
-     * 设置回调接口
-     *
-     * @param listener
-     */
-    public void setOnClickListener(OnClickListener listener) {
-        this.onClickListener = listener;
-    }
-
-    /**
-     * 回调接口，用于对外实现item的添加或者删除
-     */
-    public interface OnClickListener {
-        void onclick(int pos);
-    }
 }

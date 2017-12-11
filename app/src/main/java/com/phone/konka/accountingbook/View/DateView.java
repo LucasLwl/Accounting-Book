@@ -21,7 +21,9 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
     private String mDate = "";
 
     private Rect mTextRect;
-    private Paint mTextPaint;
+
+    private int width;
+    private int height;
 
 
     public DateView(Context context) {
@@ -42,12 +44,10 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 
-        mTextPaint = new Paint();
-        mTextPaint.setAntiAlias(true);
-        mTextPaint.setColor(getResources().getColor(R.color.black));
-        mTextPaint.setTextSize(36);
-        mTextRect = new Rect();
-        mTextPaint.getTextBounds(mDate, 0, mDate.length(), mTextRect);
+        width = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
+        height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
+        mTextRect = new Rect(0, 0, width, height);
+
     }
 
     public void setDate(String date) {
@@ -59,25 +59,30 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint;
-        int x = getWidth();
-        int y = getHeight();
-        int r = Math.min(x, y);
+
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+
+        int r = Math.min(width, height);
+
         if (mDate != null && !mDate.equals("")) {
-            paint = new Paint();
             paint.setColor(getResources().getColor(R.color.white));
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawCircle(x / 2, y / 2, r / 2, paint);
+            canvas.drawCircle(width / 2, height / 2, r / 2, paint);
 
-            canvas.drawText(mDate, (x - mTextRect.width()) / 2, (y + mTextRect.height()) / 2, mTextPaint);
 
+            paint.setColor(getResources().getColor(R.color.black));
+            paint.setTextSize(36);
+
+            Paint.FontMetricsInt fontMetrics = paint.getFontMetricsInt();
+            int baseline = (mTextRect.bottom + mTextRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
+            paint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText(mDate, mTextRect.centerX(), baseline, paint);
 
         } else {
-            paint = new Paint();
-            paint.setStyle(Paint.Style.FILL);
             paint.setColor(Color.parseColor("#778899"));
-            canvas.drawLine(x / 2, 0, x / 2, y * 3 / 4, paint);
-            canvas.drawCircle(x / 2, y * 3 / 4, y / 4, paint);
+            canvas.drawLine(width / 2, 0, width / 2, height * 3 / 4, paint);
+            canvas.drawCircle(width / 2, height * 3 / 4, height / 4, paint);
         }
     }
 }
