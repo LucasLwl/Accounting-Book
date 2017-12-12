@@ -150,6 +150,12 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
             else
                 imgDate.setDate("");
 
+            if (i == data.getTagList().size() - 1) {
+                imgDate.setIsEnd(true);
+            } else {
+                imgDate.setIsEnd(false);
+            }
+
             imgTag.setImageBitmap(mCache.getBitmap(data.getTagList().get(i).getIconID(), imgTag.getWidth(), imgTag.getHeight()));
             tvTag.setText(data.getTagList().get(i).getTag());
 

@@ -25,6 +25,8 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
     private int width;
     private int height;
 
+    private boolean isEnd = true;
+
 
     public DateView(Context context) {
         this(context, null);
@@ -55,6 +57,11 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
     }
 
 
+    public void setIsEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
+
+
     @Override
 
     protected void onDraw(Canvas canvas) {
@@ -77,12 +84,17 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
             Paint.FontMetricsInt fontMetrics = paint.getFontMetricsInt();
             int baseline = (mTextRect.bottom + mTextRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
             paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(mDate, mTextRect.centerX(), baseline, paint);
+
+            canvas.drawText(mDate, width / 2, baseline, paint);
 
         } else {
             paint.setColor(Color.parseColor("#778899"));
-            canvas.drawLine(width / 2, 0, width / 2, height * 3 / 4, paint);
-            canvas.drawCircle(width / 2, height * 3 / 4, height / 4, paint);
+            if (isEnd) {
+                canvas.drawLine(width / 2, 0, width / 2, height / 2, paint);
+            } else {
+                canvas.drawLine(width / 2, 0, width / 2, height, paint);
+            }
+            canvas.drawCircle(width / 2, height / 2, height / 6, paint);
         }
     }
 }
