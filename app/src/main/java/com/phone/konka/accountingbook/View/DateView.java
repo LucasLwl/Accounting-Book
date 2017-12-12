@@ -18,14 +18,12 @@ import com.phone.konka.accountingbook.R;
 public class DateView extends android.support.v7.widget.AppCompatTextView {
 
 
-    private String mDate = "";
+    private String mDate = "11";
 
     private Rect mTextRect;
 
     private int width;
     private int height;
-
-    private boolean isEnd = true;
 
 
     public DateView(Context context) {
@@ -45,20 +43,16 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-
         width = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
         height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
         mTextRect = new Rect(0, 0, width, height);
 
     }
 
+
     public void setDate(String date) {
         mDate = date;
-    }
-
-
-    public void setIsEnd(boolean isEnd) {
-        this.isEnd = isEnd;
+        invalidate();
     }
 
 
@@ -77,24 +71,13 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
             paint.setColor(getResources().getColor(R.color.white));
             canvas.drawCircle(width / 2, height / 2, r / 2, paint);
 
-
             paint.setColor(getResources().getColor(R.color.black));
             paint.setTextSize(36);
 
             Paint.FontMetricsInt fontMetrics = paint.getFontMetricsInt();
             int baseline = (mTextRect.bottom + mTextRect.top - fontMetrics.bottom - fontMetrics.top) / 2;
             paint.setTextAlign(Paint.Align.CENTER);
-
             canvas.drawText(mDate, width / 2, baseline, paint);
-
-        } else {
-            paint.setColor(Color.parseColor("#778899"));
-            if (isEnd) {
-                canvas.drawLine(width / 2, 0, width / 2, height / 2, paint);
-            } else {
-                canvas.drawLine(width / 2, 0, width / 2, height, paint);
-            }
-            canvas.drawCircle(width / 2, height / 2, height / 6, paint);
         }
     }
 }

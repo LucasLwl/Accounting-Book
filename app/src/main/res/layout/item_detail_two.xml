@@ -3,26 +3,65 @@
 
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#eee"
-    android:orientation="vertical"
-    android:paddingBottom="15dp">
+    android:orientation="vertical">
 
 
     <View
+        android:id="@+id/view_divider"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/item_line"></View>
+        android:layout_height="10dp"
+        android:background="#ffffff">
 
+    </View>
 
     <LinearLayout
-        android:id="@+id/ll_detail_two"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#eee"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
+        <com.phone.konka.accountingbook.View.DateView
+            android:id="@+id/dv_two_date"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.6"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/tv_two_in"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_two_out"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_two_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#000000"
+            android:textSize="14sp" />
     </LinearLayout>
-
 </LinearLayout>

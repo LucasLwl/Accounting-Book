@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,7 +24,7 @@ import java.util.List;
  * Created by 廖伟龙 on 2017/11/17.
  */
 
-public class DetailMoonAdapter extends BaseExpandableListAdapter {
+public class GroupAdapter extends BaseExpandableListAdapter {
 
 
     /**
@@ -44,7 +45,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
 
     private ImageLoader mCache;
 
-    public DetailMoonAdapter(Context mContext, List<MonthDetailBean> mDatas) {
+    public GroupAdapter(Context mContext, List<MonthDetailBean> mDatas) {
         this.mDatas = mDatas;
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
@@ -58,7 +59,7 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mDatas.get(groupPosition).getDayList().size();
+        return 1;
     }
 
     @Override
@@ -125,54 +126,25 @@ public class DetailMoonAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-
         ChildViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item_detail_two, null);
+
             holder = new ChildViewHolder();
-            holder.ll = (LinearLayout) convertView.findViewById(R.id.ll_detail_two);
+            convertView = mInflater.inflate(R.layout.chila_expandable, null);
+            holder.elv = (ExpandableListView) convertView.findViewById(R.id.lv_child);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        holder.ll.removeAllViews();
-        DayDetailBean data = mDatas.get(groupPosition).getDayList().get(childPosition);
 
-        for (int i = 0; i < data.getTagList().size(); i++) {
-            RelativeLayout ll = (RelativeLayout) mInflater.inflate(R.layout.item_detail_three, null);
-            DateView imgDate = (DateView) ll.findViewById(R.id.img_detail_date);
-            ImageView imgTag = (ImageView) ll.findViewById(R.id.img_detail_tag);
-            TextView tvTag = (TextView) ll.findViewById(R.id.tv_detail_tag);
-            TextView tvMoney = (TextView) ll.findViewById(R.id.tv_detail_money);
-
-            if (i == 0)
-                imgDate.setDate(String.valueOf(data.getTagList().get(i).getDay()));
-            else
-                imgDate.setDate("");
-
-            if (i == data.getTagList().size() - 1) {
-                imgDate.setIsEnd(true);
-            } else {
-                imgDate.setIsEnd(false);
-            }
-
-            imgTag.setImageBitmap(mCache.getBitmap(data.getTagList().get(i).getIconID(), imgTag.getWidth(), imgTag.getHeight()));
-            tvTag.setText(data.getTagList().get(i).getTag());
-
-            if (data.getTagList().get(i).getMoney() > 0) {
-                tvMoney.setText("收入+" + DoubleTo2Decimal.doubleTo2Decimal(data.getTagList().get(i).getMoney()));
-            } else {
-                tvMoney.setText("支出" + DoubleTo2Decimal.doubleTo2Decimal(data.getTagList().get(i).getMoney()));
-            }
-            holder.ll.addView(ll);
-        }
+        holder.elv.setAdapter(new ChildAdapter(mContext, mDatas.get(groupPosition).getDayList()));
 
         return convertView;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 }
 
@@ -186,5 +158,6 @@ class GroupViewHolder {
 
 class ChildViewHolder {
 
-    LinearLayout ll;
+    ExpandableListView elv;
+
 }

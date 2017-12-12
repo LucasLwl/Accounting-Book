@@ -213,7 +213,7 @@ public class DBOperator {
 
         mDataBase = mDBManager.getReadableDatabase();
 
-        Cursor cursor = mDataBase.rawQuery("select * from account order by year desc , month desc , day desc", new String[]{});
+        Cursor cursor = mDataBase.rawQuery("select * from account order by year desc , month desc , day desc , _id desc", new String[]{});
 
         List<MonthDetailBean> list = new ArrayList<>();
 

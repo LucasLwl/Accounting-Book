@@ -7,13 +7,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.phone.konka.accountingbook.Adapter.DetailMoonAdapter;
+import com.phone.konka.accountingbook.Adapter.GroupAdapter;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DBOperator;
@@ -32,7 +30,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
 
 
     private ExpandableListView mListView;
-    private DetailMoonAdapter mAdapter;
+    private GroupAdapter mAdapter;
     private List<MonthDetailBean> mData;
 
     /**
@@ -103,7 +101,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
             @Override
             public void run() {
                 mData = mDBOperator.getDetailList();
-                mAdapter = new DetailMoonAdapter(DetailActivity.this, mData);
+                mAdapter = new GroupAdapter(DetailActivity.this, mData);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
