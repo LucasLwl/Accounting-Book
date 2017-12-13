@@ -22,6 +22,7 @@ import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DBOperator;
+import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 import com.phone.konka.accountingbook.View.PopupCalculator;
 
@@ -107,8 +108,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private int mDay;
 
     private DatePickerDialog mDialog;
-
-
 
 
     @Nullable
@@ -202,10 +201,10 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 final DetailTagBean bean;
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
                     bean = new DetailTagBean(mYear, mMonth, mDay, tag, iconID, -money);
-                    Toast.makeText(getActivity(), "支出 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "支出 " + tag + ":" + DoubleTo2Decimal.doubleTo2Decimal(money) + "已保存", Toast.LENGTH_SHORT).show();
                 } else {
                     bean = new DetailTagBean(mYear, mMonth, mDay, tag, iconID, money);
-                    Toast.makeText(getActivity(), "收入 " + tag + ":" + money + "已保存", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "收入 " + tag + ":" + DoubleTo2Decimal.doubleTo2Decimal(money) + "已保存", Toast.LENGTH_SHORT).show();
                 }
                 mThreadPool.execute(new Runnable() {
                     @Override
