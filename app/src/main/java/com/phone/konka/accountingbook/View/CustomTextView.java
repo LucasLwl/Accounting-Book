@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -47,11 +48,106 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     }
 
 
+    /**
+     * 添加数字显示格式
+     *
+     * @param text
+     * @param type
+     */
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+
+        super.setText(setTextType(text), type);
+
+    }
+
+
+    /**
+     * 剔除文字中用于显示数字的','
+     *
+     * @return
+     */
+    @Override
+    public CharSequence getText() {
+        StringBuffer sb = new StringBuffer(super.getText());
+        while (sb.indexOf(",") != -1)
+            sb.deleteCharAt(sb.indexOf(","));
+        return sb;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
-        refitText(getText().toString(), this.getWidth());
+        refitText(setTextType(getText()).toString(), this.getWidth());
         super.onDraw(canvas);
 
+    }
+
+
+    /**
+     * 设置TextView显示格式
+     * 处理+、-运算符的影响：以运算符为分隔线，分为左右两个数字进行格式化
+     *
+     * @param text
+     * @return
+     */
+    private CharSequence setTextType(CharSequence text) {
+        String operator;
+        int index;
+
+        StringBuffer sb = new StringBuffer(text);
+        if (sb.indexOf("+") != -1) {
+            index = sb.indexOf("+");
+            operator = "+";
+        } else if (sb.indexOf("-") != -1) {
+            index = sb.indexOf("-");
+            operator = "-";
+        } else {
+            index = -1;
+            operator = null;
+        }
+
+        if (index != -1) {
+            StringBuffer s = new StringBuffer(divideNumber(sb.subSequence(0, index)));
+            s.append(operator);
+            s.append(divideNumber(sb.subSequence(index + 1, sb.length())));
+            return s;
+        } else {
+            return divideNumber(sb);
+        }
+    }
+
+
+    /**
+     * 调整数字显示格式
+     * 小数点前的数，每三位用','隔开
+     *
+     * @param text
+     * @return
+     */
+    private CharSequence divideNumber(CharSequence text) {
+
+        if (text == null)
+            return null;
+
+        StringBuffer sb = new StringBuffer(text);
+
+        //判断是否有小数点
+        int index = sb.indexOf(".");
+
+        if (index == -1)
+            //没小数点，将index调整到文末
+            index = sb.length() - 1;
+        else
+            //有小数点，则将index调整到小数点前一位数中
+            index--;
+
+        //每三位隔开一次
+        index -= 3;
+        while (index >= 0) {
+            sb.insert(index + 1, ',');
+            index -= 3;
+        }
+        return sb;
     }
 
 
@@ -63,6 +159,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
      */
     private void refitText(String text, int textWidth) {
 
+        Log.i("ddd", text);
 //        当textView的总宽度大于0时才能显示文字
         if (textWidth > 0) {
 

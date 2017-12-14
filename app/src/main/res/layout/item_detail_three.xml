@@ -1,43 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <!--<com.phone.konka.accountingbook.View.LineCircleView-->
+    <!--android:id="@+id/img_detail_date"-->
+    <!--android:layout_width="25dp"-->
+    <!--android:layout_height="25dp"-->
+    <!--android:layout_marginLeft="20dp" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/img_detail_tag"-->
+    <!--android:layout_width="20dp"-->
+    <!--android:layout_height="20dp"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="30dp"-->
+    <!--android:layout_toRightOf="@+id/img_detail_date"-->
+    <!--android:src="@mipmap/ic_launcher" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_detail_tag"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginLeft="10dp"-->
+    <!--android:layout_toRightOf="@+id/img_detail_tag"-->
+    <!--android:textColor="@color/item_text"-->
+    <!--android:textSize="14sp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_detail_money"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginRight="20dp"-->
+    <!--android:gravity="center"-->
+    <!--android:textColor="@color/item_text"-->
+    <!--android:textSize="14sp" />-->
 
     <com.phone.konka.accountingbook.View.LineCircleView
         android:id="@+id/img_detail_date"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="0.6" />
 
-    <ImageView
-        android:id="@+id/img_detail_tag"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/img_detail_date"
-        android:src="@mipmap/ic_launcher" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/tv_detail_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/img_detail_tag"
-        android:textColor="@color/item_text"
-        android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/img_detail_tag"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_detail_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/item_text"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tv_detail_money"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:gravity="right|center_vertical"
+        android:paddingRight="20dp"
         android:textColor="@color/item_text"
         android:textSize="14sp" />
 
 
-</RelativeLayout>
+</LinearLayout>

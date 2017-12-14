@@ -12,6 +12,11 @@ import java.util.List;
 public class DayDetailBean {
 
 
+    private int year;
+
+
+    private int month;
+
     /**
      * 日期
      */
@@ -22,6 +27,22 @@ public class DayDetailBean {
      * 具体的收入情况
      */
     private List<DetailTagBean> tagList;
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int day) {
+        this.month = day;
+    }
 
     public int getDate() {
         return date;

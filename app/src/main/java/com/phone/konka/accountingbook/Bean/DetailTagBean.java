@@ -10,6 +10,8 @@ package com.phone.konka.accountingbook.Bean;
 public class DetailTagBean {
 
 
+    private int id;
+
     private int year;
 
     private int month;
@@ -43,6 +45,14 @@ public class DetailTagBean {
         this.money = money;
     }
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getYear() {
         return year;

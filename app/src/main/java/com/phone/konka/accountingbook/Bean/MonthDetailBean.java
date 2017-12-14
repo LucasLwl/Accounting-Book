@@ -40,7 +40,7 @@ public class MonthDetailBean {
 
     private List<DayDetailBean> dayList;
 
-    public double getYear() {
+    public int getYear() {
         return year;
     }
 

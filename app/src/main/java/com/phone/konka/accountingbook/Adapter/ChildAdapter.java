@@ -47,7 +47,6 @@ public class ChildAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
 
-        Log.i("ddd", mList.get(groupPosition).getTagList().size() + "");
         return mList.get(groupPosition).getTagList().size();
     }
 
@@ -100,12 +99,12 @@ public class ChildAdapter extends BaseExpandableListAdapter {
             if (child.getMoney() > 0)
                 in += child.getMoney();
             else
-                out += child.getMoney();
+                out -= child.getMoney();
         }
 
         holder.tvIn.setText(DoubleTo2Decimal.doubleTo2Decimal(in));
         holder.tvOut.setText(DoubleTo2Decimal.doubleTo2Decimal(out));
-        holder.tvLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(in + out));
+        holder.tvLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(in - out));
 
         return convertView;
     }
@@ -157,7 +156,7 @@ public class ChildAdapter extends BaseExpandableListAdapter {
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 
     class GroupViewHolder {

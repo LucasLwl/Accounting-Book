@@ -246,6 +246,8 @@ public class DBOperator {
             }
             if (nowDay != lastDay || nowMonth != lastMonth || nowDay != lastDay) {
                 dayBean = new DayDetailBean();
+                dayBean.setYear(nowYear);
+                dayBean.setMonth(nowMonth);
                 dayBean.setDate(nowDay);
                 dayBean.setTagList(new ArrayList<DetailTagBean>());
                 monthBean.getDayList().add(dayBean);
@@ -255,6 +257,7 @@ public class DBOperator {
             lastDay = nowDay;
 
             detailBean = new DetailTagBean();
+            detailBean.setId(cursor.getInt(cursor.getColumnIndex("_id")));
             detailBean.setTag(cursor.getString(cursor.getColumnIndex("tag")));
             detailBean.setIconID(cursor.getInt(cursor.getColumnIndex("iconID")));
             detailBean.setMoney(cursor.getDouble(cursor.getColumnIndex("money")));
