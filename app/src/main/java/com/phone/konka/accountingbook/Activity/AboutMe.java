@@ -21,11 +21,16 @@ public class AboutMe extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
 
+//        设置沉浸式状态栏
         initState();
 
         initEvent();
     }
 
+    /**
+     * 设置沉浸式状态栏
+     *
+     */
     private void initState() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

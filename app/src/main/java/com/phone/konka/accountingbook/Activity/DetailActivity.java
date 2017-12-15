@@ -40,8 +40,21 @@ import java.util.List;
 public class DetailActivity extends Activity implements View.OnClickListener {
 
 
+    /**
+     * 展示账单详情的ExpandableListView
+     */
     private ExpandableListView mListView;
+
+
+    /**
+     * 展示账单详情的ExpandableListView的适配器
+     */
     private GroupAdapter mAdapter;
+
+
+    /**
+     * 账单详情数据
+     */
     private List<MonthDetailBean> mData;
 
     /**
@@ -74,6 +87,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
 
         setContentView(R.layout.activity_detail);
 
+//        设置沉浸式状态栏
         initState();
 
         initView();
@@ -90,7 +104,11 @@ public class DetailActivity extends Activity implements View.OnClickListener {
 
 
     /**
-     * 设置状态栏透明
+     * 设置沉浸式状态栏
+     * <p>
+     * 先设置状态栏为透明
+     * <p>
+     * 然后设置占位View的高度为状态栏的高度
      */
     private void initState() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -104,7 +122,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
     }
 
     /**
-     * 获取状态栏高屋
+     * 获取状态栏高度
      *
      * @return
      */
@@ -121,18 +139,25 @@ public class DetailActivity extends Activity implements View.OnClickListener {
 
     private void initView() {
         mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
+
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
 
         mDBOperator = new DBOperator(this);
 
         mThreadPool = ThreadPoolManager.getInstance();
 
+//        从数据表中获取数据
         mThreadPool.execute(new Runnable() {
             @Override
             public void run() {
                 mData = mDBOperator.getDetailList();
+
+//                转到UI线程处理View的显示
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -145,12 +170,20 @@ public class DetailActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    /**
+     * 初始化事件
+     */
     private void initEvent() {
 
         findViewById(R.id.img_detail_addAccount).setOnClickListener(this);
 
         findViewById(R.id.img_detail_back).setOnClickListener(this);
 
+
+        /**
+         * 外层ExpandableListView的Group长按事件
+         *
+         */
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -165,6 +198,18 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                     }
                 }
                 return true;
+            }
+        });
+
+        /**
+         * 默认设置外层ExpandableListView每次只能有一个Child展开
+         */
+        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                for (int i = 0; i < mAdapter.getGroupCount(); i++)
+                    if (groupPosition != i)
+                        mListView.collapseGroup(i);
             }
         });
     }
@@ -203,12 +248,14 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void onClick(View v) {
 
-                    Log.i("ddd", mData.get(mLongClickPos).getYear() + "   " + mData.get(mLongClickPos).getMonth() + "");
+//                    在线程池中删除数据表中的账单信息
                     mThreadPool.execute(new Runnable() {
                         @Override
                         public void run() {
                             mDBOperator.delete("account", "year = ? and month = ?",
                                     new String[]{mData.get(mLongClickPos).getYear() + "", mData.get(mLongClickPos).getMonth() + ""});
+
+//                            转到UI线程处理View更新
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -227,6 +274,11 @@ public class DetailActivity extends Activity implements View.OnClickListener {
             mPopupWindow.setTouchable(true);
         }
 
+        /**
+         * 显示删除提示栏
+         *
+         * 默认显示在长按的Item下方，若下方显示不下，则显示在上方
+         */
         if (!mPopupWindow.isShowing()) {
             if (view.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
                 mPopupWindow.showAsDropDown(view, (view.getWidth() - mPopupWindow.getWidth()) / 2, -(view.getHeight() + mPopupWindow.getHeight()));

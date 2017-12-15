@@ -4,14 +4,15 @@
     android:layout_height="220dp"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingBottom="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+    android:paddingBottom="@dimen/calculator_margin_bottom"
+    android:paddingLeft="@dimen/calculator_margin_left"
+    android:paddingRight="@dimen/calculator_margin_right">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#bbb"></View>
+        android:layout_height="@dimen/line_width_nor"
+        android:background="@color/item_line"></View>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,18 +23,17 @@
 
         <ImageView
             android:id="@+id/img_popup_calculator_tag"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:paddingLeft="5dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
+            android:paddingLeft="@dimen/calculator_margin_left" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <com.phone.konka.accountingbook.View.CustomTextView
             android:id="@+id/tv_popup_calculator_res"
@@ -41,10 +41,9 @@
             android:layout_height="match_parent"
             android:gravity="right|center_vertical"
             android:paddingLeft="20dp"
-            android:paddingRight="5dp"
-            android:text="0"
+            android:paddingRight="@dimen/calculator_margin_bottom"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
 
@@ -63,53 +62,53 @@
             android:gravity="center"
             android:text="1"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
 
         <TextView
             android:id="@+id/tv_popup_calculator_two"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="2"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
 
         <TextView
             android:id="@+id/tv_popup_calculator_three"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="3"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
 
         <TextView
             android:id="@+id/tv_popup_calculator_add"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="+"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/calculator_margin_top"
         android:layout_weight="1">
 
         <TextView
@@ -121,50 +120,50 @@
             android:gravity="center"
             android:text="4"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_five"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="5"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_six"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="6"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <TextView
             android:id="@+id/tv_popup_calculator_sub"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="-"
             android:textColor="@color/calculator"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="@dimen/calculator_margin_top"
+        android:layout_marginTop="@dimen/calculator_margin_top"
         android:layout_weight="2">
 
         <LinearLayout
@@ -182,25 +181,25 @@
                     android:id="@+id/tv_popup_calculator_seven"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/calculator_margin_right"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="7"
                     android:textColor="@color/calculator"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/item_text_big" />
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_eight"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/calculator_margin_right"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="8"
                     android:textColor="@color/calculator"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/item_text_big" />
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_nine"
@@ -211,7 +210,7 @@
                     android:gravity="center"
                     android:text="9"
                     android:textColor="@color/calculator"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/item_text_big" />
 
             </LinearLayout>
 
@@ -219,33 +218,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginRight="0.5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/calculator_margin_top"
                 android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_point"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/calculator_margin_right"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="."
                     android:textColor="@color/calculator"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/item_text_big" />
 
                 <TextView
                     android:id="@+id/tv_popup_calculator_zero"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/calculator_margin_right"
                     android:layout_weight="1"
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@color/calculator"
-                    android:textSize="18sp" />
+                    android:textSize="@dimen/item_text_big" />
 
                 <ImageView
                     android:id="@+id/img_popup_calculator_del"
@@ -265,14 +263,12 @@
             android:id="@+id/tv_popup_calculator_ok"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/calculator_margin_left"
             android:layout_weight="1"
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="OK"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </LinearLayout>
-
-
 </LinearLayout>

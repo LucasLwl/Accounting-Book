@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Accounting Book</string>
+    <string name="app_name">记账本</string>
 
     <!--主界面-->
+
+    <string name="title_main">主页</string>
     <string name="month_out">本月支出</string>
     <string name="month_in">本月收入</string>
     <string name="month_left">本月结余</string>
@@ -16,6 +18,21 @@
     <string name="in_account">导入账本</string>
     <string name="about_me">关于我们</string>
 
+
+    <!--明细-->
+    <string name="detail">明细</string>
+    <string name="detail_month_in">收入</string>
+    <string name="detail_month_out">支出</string>
+    <string name="detail_month_left">结余</string>
+
+
+    <!--添加账单-->
+    <string name="out">支出</string>
+    <string name="in">收入</string>
+
+    <!--新增Tag-->
+    <string name="add_tag">新增类别</string>
+    <string name="hint">请输入类别名称</string>
 
     <!--编辑Tag-->
     <string name="edit_tag">编辑</string>

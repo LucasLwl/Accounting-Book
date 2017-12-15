@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical">
 
 
@@ -9,7 +10,7 @@
         android:id="@+id/ll_main_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#445566"
+        android:background="@color/title_bar"
         android:orientation="vertical">
 
     </LinearLayout>
@@ -17,25 +18,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#445566"
+        android:background="@color/title_bar"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="@dimen/title_bar_height">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="主页"
-                android:textColor="#ffffff"
-                android:textSize="18sp" />
+                android:layout_alignTop="@+id/img_main_setting"
+                android:layout_centerHorizontal="true"
+                android:text="@string/title_main"
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_big" />
 
             <ImageView
                 android:id="@+id/img_main_setting"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/icon_width"
+                android:layout_height="@dimen/icon_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
@@ -56,8 +58,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/month_in"
-                android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_small" />
 
             <TextView
                 android:layout_width="0dp"
@@ -65,8 +67,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/month_out"
-                android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_small" />
 
             <TextView
                 android:layout_width="0dp"
@@ -74,8 +76,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/month_left"
-                android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_small" />
         </LinearLayout>
 
 
@@ -94,13 +96,13 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/initial"
-                android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_small" />
 
             <View
-                android:layout_width="1dp"
+                android:layout_width="@dimen/line_width_nor"
                 android:layout_height="match_parent"
-                android:background="#ffffff">
+                android:background="@color/white">
 
             </View>
 
@@ -111,13 +113,13 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/initial"
-                android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_small" />
 
             <View
-                android:layout_width="1dp"
+                android:layout_width="@dimen/line_width_nor"
                 android:layout_height="match_parent"
-                android:background="#ffffff">
+                android:background="@color/white">
 
             </View>
 
@@ -128,8 +130,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/initial"
-                android:textColor="#ffffff"
-                android:textSize="14sp" />
+                android:textColor="@color/white"
+                android:textSize="@dimen/item_text_small" />
         </LinearLayout>
 
 
@@ -138,132 +140,132 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/item_height"
         android:background="@color/white">
 
         <ImageView
             android:id="@+id/img_main_addAccount"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/icon_width_big"
+            android:layout_height="@dimen/icon_height_big"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/item_margin_right"
             android:src="@drawable/icon_main_add" />
     </RelativeLayout>
 
-    <View
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#eee"></View>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_margin_top"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/img_main_leastOut"
+                android:layout_width="@dimen/icon_width"
+                android:layout_height="@dimen/icon_height"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_margin_left"
+                android:src="@drawable/icon_least_out" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_margin_left"
+                android:layout_toRightOf="@+id/img_main_leastOut"
+                android:text="@string/least_out"
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_big" />
+
+            <TextView
+                android:id="@+id/tv_main_leastOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/item_margin_right"
+                android:text="@string/initial"
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_big" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_width_small"
+            android:layout_marginLeft="@dimen/item_margin_left"
+            android:layout_marginRight="@dimen/item_margin_right"
+            android:background="@color/item_line"></View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_height"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/img_main_todayOut"
+                android:layout_width="@dimen/icon_width"
+                android:layout_height="@dimen/icon_height"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_margin_left"
+                android:src="@drawable/icon_today_out" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/item_margin_left"
+                android:layout_toRightOf="@+id/img_main_todayOut"
+                android:text="@string/today_out"
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_big" />
+
+            <TextView
+                android:id="@+id/tv_main_todayOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/item_margin_left"
+                android:text="@string/initial"
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_big" />
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white">
-
-        <ImageView
-            android:id="@+id/img_main_leastOut"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/icon_least_out" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/img_main_leastOut"
-            android:text="@string/least_out"
-            android:textColor="@color/item_text"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_main_leastOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:text="@string/initial"
-            android:textColor="@color/item_text"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@color/item_line"></View>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/white">
-
-        <ImageView
-            android:id="@+id/img_main_todayOut"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/icon_today_out" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/img_main_todayOut"
-            android:text="@string/today_out"
-            android:textColor="@color/item_text"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_main_todayOut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:text="@string/initial"
-            android:textColor="@color/item_text"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#eee"></View>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/item_height"
+        android:layout_marginTop="@dimen/item_margin_top"
         android:background="@color/white">
 
         <ImageView
             android:id="@+id/img_main_weekOut"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/item_margin_left"
             android:src="@drawable/icon_week_out" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginLeft="@dimen/item_margin_left"
             android:layout_toRightOf="@+id/img_main_weekOut"
             android:text="@string/week_out"
             android:textColor="@color/item_text"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <TextView
             android:id="@+id/tv_main_weekOut"
@@ -271,16 +273,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="@dimen/item_margin_right"
             android:text="@string/initial"
             android:textColor="@color/item_text"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#eee"></View>
-
-
 </LinearLayout>

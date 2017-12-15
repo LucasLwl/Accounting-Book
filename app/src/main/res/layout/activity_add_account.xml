@@ -8,9 +8,7 @@
         android:id="@+id/ll_addAccount_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#778899"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"></LinearLayout>
+        android:background="@color/title_bar"></LinearLayout>
 
     <FrameLayout
         android:id="@+id/fl_addAccount_content"

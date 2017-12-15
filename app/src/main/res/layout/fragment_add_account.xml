@@ -6,8 +6,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#778899"
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/title_bar"
         android:orientation="horizontal">
 
         <TextView
@@ -16,34 +16,34 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="支出"
+            android:text="@string/out"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <TextView
             android:id="@+id/tv_fragment_in"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="收入"
             android:alpha="0.5"
+            android:gravity="center"
+            android:text="@string/in"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="@dimen/item_height">
 
         <ImageView
             android:id="@+id/img_fragment_edit"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="@dimen/item_margin_right"
             android:src="@drawable/icon_edit_tag" />
 
         <TextView
@@ -51,11 +51,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/item_margin_right"
             android:layout_toLeftOf="@+id/img_fragment_edit"
             android:background="@drawable/calculator_bg"
-            android:padding="2dp"
-            android:text="0" />
+            android:padding="2dp" />
     </RelativeLayout>
 
     <GridView
@@ -63,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:numColumns="5"
-        android:verticalSpacing="10dp">
+        android:verticalSpacing="@dimen/verticalSpacing">
 
     </GridView>
 

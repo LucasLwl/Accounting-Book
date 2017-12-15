@@ -20,44 +20,57 @@ import com.phone.konka.accountingbook.View.LineCircleView;
 import java.util.List;
 
 /**
+ * 内层ExpandableListView的适配器
+ * <p>
+ * <p>
  * Created by 廖伟龙 on 2017/12/12.
  */
 
 public class ChildAdapter extends BaseExpandableListAdapter {
 
 
+    /**
+     * 上下文对象
+     */
     private Context mContext;
 
-    private List<DayDetailBean> mList;
+    /**
+     * 显示的数据
+     */
+    private List<DayDetailBean> mData;
 
+
+    /**
+     * 图片缓存加载器
+     */
     private ImageLoader mCache;
 
 
-    public ChildAdapter(Context mContext, List<DayDetailBean> mList) {
+    public ChildAdapter(Context mContext, List<DayDetailBean> mData) {
         this.mContext = mContext;
-        this.mList = mList;
+        this.mData = mData;
         mCache = ImageLoader.getInstance(mContext);
     }
 
     @Override
     public int getGroupCount() {
-        return mList.size();
+        return mData.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
 
-        return mList.get(groupPosition).getTagList().size();
+        return mData.get(groupPosition).getTagList().size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return mList.get(groupPosition);
+        return mData.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return mList.get(groupPosition).getTagList().get(childPosition);
+        return mData.get(groupPosition).getTagList().get(childPosition);
     }
 
     @Override
@@ -91,9 +104,13 @@ public class ChildAdapter extends BaseExpandableListAdapter {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
-        DayDetailBean bean = mList.get(groupPosition);
+        DayDetailBean bean = mData.get(groupPosition);
         holder.dateView.setDate(bean.getDate() + "");
 
+
+        /**
+         * 计算每日总的收支、结余情况
+         */
         double in = 0, out = 0;
         for (DetailTagBean child : bean.getTagList()) {
             if (child.getMoney() > 0)
@@ -127,14 +144,20 @@ public class ChildAdapter extends BaseExpandableListAdapter {
         }
 
 
-        DetailTagBean bean = mList.get(groupPosition).getTagList().get(childPosition);
+        DetailTagBean bean = mData.get(groupPosition).getTagList().get(childPosition);
 
+        /**
+         * 设置该item是否为第一个
+         */
         if (childPosition == 0) {
             holder.lineCircleView.setFirst(true);
         } else {
             holder.lineCircleView.setFirst(false);
         }
 
+        /**
+         * 设置该item是否为最后一个
+         */
         if (getChildrenCount(groupPosition) == childPosition + 1) {
             holder.lineCircleView.setEnd(true);
         } else {
@@ -144,16 +167,22 @@ public class ChildAdapter extends BaseExpandableListAdapter {
         holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(), holder.imgIcon.getWidth(), holder.imgIcon.getHeight()));
 
         holder.tvTag.setText(bean.getTag());
+
         if (bean.getMoney() > 0) {
             holder.tvMoney.setText("收入+" + DoubleTo2Decimal.doubleTo2Decimal(bean.getMoney()));
         } else {
             holder.tvMoney.setText("支出" + DoubleTo2Decimal.doubleTo2Decimal(bean.getMoney()));
         }
-
-
         return convertView;
     }
 
+    /**
+     * 设置Child为可点击
+     *
+     * @param groupPosition
+     * @param childPosition
+     * @return
+     */
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;

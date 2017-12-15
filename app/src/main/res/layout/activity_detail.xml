@@ -9,41 +9,40 @@
         android:id="@+id/ll_detail_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#aabbcc"
+        android:background="@color/title_bar"
         android:orientation="vertical"></LinearLayout>
 
 
     <RelativeLayout
         android:id="@+id/tv_detail"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#aabbcc">
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/title_bar">
 
         <ImageView
             android:id="@+id/img_detail_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="@dimen/item_margin_left"
             android:src="@drawable/icon_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="#aabbcc"
             android:gravity="center"
-            android:text="明细"
-            android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:text="@string/detail"
+            android:textColor="@color/white"
+            android:textSize="@dimen/item_text_big" />
 
         <ImageView
             android:id="@+id/img_detail_addAccount"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/item_margin_right"
             android:src="@drawable/icon_add_account" />
 
     </RelativeLayout>

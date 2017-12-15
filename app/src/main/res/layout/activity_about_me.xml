@@ -8,24 +8,20 @@
         android:id="@+id/ll_aboutMe_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#778899"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical">
-
-    </LinearLayout>
+        android:background="@color/title_bar"></LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#778899">
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/title_bar">
 
         <ImageView
             android:id="@+id/img_aboutMe_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/item_margin_left"
             android:src="@drawable/icon_back" />
 
         <TextView
@@ -34,8 +30,7 @@
             android:layout_centerInParent="true"
             android:text="@string/about_me"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
     </RelativeLayout>
-
 </LinearLayout>

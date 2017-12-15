@@ -4,14 +4,23 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+
+    <color name="title_bar">#445566</color>
 
     <color name="calculator">#707070</color>
 
     <color name="item_text">#555555</color>
 
     <color name="item_line">#aaa</color>
+
+    <color name="background">#eee</color>
+
+
+    <!---->
+    <color name="detail_item_one">#ddd</color>
+    <color name="detail_item_two">#eee</color>
+    <color name="detail_item_three">#ffffff</color>
 
 </resources>

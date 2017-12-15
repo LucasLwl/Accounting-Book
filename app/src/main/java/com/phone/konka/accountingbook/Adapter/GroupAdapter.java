@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.phone.konka.accountingbook.Bean.DayDetailBean;
+import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DBOperator;
@@ -29,6 +29,8 @@ import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 import java.util.List;
 
 /**
+ * 外层ExpandableListView的适配器
+ * <p>
  * Created by 廖伟龙 on 2017/11/17.
  */
 
@@ -38,7 +40,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     /**
      * 月份账单详情
      */
-    private List<MonthDetailBean> mDatas;
+    private List<MonthDetailBean> mData;
 
 
     /**
@@ -46,30 +48,64 @@ public class GroupAdapter extends BaseExpandableListAdapter {
      */
     private Context mContext;
 
+
     /**
      * 布局加载
      */
     private LayoutInflater mInflater;
 
+
+    /**
+     * 弹出是否删除账单的PopupWindow
+     */
     private PopupWindow mPopupWindow;
 
+
+    /**
+     * 线程池
+     */
     private ThreadPoolManager mThreadPool;
 
+
+    /**
+     * 数据库操作类
+     */
     private DBOperator mDBOperator;
+
+
+    /**
+     * 记录内层ExpandableListView长按时，Group的位置
+     * <p>
+     * 初始化-1代表没进行长按
+     */
+    private int mGroupLongClickPos = -1;
+
+
+    /**
+     * 记录内层ExpandableListView长按时，Child的位置
+     * 初始化-1代表没进行长按
+     */
+    private int mChildLongClickPos = -1;
+
+
+    /**
+     * 记录内层ExpandableListView长按时，内层ExpandableListView所属的外层Group位置
+     * 初始化-1代表没进行长按
+     */
+    private int mGroupPosition = -1;
+
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ChildAdapter adapter = (ChildAdapter) msg.obj;
-            adapter.notifyDataSetChanged();
-//            notifyDataSetChanged();
+            notifyDataSetChanged();
         }
     };
 
 
-    public GroupAdapter(Context mContext, List<MonthDetailBean> mDatas) {
-        this.mDatas = mDatas;
+    public GroupAdapter(Context mContext, List<MonthDetailBean> mData) {
+        this.mData = mData;
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
         mThreadPool = ThreadPoolManager.getInstance();
@@ -78,9 +114,16 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return mDatas.size();
+        return mData.size();
     }
 
+
+    /**
+     * 2、3层的显示交由内层的ExpandableListView处理，故返回1
+     *
+     * @param groupPosition
+     * @return
+     */
     @Override
     public int getChildrenCount(int groupPosition) {
         return 1;
@@ -88,12 +131,12 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int groupPosition) {
-        return mDatas.get(groupPosition);
+        return mData.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return mDatas.get(groupPosition).getDayList().get(childPosition);
+        return mData.get(groupPosition).getDayList().get(childPosition);
     }
 
     @Override
@@ -128,7 +171,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
-        MonthDetailBean moonData = mDatas.get(groupPosition);
+        MonthDetailBean moonData = mData.get(groupPosition);
 
         holder.tvMonth.setText(moonData.getMonth() + "月");
         holder.tvIn.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getIn()));
@@ -137,6 +180,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
         /**
          * 设置父ListView的Divider
+         * 第一个不显示
          */
         if (groupPosition == 0) {
             holder.llHead.setVisibility(View.GONE);
@@ -154,32 +198,57 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
 
             holder = new ChildViewHolder();
-            convertView = mInflater.inflate(R.layout.chila_expandable, null);
+            convertView = mInflater.inflate(R.layout.item_dedail_child, null);
             holder.elv = (ExpandableListView) convertView.findViewById(R.id.lv_child);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
 
-        final List<DayDetailBean> data = mDatas.get(groupPosition).getDayList();
-
-        final ChildAdapter adapter = new ChildAdapter(mContext, data);
-
+        List<DayDetailBean> data = mData.get(groupPosition).getDayList();
+        ChildAdapter adapter = new ChildAdapter(mContext, data);
         holder.elv.setAdapter(adapter);
 
 
+        /**
+         * 删除第三层的账单，会导致重绘内外两层的ExpandableListView
+         * 而内层的ExpandableListView再重绘时，会重新设置Adapter，
+         * 导致保存了展开信息的ExpandableListConnector会被重新创建，失去了内层展开信息
+         */
+
+        /**
+         * 根据长按时确定的位置信息，恢复删除后子ExpandableListView的展开
+         */
+        if (mGroupPosition == groupPosition && mGroupLongClickPos == childPosition) {
+            holder.elv.expandGroup(mGroupLongClickPos);
+            mGroupPosition = -1;
+            mGroupLongClickPos = -1;
+            mChildLongClickPos = -1;
+        }
+
+        /**
+         * 给子ExpandableListView设置longClickListener
+         *
+         * 当长按的是外层GroupItem时，mChildLongClickPos的值为AdapterView.INVALID_POSITION
+         */
         holder.elv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent1, View view, int position, long id) {
-                int npos = holder.elv.pointToPosition((int) view.getX(), (int) view.getY());
-                if (npos != AdapterView.INVALID_POSITION) {
-                    long pos = holder.elv.getExpandableListPosition(npos);
-                    int childPos = ExpandableListView.getPackedPositionChild(pos);
-                    int groupPos = ExpandableListView.getPackedPositionGroup(pos);
-                    if (childPos == AdapterView.INVALID_POSITION) {
-                        showPopupWindow(parent, view, adapter, mDatas, groupPosition, groupPos, childPos);
+                int nPos = holder.elv.pointToPosition((int) view.getX(), (int) view.getY());
+                if (nPos != AdapterView.INVALID_POSITION) {
+                    long pos = holder.elv.getExpandableListPosition(nPos);
+
+                    mChildLongClickPos = ExpandableListView.getPackedPositionChild(pos);
+                    mGroupLongClickPos = ExpandableListView.getPackedPositionGroup(pos);
+                    mGroupPosition = groupPosition;
+
+                    /**
+                     * 显示是否删除账单栏
+                     */
+                    if (mChildLongClickPos == AdapterView.INVALID_POSITION) {
+                        showPopupWindow(parent, view);
                     } else {
-                        showPopupWindow(parent, view, adapter, mDatas, groupPosition, groupPos, childPos);
+                        showPopupWindow(parent, view);
                     }
                 }
                 return true;
@@ -188,67 +257,90 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+
+    /**
+     * 隐藏是否删除账单栏
+     */
     private void dismissPopupWindow() {
         if (mPopupWindow != null && mPopupWindow.isShowing())
             mPopupWindow.dismiss();
     }
 
-    private void showPopupWindow(ViewGroup parent, View view, final ChildAdapter adapter, final List<MonthDetailBean> mData, final int groupPosition, final int groupPos, final int childPos) {
+    /**
+     * 显示是否删除账单栏
+     *
+     * @param parent
+     * @param view
+     */
+    private void showPopupWindow(ViewGroup parent, View view) {
 
-
-        Button btn = new Button(mContext);
-        btn.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-        btn.setText("是否删除该账单");
-        btn.setTextColor(mContext.getResources().getColor(R.color.item_text));
-        btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        btn.setGravity(Gravity.CENTER);
-        btn.setPadding(20, 0, 20, 0);
-        btn.setLayoutParams(lp);
-        btn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                mThreadPool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (childPos == AdapterView.INVALID_POSITION) {
-                            Log.i("ddd", mData.get(groupPos).getYear() + "  " + mData.get(groupPos).getMonth() + "  " + mData.get(groupPosition).getDayList().get(groupPos).getDate() + "");
-                            mDBOperator.delete("account", "year = ? and month = ? and day = ?",
-                                    new String[]{mData.get(groupPosition).getDayList().get(groupPos).getYear() + "", mData.get(groupPosition).getDayList().get(groupPos).getMonth() + "", mData.get(groupPosition).getDayList().get(groupPos).getDate() + ""});
-                            mData.get(groupPosition).getDayList().remove(groupPos);
-                            if (mData.get(groupPosition).getDayList().size() == 0)
-                                mData.remove(groupPosition);
-                        } else {
-                            mDBOperator.delete("account", "_id = ?",
-                                    new String[]{mData.get(groupPosition).getDayList().get(groupPos).getTagList().get(childPos).getId() + ""});
-                            mData.get(groupPosition).getDayList().get(groupPos).getTagList().remove(childPos);
-                            if (mData.get(groupPosition).getDayList().get(groupPos).getTagList().size() == 0)
-                                mData.get(groupPosition).getDayList().remove(groupPos);
-                        }
-                        Message msg = mHandler.obtainMessage();
-                        msg.obj = adapter;
-                        msg.sendToTarget();
-                    }
-                });
-                dismissPopupWindow();
-            }
-        });
-
+        /**
+         * 如mPopupWindow为空，先创建
+         */
         if (mPopupWindow == null) {
-            mPopupWindow = new PopupWindow(RelativeLayout.LayoutParams.WRAP_CONTENT, 150);
+
+            /**
+             * 创建PopupWindow显示的View
+             */
+            Button btn = new Button(mContext);
+            btn.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+            btn.setText("是否删除该账单");
+            btn.setTextColor(mContext.getResources().getColor(R.color.item_text));
+            btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            btn.setGravity(Gravity.CENTER);
+            btn.setPadding(20, 0, 20, 0);
+            btn.setLayoutParams(lp);
+
+//            设置点击事件
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    /**
+                     * 使用线程池来进行操作数据表
+                     */
+                    mThreadPool.execute(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            DayDetailBean dayBean = mData.get(mGroupPosition).getDayList().get(mGroupLongClickPos);
+
+//                            根据长按情况，删除数据表中的账单详情信息
+                            if (mChildLongClickPos == AdapterView.INVALID_POSITION) {
+                                mDBOperator.delete("account", "year = ? and month = ? and day = ?",
+                                        new String[]{dayBean.getYear() + "", dayBean.getMonth() + "", dayBean.getDate() + ""});
+                            } else {
+                                DetailTagBean detailBean = dayBean.getTagList().get(mChildLongClickPos);
+                                mDBOperator.delete("account", "_id = ?",
+                                        new String[]{detailBean.getId() + ""});
+                            }
+
+//                            从数据表中获取新的账单详情信息
+                            mData = mDBOperator.getDetailList();
+
+//                            删除完成后通过Handler，在UIThread刷新ExpandableListView
+                            mHandler.obtainMessage().sendToTarget();
+                        }
+                    });
+                    dismissPopupWindow();
+                }
+            });
+
+//            初始化PopupWindow
+            mPopupWindow = new PopupWindow(btn, RelativeLayout.LayoutParams.WRAP_CONTENT, 150, true);
             mPopupWindow.setOutsideTouchable(true);
             mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
             mPopupWindow.setTouchable(true);
         }
 
-        mPopupWindow.setContentView(btn);
-
+        /**
+         * 显示PopupWindow
+         * 显示在长按的item下面
+         * 若长按的item下面显示不下，则显示在长按item的上面
+         */
         if (!mPopupWindow.isShowing()) {
-            Log.i("ddd", view.getBottom() + " " + mPopupWindow.getHeight() + " " + parent.getHeight() + "  ");
             if (view.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
                 mPopupWindow.showAsDropDown(view, (view.getWidth() - mPopupWindow.getWidth()) / 2, -(view.getHeight() + mPopupWindow.getHeight()));
             else {
@@ -257,12 +349,19 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         }
     }
 
-
+    /**
+     * 设置Child可点击为true
+     *
+     * @param groupPosition
+     * @param childPosition
+     * @return
+     */
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
 }
+
 
 class GroupViewHolder {
     View llHead;
@@ -273,7 +372,5 @@ class GroupViewHolder {
 }
 
 class ChildViewHolder {
-
     ExpandableListView elv;
-
 }

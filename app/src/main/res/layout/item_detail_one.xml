@@ -7,19 +7,19 @@
     <View
         android:id="@+id/view_divider"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="#ffffff">
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/white">
 
     </View>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ddd"
+        android:background="@color/detail_item_one"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+        android:paddingBottom="@dimen/detail_item_margin_bottom"
+        android:paddingTop="@dimen/detail_item_margin_top">
 
         <TextView
             android:id="@+id/tv_detail_moon"
@@ -27,8 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:gravity="center"
-            android:textColor="#000000"
-            android:textSize="18sp" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/item_text_big" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -41,16 +41,16 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="收入"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:text="@string/detail_month_in"
+                android:textColor="@color/black"
+                android:textSize="@dimen/item_text_mid" />
 
             <TextView
                 android:id="@+id/tv_detain_moon_in"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_small" />
         </LinearLayout>
 
         <LinearLayout
@@ -63,16 +63,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="支出"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:text="@string/detail_month_out"
+                android:textColor="@color/black"
+                android:textSize="@dimen/item_text_mid" />
 
             <TextView
                 android:id="@+id/tv_detail_moon_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_small" />
         </LinearLayout>
 
         <LinearLayout
@@ -85,16 +85,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="结余"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:text="@string/detail_month_left"
+                android:textColor="@color/black"
+                android:textSize="@dimen/item_text_mid" />
 
             <TextView
                 android:id="@+id/tv_detail_moon_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_small" />
         </LinearLayout>
 
     </LinearLayout>

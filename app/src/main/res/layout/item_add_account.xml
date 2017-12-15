@@ -13,14 +13,13 @@
 
         <ImageView
             android:id="@+id/img_addAccount_item"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/icon_diet" />
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height" />
 
         <ImageView
             android:id="@+id/img_addAccount_item_selected"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="@dimen/icon_width_small"
+            android:layout_height="@dimen/icon_height_small"
             android:layout_alignBottom="@+id/img_addAccount_item"
             android:layout_alignRight="@+id/img_addAccount_item"
             android:src="@drawable/icon_selected" />
@@ -32,8 +31,7 @@
         android:id="@+id/tv_addAccount_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="现金"
-        android:textSize="14sp" />
-
+        android:textColor="@color/item_text"
+        android:textSize="@dimen/item_text_small" />
 
 </LinearLayout>

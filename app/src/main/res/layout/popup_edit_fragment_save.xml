@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -12,12 +12,12 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="是否存储编辑内容"
-        android:textSize="18sp" />
+        android:textSize="@dimen/item_text_big" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/item_margin_top"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="否"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <TextView
             android:id="@+id/tv_popup_editFragment_yes"
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="是"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
 

@@ -6,16 +6,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#778899">
+        android:layout_height="@dimen/title_bar_height"
+        android:background="@color/title_bar">
 
         <ImageView
             android:id="@+id/img_edit_fragment_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/item_margin_left"
             android:src="@drawable/icon_back" />
 
         <TextView
@@ -24,15 +24,15 @@
             android:layout_centerInParent="true"
             android:text="@string/edit_tag"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="@dimen/item_text_big" />
 
         <ImageView
             android:id="@+id/img_edit_fragment_save"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/icon_width"
+            android:layout_height="@dimen/icon_height"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/item_margin_right"
             android:src="@drawable/icon_save" />
 
     </RelativeLayout>
@@ -40,10 +40,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/item_margin_left"
         android:text="@string/my_tag"
         android:textColor="@color/item_text"
-        android:textSize="18sp" />
+        android:textSize="@dimen/item_text_big" />
 
     <com.phone.konka.accountingbook.View.DragGridView
         android:id="@+id/dgv_edit_mytag"
@@ -52,23 +52,21 @@
         android:layout_weight="1"
         android:gravity="center"
         android:numColumns="5"
-        android:verticalSpacing="10dp"></com.phone.konka.accountingbook.View.DragGridView>
+        android:verticalSpacing="@dimen/verticalSpacing"></com.phone.konka.accountingbook.View.DragGridView>
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:background="#eee">
-
-    </View>
+        android:background="#eee"></View>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="@dimen/item_margin_left"
         android:text="@string/recommend_tag"
         android:textColor="@color/item_text"
-        android:textSize="18sp" />
+        android:textSize="@dimen/item_text_big" />
 
     <com.phone.konka.accountingbook.View.DragGridView
         android:id="@+id/dgv_edit_recomtag"
@@ -77,6 +75,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:numColumns="5"
-        android:verticalSpacing="10dp"></com.phone.konka.accountingbook.View.DragGridView>
+        android:verticalSpacing="@dimen/verticalSpacing"></com.phone.konka.accountingbook.View.DragGridView>
 
 </LinearLayout>
