@@ -22,8 +22,8 @@ import com.phone.konka.accountingbook.Bean.DayDetailBean;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBOperator;
 import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
+import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.List;
@@ -68,9 +68,9 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
 
     /**
-     * 数据库操作类
+     * Provider操作类
      */
-    private DBOperator mDBOperator;
+    private ProviderManager mDataManager;
 
 
     /**
@@ -104,12 +104,14 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     };
 
 
+
     public GroupAdapter(Context mContext, List<MonthDetailBean> mData) {
         this.mData = mData;
         this.mContext = mContext;
         mInflater = LayoutInflater.from(mContext);
         mThreadPool = ThreadPoolManager.getInstance();
-        mDBOperator = new DBOperator(mContext);
+
+        mDataManager = new ProviderManager(mContext);
     }
 
     @Override
@@ -309,16 +311,16 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
 //                            根据长按情况，删除数据表中的账单详情信息
                             if (mChildLongClickPos == AdapterView.INVALID_POSITION) {
-                                mDBOperator.delete("account", "year = ? and month = ? and day = ?",
+                                mDataManager.deleteData("year = ? and month = ? and day = ?",
                                         new String[]{dayBean.getYear() + "", dayBean.getMonth() + "", dayBean.getDate() + ""});
                             } else {
                                 DetailTagBean detailBean = dayBean.getTagList().get(mChildLongClickPos);
-                                mDBOperator.delete("account", "_id = ?",
+                                mDataManager.deleteData("_id = ?",
                                         new String[]{detailBean.getId() + ""});
                             }
 
 //                            从数据表中获取新的账单详情信息
-                            mData = mDBOperator.getDetailList();
+                            mData = mDataManager.getDetailList();
 
 //                            删除完成后通过Handler，在UIThread刷新ExpandableListView
                             mHandler.obtainMessage().sendToTarget();

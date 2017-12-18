@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,8 +20,8 @@ import com.phone.konka.accountingbook.Adapter.TagGridViewAdapter;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBOperator;
 import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
+import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 import com.phone.konka.accountingbook.View.PopupCalculator;
 
@@ -100,7 +99,9 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
     private ThreadPoolManager mThreadPool;
 
-    private DBOperator mDBOperator;
+
+    private ProviderManager mDataManager;
+
     private Calendar mCalendar;
 
     private int mYear;
@@ -167,8 +168,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         //初始化线程池
         mThreadPool = ThreadPoolManager.getInstance();
 
-        //初始化数据库操作类
-        mDBOperator = new DBOperator(getActivity());
+        //初始化Provider操作类
+        mDataManager = new ProviderManager(getActivity());
 
         //获取日历
         mCalendar = Calendar.getInstance();
@@ -181,7 +182,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             mList = ((AddAccountActivity) getActivity()).mOutList;
         else
             mList = ((AddAccountActivity) getActivity()).mInList;
-//        mList.add(mBeanAdd);
 
         mAdapter = new TagGridViewAdapter(getActivity(), mList);
 
@@ -209,7 +209,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 mThreadPool.execute(new Runnable() {
                     @Override
                     public void run() {
-                        mDBOperator.insertAccount(bean);
+                        mDataManager.insertAccount(bean);
                     }
                 });
             }

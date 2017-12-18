@@ -55,5 +55,12 @@
         android:divider="@null"
         android:groupIndicator="@null"></ExpandableListView>
 
-
+    <TextView
+        android:id="@+id/tv_detail_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/detail_no_data"
+        android:textColor="@color/item_text"
+        android:textSize="@dimen/item_text_big" />
 </LinearLayout>

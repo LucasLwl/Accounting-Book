@@ -1,7 +1,9 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +37,14 @@ public class TagGridViewAdapter extends BaseAdapter {
         mSelected = 0;
     }
 
+
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
         mInflater = LayoutInflater.from(mContext);
         mCache = ImageLoader.getInstance(mContext);
     }
+
 
     @Override
     public int getCount() {
@@ -73,7 +77,7 @@ public class TagGridViewAdapter extends BaseAdapter {
 
         TagBean bean = mList.get(position);
         holder.tvText.setText(bean.getText());
-        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(),holder.imgIcon.getWidth(),holder.imgIcon.getHeight()));
+        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(), holder.imgIcon.getWidth(), holder.imgIcon.getHeight()));
 
         if (position == mSelected) {
             holder.imgSelected.setVisibility(View.VISIBLE);

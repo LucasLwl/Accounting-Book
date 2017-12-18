@@ -2,17 +2,17 @@ package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -20,12 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Adapter.GroupAdapter;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBOperator;
+import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.List;
@@ -58,9 +57,9 @@ public class DetailActivity extends Activity implements View.OnClickListener {
     private List<MonthDetailBean> mData;
 
     /**
-     * 数据库操作类
+     * Provider操作类
      */
-    private DBOperator mDBOperator;
+    private ProviderManager mDataManager;
 
 
     /**
@@ -140,6 +139,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
     private void initView() {
         mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
 
+        mListView.setEmptyView(findViewById(R.id.tv_detail_no_data));
     }
 
     /**
@@ -147,7 +147,8 @@ public class DetailActivity extends Activity implements View.OnClickListener {
      */
     private void initData() {
 
-        mDBOperator = new DBOperator(this);
+
+        mDataManager = new ProviderManager(this);
 
         mThreadPool = ThreadPoolManager.getInstance();
 
@@ -155,7 +156,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
         mThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                mData = mDBOperator.getDetailList();
+                mData = mDataManager.getDetailList();
 
 //                转到UI线程处理View的显示
                 runOnUiThread(new Runnable() {
@@ -252,7 +253,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                     mThreadPool.execute(new Runnable() {
                         @Override
                         public void run() {
-                            mDBOperator.delete("account", "year = ? and month = ?",
+                            mDataManager.deleteData("year = ? and month = ?",
                                     new String[]{mData.get(mLongClickPos).getYear() + "", mData.get(mLongClickPos).getMonth() + ""});
 
 //                            转到UI线程处理View更新

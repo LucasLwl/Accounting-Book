@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBOperator;
 import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
+import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.Calendar;
@@ -58,9 +58,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
     /**
-     * 数据库操作类
+     * Provider操作类
      */
-    private DBOperator mDBOperator;
+    private ProviderManager mDataManager;
 
 
     /**
@@ -149,12 +149,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                monthIn = mDBOperator.getMonthIn(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
-                monthOut = mDBOperator.getMonthOut(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
-                dayOut = mDBOperator.getDayOut(mCalendar.get(Calendar.YEAR),
+                monthIn = mDataManager.getMonthIn(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
+                monthOut = mDataManager.getMonthOut(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
+                dayOut = mDataManager.getDayOut(mCalendar.get(Calendar.YEAR),
                         mCalendar.get(Calendar.MONTH) + 1, mCalendar.get(Calendar.DAY_OF_MONTH));
-                leastOut = mDBOperator.getLeastOut();
-                weekOut = mDBOperator.getWeekOut();
+                leastOut = mDataManager.getLeastOut();
+                weekOut = mDataManager.getWeekOut();
                 mHandler.sendEmptyMessage(0);
             }
         });
@@ -178,7 +178,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         mCalendar = Calendar.getInstance();
 
-        mDBOperator = new DBOperator(this);
+        mDataManager = new ProviderManager(this);
     }
 
 

@@ -1,5 +1,6 @@
 package com.phone.konka.accountingbook.Utils;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -21,16 +22,20 @@ public class DBManager {
 
     private SQLiteDatabase mDataBase;
 
-    public static synchronized void initializeInstance(SQLiteOpenHelper helper) {
+    private DBManager() {
+
+    }
+
+    public static synchronized void initializeInstance(Context context) {
         if (mInstance == null) {
             mInstance = new DBManager();
-            mHelper = (DBHelper) helper;
+            mHelper = DBHelper.getInstance(context);
         }
     }
 
-    public static synchronized DBManager getInstance(SQLiteOpenHelper helper) {
+    public static synchronized DBManager getInstance(Context context) {
         if (mInstance == null)
-            initializeInstance(helper);
+            initializeInstance(context);
         return mInstance;
     }
 

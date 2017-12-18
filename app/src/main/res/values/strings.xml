@@ -24,6 +24,7 @@
     <string name="detail_month_in">收入</string>
     <string name="detail_month_out">支出</string>
     <string name="detail_month_left">结余</string>
+    <string name="detail_no_data">无账单记录</string>
 
 
     <!--添加账单-->

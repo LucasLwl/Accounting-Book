@@ -3,69 +3,75 @@ package com.phone.konka.accountingbook.Utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
 import com.phone.konka.accountingbook.Bean.DayDetailBean;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
-import com.phone.konka.accountingbook.DataBase.DBHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 数据库管理类
+ * ContentProvider对数据的具体操作
  * <p>
- * Created by 廖伟龙 on 2017/11/24.
+ * Created by 廖伟龙 on 2017/12/18.
  */
 
-public class DBOperator {
+public class ProviderManager {
 
-
-    private DBManager mDBManager;
 
     /**
-     * 数据库
+     * ContentProvider的authorities
      */
-    private SQLiteDatabase mDataBase;
+    private static final String PROVIDER = "com.phone.konka.accountingbook.Utils.AccountProvider";
 
 
-    public DBOperator(Context mContext) {
-        mDBManager = DBManager.getInstance(DBHelper.getInstance(mContext));
+    private Context mContext;
+
+
+    /**
+     * ContentProvider的Uri
+     */
+    private Uri mUri;
+
+
+    public ProviderManager(Context mContext) {
+        this.mContext = mContext;
+        mUri = Uri.parse("content://" + PROVIDER);
     }
 
+
     /**
-     * 判断数据库是否为空
+     * 查看数据库是否为空
      *
      * @return
      */
     public boolean isDBEmpty() {
-        boolean temp = true;
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select money from account", new String[]{});
-        if (cursor.moveToNext())
-            temp = false;
-        mDBManager.closeDatabase();
-        return temp;
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"_id"}, null, null, null);
+        if (cursor.moveToLast())
+            return false;
+        return true;
     }
 
 
     /**
-     * 添加账单
+     * 添加账单信息
      *
      * @param bean
      */
     public synchronized void insertAccount(DetailTagBean bean) {
-        mDataBase = mDBManager.getWritableDatabase();
-        mDataBase.execSQL("insert into account(year,month,day,tag ,iconID,money) values(?,?,?,?,?,?)",
-                new Object[]{bean.getYear(), bean.getMonth(), bean.getDay(), bean.getTag(), bean.getIconID(), bean.getMoney()});
-        mDBManager.closeDatabase();
-    }
 
+        ContentValues values = new ContentValues();
+        values.put("year", bean.getYear());
+        values.put("month", bean.getMonth());
+        values.put("day", bean.getDay());
+        values.put("tag", bean.getTag());
+        values.put("iconID", bean.getIconID());
+        values.put("money", bean.getMoney());
+        mContext.getContentResolver().insert(mUri, values);
+    }
 
     /**
      * 获取月份的总收入
@@ -76,12 +82,10 @@ public class DBOperator {
      */
     public double getMonthIn(int year, int month) {
         double res = 0;
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select money from account where year = ? and month = ? and money > ?", new String[]{year + "", month + "", 0 + ""});
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"money"}, "year = ? and month = ? and money > ?", new String[]{year + "", month + "", "0"}, null);
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
         }
-        mDBManager.closeDatabase();
         return res;
     }
 
@@ -89,17 +93,15 @@ public class DBOperator {
      * 获取月份的总支出
      *
      * @param year
-     * @param moon
+     * @param month
      * @return
      */
-    public double getMonthOut(int year, int moon) {
+    public double getMonthOut(int year, int month) {
         double res = 0;
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select money from account where year = ? and month = ? and money < ?", new String[]{year + "", moon + "", 0 + ""});
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"money"}, "year = ? and month = ? and money < ?", new String[]{year + "", month + "", "0"}, null);
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
         }
-        mDBManager.closeDatabase();
         if (res == 0)
             return res;
         return -res;
@@ -116,13 +118,11 @@ public class DBOperator {
      */
     public double getDayOut(int year, int moon, int day) {
         double res = 0;
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select money from account where year = ? and month = ? and day = ? and money < ?",
-                new String[]{year + "", moon + "", day + "", 0 + ""});
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"money"}, "year = ? and month = ? and day = ? and money < ?",
+                new String[]{year + "", moon + "", day + "", "0"}, null);
         while (cursor.moveToNext()) {
             res += cursor.getDouble(cursor.getColumnIndex("money"));
         }
-        mDBManager.closeDatabase();
         if (res == 0)
             return res;
         return -res;
@@ -136,24 +136,23 @@ public class DBOperator {
      */
     public double getLeastOut() {
         double res = 0;
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select money from account where  money < ? order by year ,month,day",
-                new String[]{0 + ""});
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"money"}, "money < ?", new String[]{"0"}, "year,month,day");
         if (cursor.moveToLast()) {
             res = cursor.getDouble(cursor.getColumnIndex("money"));
         }
-        mDBManager.closeDatabase();
         if (res == 0)
             return res;
         return -res;
     }
 
 
+    /**
+     * 获取数据表中的所有数据
+     *
+     * @return
+     */
     public List<DetailTagBean> getAllData() {
-
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.rawQuery("select * from account", new String[]{});
-
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"*"}, null, null, null);
         List<DetailTagBean> list = new ArrayList<>();
         while (cursor.moveToNext()) {
             DetailTagBean bean = new DetailTagBean();
@@ -165,42 +164,26 @@ public class DBOperator {
             bean.setMoney(cursor.getInt(cursor.getColumnIndex("money")));
             list.add(bean);
         }
-        mDBManager.closeDatabase();
         return list;
     }
 
-    public Cursor query(String tableName, String[] projection, String selection, String[] selectionArgs, String groupBy, String having, String sortOrder, String limit) {
-        mDataBase = mDBManager.getReadableDatabase();
-        Cursor cursor = mDataBase.query(tableName, projection, selection, selectionArgs, groupBy, having, sortOrder, limit);
-//        mDBManager.closeDatabase();
-        return cursor;
-    }
 
-    public synchronized void insert(String table, String nullColumn, ContentValues values) {
-        mDataBase = mDBManager.getWritableDatabase();
-        mDataBase.insert(table, nullColumn, values);
-        mDBManager.closeDatabase();
-    }
-
-    public synchronized int delete(String table, String selection, String[] selectionArgs) {
-        mDataBase = mDBManager.getWritableDatabase();
-        int count = mDataBase.delete(table, selection, selectionArgs);
-        mDBManager.closeDatabase();
-        return count;
-    }
-
-    public synchronized int update(String table, ContentValues values, String selection, String[] selectionArgs) {
-        mDataBase = mDBManager.getWritableDatabase();
-        int count = mDataBase.update(table, values, selection, selectionArgs);
-        mDBManager.closeDatabase();
-        return count;
+    /**
+     * 删除数据表中的数据
+     *
+     * @param selection
+     * @param selectionArgs
+     */
+    public synchronized void deleteData(String selection, String[] selectionArgs) {
+        mContext.getContentResolver().delete(mUri, selection, selectionArgs);
     }
 
 
-    public synchronized void removeAllData() {
-        mDataBase = mDBManager.getWritableDatabase();
-        mDataBase.execSQL("delete from account");
-        mDBManager.closeDatabase();
+    /**
+     * 删除数据表中的所有数据
+     */
+    public synchronized void deleteAllData() {
+        mContext.getContentResolver().delete(mUri, null, null);
     }
 
 
@@ -211,9 +194,7 @@ public class DBOperator {
      */
     public List<MonthDetailBean> getDetailList() {
 
-        mDataBase = mDBManager.getReadableDatabase();
-
-        Cursor cursor = mDataBase.rawQuery("select * from account order by year desc , month desc , day desc , _id desc", new String[]{});
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"*"}, null, null, "  year desc , month desc , day desc , _id desc");
 
         List<MonthDetailBean> list = new ArrayList<>();
 
@@ -264,12 +245,8 @@ public class DBOperator {
             detailBean.setDay(nowDay);
             dayBean.getTagList().add(detailBean);
         }
-
-        mDBManager.closeDatabase();
-
         return list;
     }
-
 
     /**
      * 获取当前时间所在星期的支出
@@ -287,24 +264,28 @@ public class DBOperator {
 
 
     /**
-     * 获取当前时间所在的星期的日期
-     * 以星期一开始，星期日结束
+     * 根据当前时间计算本周的日期
      *
      * @return
      */
-    public static List<Calendar> dateToCurrentWeek() {
-        Calendar cal = Calendar.getInstance();
-        int b = cal.get(Calendar.DAY_OF_WEEK) - 1;
-        if (b == 0) {
-            b = 7;
-        }
-        Calendar fdate;
+    private List<Calendar> dateToCurrentWeek() {
+
         List<Calendar> list = new ArrayList<Calendar>();
-        Long fTime = cal.getTime().getTime() - b * 24 * 3600000;
-        for (int a = 1; a <= 7; a++) {
-            fdate = Calendar.getInstance();
-            fdate.setTime(new Date(fTime + (a * 24 * 3600000)));
-            list.add(a - 1, fdate);
+
+        Calendar calendar = Calendar.getInstance();
+        int firstDayOfWeek = calendar.getFirstDayOfWeek();
+        long nowTime = calendar.getTimeInMillis();
+        int date = calendar.get(Calendar.DAY_OF_WEEK);
+        if (firstDayOfWeek == Calendar.SUNDAY) {
+            date--;
+            if (date == 0)
+                date = 7;
+        }
+        long time = nowTime - date * 24 * 3600000;
+        for (int i = 1; i < 8; i++) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(time + i * 24 * 3600000);
+            list.add(i - 1, cal);
         }
         return list;
     }

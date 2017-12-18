@@ -24,6 +24,7 @@ public class AboutMe extends Activity implements View.OnClickListener {
 //        设置沉浸式状态栏
         initState();
 
+
         initEvent();
     }
 

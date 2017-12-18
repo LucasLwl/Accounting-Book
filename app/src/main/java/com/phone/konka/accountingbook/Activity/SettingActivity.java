@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DBOperator;
 import com.phone.konka.accountingbook.Utils.ExcelUtil;
+import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.text.SimpleDateFormat;
@@ -36,9 +36,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
 
     /**
-     * 数据库管理类
+     * Provider管理类
      */
-    private DBOperator mDBOperator;
+    private ProviderManager mDataManager;
 
 
     /**
@@ -97,7 +97,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     private void initData() {
         mThreadPool = ThreadPoolManager.getInstance();
 
-        mDBOperator = new DBOperator(this);
+        mDataManager = new ProviderManager(this);
 
         //        获取今日日期
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -147,10 +147,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                             mThreadPool.execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mDBOperator.removeAllData();
+                                    mDataManager.deleteAllData();
                                     List<DetailTagBean> list = ExcelUtil.readExcel(path);
                                     for (DetailTagBean bean : list)
-                                        mDBOperator.insertAccount(bean);
+                                        mDataManager.insertAccount(bean);
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -239,7 +239,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                                 mThreadPool.execute(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (mDBOperator.isDBEmpty()) {
+                                        if (mDataManager.isDBEmpty()) {
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -248,7 +248,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                                                 }
                                             });
                                         } else {
-                                            ExcelUtil.writeExcel(excelName, "content", mDBOperator.getAllData());
+                                            ExcelUtil.writeExcel(excelName, "content", mDataManager.getAllData());
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
