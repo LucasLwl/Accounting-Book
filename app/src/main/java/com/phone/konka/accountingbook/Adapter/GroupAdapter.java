@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +27,9 @@ import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
 import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
+import org.xmlpull.v1.XmlSerializer;
+
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -95,6 +99,8 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     private int mGroupPosition = -1;
 
 
+    private int mNowYear;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -104,7 +110,6 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     };
 
 
-
     public GroupAdapter(Context mContext, List<MonthDetailBean> mData) {
         this.mData = mData;
         this.mContext = mContext;
@@ -112,6 +117,8 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         mThreadPool = ThreadPoolManager.getInstance();
 
         mDataManager = new ProviderManager(mContext);
+
+        mNowYear = Calendar.getInstance().get(Calendar.YEAR);
     }
 
     @Override
@@ -164,29 +171,47 @@ public class GroupAdapter extends BaseExpandableListAdapter {
             holder = new GroupViewHolder();
             convertView = mInflater.inflate(R.layout.item_detail_one, null);
             holder.llHead = convertView.findViewById(R.id.view_divider);
-            holder.tvMonth = (TextView) convertView.findViewById(R.id.tv_detail_moon);
-            holder.tvIn = (TextView) convertView.findViewById(R.id.tv_detain_moon_in);
-            holder.tvOut = (TextView) convertView.findViewById(R.id.tv_detail_moon_out);
-            holder.tvLeft = (TextView) convertView.findViewById(R.id.tv_detail_moon_left);
+            holder.tvMonth = (TextView) convertView.findViewById(R.id.tv_detail_month);
+            holder.tvIn = (TextView) convertView.findViewById(R.id.tv_detain_month_in);
+            holder.tvOut = (TextView) convertView.findViewById(R.id.tv_detail_month_out);
+            holder.tvLeft = (TextView) convertView.findViewById(R.id.tv_detail_month_left);
             convertView.setTag(holder);
         } else {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
-        MonthDetailBean moonData = mData.get(groupPosition);
+        MonthDetailBean monthData = mData.get(groupPosition);
 
-        holder.tvMonth.setText(moonData.getMonth() + "月");
-        holder.tvIn.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getIn()));
-        holder.tvOut.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getOut()));
-        holder.tvLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(moonData.getIn() - moonData.getOut()));
+
+        if (groupPosition != 0) {
+            if (monthData.getYear() == mData.get(groupPosition - 1).getYear()) {
+                holder.tvMonth.setText(monthData.getMonth() + "月");
+            } else {
+                holder.tvMonth.setText(monthData.getYear() + "年" + monthData.getMonth() + "月");
+            }
+        } else {
+            if (monthData.getYear() == mNowYear) {
+                holder.tvMonth.setText(monthData.getMonth() + "月");
+            } else {
+                holder.tvMonth.setText(monthData.getYear() + "年" + monthData.getMonth() + "月");
+            }
+        }
+
+        holder.tvIn.setText(DoubleTo2Decimal.doubleTo2Decimal(monthData.getIn()));
+        holder.tvOut.setText(DoubleTo2Decimal.doubleTo2Decimal(monthData.getOut()));
+        holder.tvLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(monthData.getIn() - monthData.getOut()));
 
         /**
          * 设置父ListView的Divider
          * 第一个不显示
          */
-        if (groupPosition == 0) {
+        if (groupPosition == 0)
+
+        {
             holder.llHead.setVisibility(View.GONE);
-        } else {
+        } else
+
+        {
             holder.llHead.setVisibility(View.VISIBLE);
         }
 
@@ -263,7 +288,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     /**
      * 隐藏是否删除账单栏
      */
-    private void dismissPopupWindow() {
+    public void dismissPopupWindow() {
         if (mPopupWindow != null && mPopupWindow.isShowing())
             mPopupWindow.dismiss();
     }
@@ -274,7 +299,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
      * @param parent
      * @param view
      */
-    private void showPopupWindow(ViewGroup parent, View view) {
+    public void showPopupWindow(ViewGroup parent, View view) {
 
         /**
          * 如mPopupWindow为空，先创建
@@ -291,6 +316,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
             btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
+            btn.setBackground(mContext.getResources().getDrawable(R.drawable.delete_account_bg));
             btn.setGravity(Gravity.CENTER);
             btn.setPadding(20, 0, 20, 0);
             btn.setLayoutParams(lp);

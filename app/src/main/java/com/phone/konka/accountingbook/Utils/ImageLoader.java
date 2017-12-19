@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.content.MutableContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.util.LruCache;
+import android.widget.ImageView;
 
 /**
  * Created by 廖伟龙 on 2017/12/5.
@@ -24,6 +28,22 @@ public class ImageLoader {
     private static ImageLoader mInstance;
 
 
+    private ThreadPoolManager mThreadPool;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            ImageView imgView = (ImageView) msg.obj;
+            Bundle bundle = msg.getData();
+            Bitmap bitmap = bundle.getParcelable("bitmap");
+            if ((int) imgView.getTag() == msg.arg1)
+                imgView.setImageBitmap(bitmap);
+        }
+    };
+
+
     private ImageLoader(Context context) {
 
         mContext = context;
@@ -36,6 +56,8 @@ public class ImageLoader {
                 return size;
             }
         };
+
+        mThreadPool = ThreadPoolManager.getInstance();
     }
 
     public static ImageLoader getInstance(Context context) {
@@ -58,11 +80,40 @@ public class ImageLoader {
             bitmap = decodeSamplesBitmap(id, reqWidth, reqHeight);
 //            bitmap = BitmapFactory.decodeResource(mContext.getResources(), id);
             if (bitmap != null) {
-
                 mCache.put(id, bitmap);
             }
         }
         return bitmap;
+    }
+
+
+    public void getBitmap(final int id, final ImageView imgView) {
+        final Bitmap[] bitmap = {null};
+        bitmap[0] = mCache.get(id);
+
+
+        if (bitmap[0] == null) {
+            mThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    imgView.setTag(id);
+                    bitmap[0] = decodeSamplesBitmap(id, imgView.getWidth(), imgView.getHeight());
+                    if (bitmap[0] != null) {
+                        mCache.put(id, bitmap[0]);
+                    }
+                    Message msg = mHandler.obtainMessage();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("bitmap", bitmap[0]);
+                    msg.setData(bundle);
+                    msg.obj = imgView;
+                    msg.arg1 = id;
+                    msg.sendToTarget();
+                }
+            });
+
+        } else {
+            imgView.setImageBitmap(bitmap[0]);
+        }
     }
 
     public Bitmap decodeSamplesBitmap(int resId, int reqWidth, int reqHeight) {

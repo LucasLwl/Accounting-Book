@@ -8,7 +8,7 @@ import android.widget.ExpandableListView;
  * Created by 廖伟龙 on 2017/12/12.
  */
 
-public class CustomExpandableListview extends ExpandableListView {
+public class CustomExpandableListview  extends ExpandableListView {
 
 
     public CustomExpandableListview(Context context) {

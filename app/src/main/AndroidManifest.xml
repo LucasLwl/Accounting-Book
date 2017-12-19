@@ -21,8 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.AddAccountActivity"></activity>
-        <activity android:name=".Activity.DetailActivity"></activity>
+        <activity
+            android:name=".Activity.AddAccountActivity"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".Activity.DetailActivity"
+            android:launchMode="singleTask"></activity>
         <activity android:name=".Activity.SettingActivity"></activity>
         <activity android:name=".Activity.AboutMe"></activity>
 

@@ -17,6 +17,7 @@ import com.phone.konka.accountingbook.Fragment.AddAccountFragment;
 import com.phone.konka.accountingbook.Fragment.AddTagFragment;
 import com.phone.konka.accountingbook.Fragment.EditTagFragment;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,14 +127,16 @@ public class AddAccountActivity extends Activity {
     /**
      * 存储收入推荐Tag的key
      */
-    private static final String IN_RECOM_TAG = "inrecom";
+    private static final String IN_RECOM_TAG = "inRecom";
 
 
     /**
      * 存储支出推荐Tag的key
      */
-    private static final String OUT_RECOM_TAG = "outrecom";
+    private static final String OUT_RECOM_TAG = "outRecom";
 
+
+    private ThreadPoolManager mThreadPool;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -145,8 +148,8 @@ public class AddAccountActivity extends Activity {
         initData();
 
 //        显示初始的Fragment
-        showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
-        mIndex = ADD_ACCOUNT_FRAGMENT_OUT;
+//        showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
+//        mIndex = ADD_ACCOUNT_FRAGMENT_OUT;
     }
 
     private void initState() {
@@ -220,53 +223,68 @@ public class AddAccountActivity extends Activity {
     private void initData() {
 
 
+        mThreadPool = ThreadPoolManager.getInstance();
+
         mOutList = new ArrayList<>();
         mInList = new ArrayList<>();
         mOutRecomList = new ArrayList<>();
         mInRecomList = new ArrayList<>();
 
 
-        /**
-         * 获取用户Tag的信息
-         */
-        readFromSharedPreferences(OUT_TAG, mOutList);
-        readFromSharedPreferences(IN_TAG, mInList);
-        readFromSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
-        readFromSharedPreferences(IN_RECOM_TAG, mInRecomList);
+        mThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+
+                /**
+                 * 获取用户Tag的信息
+                 */
+                readFromSharedPreferences(OUT_TAG, mOutList);
+                readFromSharedPreferences(IN_TAG, mInList);
+                readFromSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
+                readFromSharedPreferences(IN_RECOM_TAG, mInRecomList);
 
 
-        /**
-         * 当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
-         */
-        if (mOutList.size() == 0) {
+                /**
+                 * 当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
+                 */
+                if (mOutList.size() == 0) {
+                    String[] strArr = getResources().getStringArray(R.array.out_tag_text);
+                    TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
 
-            Log.i("ddd", "fromArray");
-            String[] strArr = getResources().getStringArray(R.array.out_tag_text);
-            TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
+                    TagBean bean;
+                    for (int i = 0; i < strArr.length; i++) {
+                        bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+                        mOutList.add(bean);
+                    }
 
-            TagBean bean;
-            for (int i = 0; i < strArr.length; i++) {
-                bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
-                mOutList.add(bean);
+                    strArr = getResources().getStringArray(R.array.in_tag_text);
+                    ta = getResources().obtainTypedArray(R.array.in_tag_icon);
+
+                    for (int i = 0; i < strArr.length; i++) {
+                        bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+                        mInList.add(bean);
+                    }
+
+                    strArr = getResources().getStringArray(R.array.out_recom_tag_text);
+                    ta = getResources().obtainTypedArray(R.array.out_recom_tag_icon);
+
+                    for (int i = 0; i < strArr.length; i++) {
+                        bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
+                        mOutRecomList.add(bean);
+                        mInRecomList.add(bean);
+                    }
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
+                        mIndex = ADD_ACCOUNT_FRAGMENT_OUT;
+                    }
+                });
             }
+        });
 
-            strArr = getResources().getStringArray(R.array.in_tag_text);
-            ta = getResources().obtainTypedArray(R.array.in_tag_icon);
-
-            for (int i = 0; i < strArr.length; i++) {
-                bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
-                mInList.add(bean);
-            }
-
-            strArr = getResources().getStringArray(R.array.out_recom_tag_text);
-            ta = getResources().obtainTypedArray(R.array.out_recom_tag_icon);
-
-            for (int i = 0; i < strArr.length; i++) {
-                bean = new TagBean(strArr[i], ta.getResourceId(i, R.drawable.icon_diet));
-                mOutRecomList.add(bean);
-                mInRecomList.add(bean);
-            }
-        }
 
     }
 

@@ -109,7 +109,6 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.ll_setting_inAccount).setOnClickListener(this);
         findViewById(R.id.ll_setting_outAccount).setOnClickListener(this);
         findViewById(R.id.ll_setting_aboutMe).setOnClickListener(this);
-
     }
 
 

@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Utils.ImageLoader;
+import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.List;
 
@@ -39,6 +41,8 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
     private int mIndex;
 
     private int mIconID;
+
+    private ImageLoader mImgLoader;
 
     @Nullable
     @Override
@@ -67,12 +71,17 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         mEtTag = (EditText) rootView.findViewById(R.id.et_addTagFragment_tag);
         mGvTag = (GridView) rootView.findViewById(R.id.gv_addTagFragment_tag);
 
-        mImgTag.setImageResource(((AddAccountActivity) getActivity()).mInRecomList.get(0).getIconID());
-        mIconID = ((AddAccountActivity) getActivity()).mInRecomList.get(0).getIconID();
-
+        TagBean bean = ((AddAccountActivity) getActivity()).mInRecomList.get(0);
+        if (bean != null) {
+            mImgTag.setImageResource(((AddAccountActivity) getActivity()).mInRecomList.get(0).getIconID());
+            mIconID = ((AddAccountActivity) getActivity()).mInRecomList.get(0).getIconID();
+        }
     }
 
     private void initData() {
+
+        mImgLoader = ImageLoader.getInstance(getActivity());
+
         mIndex = ((AddAccountActivity) getActivity()).getIndex();
         mAdapter = new Adapter(((AddAccountActivity) getActivity()).mInRecomList);
         mGvTag.setAdapter(mAdapter);
@@ -86,7 +95,6 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         mGvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 mIconID = ((AddAccountActivity) getActivity()).mInRecomList.get(position).getIconID();
                 mImgTag.setImageDrawable(((ImageView) view).getDrawable());
             }
@@ -150,7 +158,8 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(100, 100);
                 convertView.setLayoutParams(lp);
             }
-            ((ImageView) convertView).setImageResource(getItem(position).getIconID());
+//            ((ImageView) convertView).setImageResource(getItem(position).getIconID());
+            mImgLoader.getBitmap(getItem(position).getIconID(), (ImageView) convertView);
             return convertView;
         }
     }

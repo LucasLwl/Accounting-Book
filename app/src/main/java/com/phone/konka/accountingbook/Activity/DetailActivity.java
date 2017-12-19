@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -213,6 +214,8 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                         mListView.collapseGroup(i);
             }
         });
+
+
     }
 
 
@@ -224,6 +227,11 @@ public class DetailActivity extends Activity implements View.OnClickListener {
             mPopupWindow.dismiss();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAdapter.dismissPopupWindow();
+    }
 
     /**
      * 显示删除提示栏
@@ -242,6 +250,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
             btn.setGravity(Gravity.CENTER);
+            btn.setBackground(getResources().getDrawable(R.drawable.delete_account_bg));
             btn.setPadding(20, 0, 20, 0);
             btn.setLayoutParams(lp);
             btn.setOnClickListener(new View.OnClickListener() {

@@ -45,7 +45,7 @@ public class DragGridAdapter extends BaseAdapter {
     private final Bitmap DEL_BITMAP;
     private final Bitmap ADD_BITMAP;
 
-    private ImageLoader mCache;
+    private ImageLoader mImgLoader;
 
 
     public DragGridAdapter(Context mContext, List<TagBean> mDatas, int index) {
@@ -55,7 +55,7 @@ public class DragGridAdapter extends BaseAdapter {
 
         mIndex = index;
 
-        mCache = ImageLoader.getInstance(mContext);
+        mImgLoader = ImageLoader.getInstance(mContext);
 
         DEL_BITMAP = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_del_tag);
         ADD_BITMAP = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_add_tag);
@@ -98,7 +98,8 @@ public class DragGridAdapter extends BaseAdapter {
 
         TagBean bean = mDatas.get(position);
         holder.tvTag.setText(bean.getText());
-        holder.imgTag.setImageBitmap(mCache.getBitmap(bean.getIconID(), holder.imgTag.getWidth(), holder.imgTag.getHeight()));
+//        holder.imgTag.setImageBitmap(mImgLoader.getBitmap(bean.getIconID(), holder.imgTag.getWidth(), holder.imgTag.getHeight()));
+        mImgLoader.getBitmap(bean.getIconID(), holder.imgTag);
         if (mIndex == 0) {
             holder.imgOpera.setImageBitmap(DEL_BITMAP);
         } else {

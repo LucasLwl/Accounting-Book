@@ -225,7 +225,7 @@ public class ProviderManager {
                 monthBean.setOut(getMonthOut(nowYear, nowMonth));
                 list.add(monthBean);
             }
-            if (nowDay != lastDay || nowMonth != lastMonth || nowDay != lastDay) {
+            if (nowDay != lastDay || nowMonth != lastMonth || nowYear != lastYear) {
                 dayBean = new DayDetailBean();
                 dayBean.setYear(nowYear);
                 dayBean.setMonth(nowMonth);

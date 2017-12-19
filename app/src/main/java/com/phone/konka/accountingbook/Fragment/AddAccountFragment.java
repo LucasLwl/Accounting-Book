@@ -2,8 +2,10 @@ package com.phone.konka.accountingbook.Fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
+import com.phone.konka.accountingbook.Activity.DetailActivity;
 import com.phone.konka.accountingbook.Adapter.TagGridViewAdapter;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
@@ -137,21 +140,32 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      */
     @Override
     public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
+
+        if (hidden && mCalculator != null && mCalculator.isPopCalculatorShow()) {
+            mCalculator.dismissPopCalculator();
+        }
+
         if (!hidden && mAdapter != null) {
             if (mIndex == 0) {
                 mList = ((AddAccountActivity) getActivity()).mOutList;
             } else {
                 mList = ((AddAccountActivity) getActivity()).mInList;
             }
-//            mList.add(mBeanAdd);
             mAdapter.setList(mList);
             mAdapter.notifyDataSetChanged();
         }
 
-        if (hidden && mCalculator != null && mCalculator.isPopCalculatorShow())
-            mCalculator.dismissPopCalculator();
+        super.onHiddenChanged(hidden);
 
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mCalculator != null && mCalculator.isPopCalculatorShow()) {
+            mCalculator.dismissPopCalculator();
+        }
     }
 
     private void initView() {
@@ -188,6 +202,13 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         mGvTag.setAdapter(mAdapter);
     }
 
+    public void setmList(List list) {
+        mList = list;
+        mAdapter = new TagGridViewAdapter(getActivity(), mList);
+        mGvTag.setAdapter(mAdapter);
+
+    }
+
 
     private void initEven() {
 
@@ -212,6 +233,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                         mDataManager.insertAccount(bean);
                     }
                 });
+                Intent intent = new Intent(getActivity(), DetailActivity.class);
+                getActivity().startActivity(intent);
             }
         });
 

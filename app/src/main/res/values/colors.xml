@@ -19,8 +19,8 @@
 
 
     <!---->
-    <color name="detail_item_one">#ddd</color>
+    <color name="detail_item_one">#e0e0e0</color>
     <color name="detail_item_two">#eee</color>
-    <color name="detail_item_three">#ffffff</color>
+    <color name="detail_item_three">#fff</color>
 
 </resources>
