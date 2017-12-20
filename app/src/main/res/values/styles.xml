@@ -9,7 +9,6 @@
     </style>
 
     <style name="popupCalculatorStyle">
-
         <item name="android:windowEnterAnimation">@anim/popup_calculator_in</item>
         <item name="android:windowExitAnimation">@anim/popup_calculator_out</item>
     </style>

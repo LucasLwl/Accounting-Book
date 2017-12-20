@@ -18,6 +18,10 @@ import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.Calendar;
 
+
+/**
+ * 主页Activity
+ */
 public class MainActivity extends Activity implements View.OnClickListener {
 
 
@@ -74,10 +78,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
      */
     private ThreadPoolManager mThreadPool;
 
+    /**
+     * 本月支出金额
+     */
     private double monthOut;
+
+
+    /**
+     * 本月收入金额
+     */
     private double monthIn;
+
+
+    /**
+     * 今天支出金额
+     */
     private double dayOut;
+
+    /**
+     * 最近支出金额
+     */
     private double leastOut;
+
+
+    /**
+     * 本周支出金额
+     */
     private double weekOut;
 
     private Handler mHandler = new Handler() {
@@ -114,6 +140,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         initEven();
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        获取数据库数据
+        getDataFromDB();
+    }
+
+
+    /**
+     * 设置状态栏透明,实现沉浸式状态栏
+     */
     private void initState() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -126,6 +164,49 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * 初始化View
+     */
+    private void initView() {
+
+        mTvMonthOut = (TextView) findViewById(R.id.tv_main_moonOut);
+        mTvMonthIn = (TextView) findViewById(R.id.tv_main_moonIn);
+        mTvMonthLeft = (TextView) findViewById(R.id.tv_main_moonLeft);
+
+        mTvLeastOut = (TextView) findViewById(R.id.tv_main_leastOut);
+        mTvTodayOut = (TextView) findViewById(R.id.tv_main_todayOut);
+        mTvWeekOut = (TextView) findViewById(R.id.tv_main_weekOut);
+
+    }
+
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        mThreadPool = ThreadPoolManager.getInstance();
+
+        mCalendar = Calendar.getInstance();
+
+        mDataManager = new ProviderManager(this);
+    }
+
+
+    /**
+     * 初始化事件
+     */
+    private void initEven() {
+        findViewById(R.id.ll_main_detail).setOnClickListener(this);
+        findViewById(R.id.rl_main_addAccount).setOnClickListener(this);
+        findViewById(R.id.img_main_setting).setOnClickListener(this);
+    }
+
+
+    /**
+     * 获取状态栏高度
+     *
+     * @return
+     */
     private int getStatusBarHeight() {
 
         int result = 0;
@@ -137,13 +218,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         return result;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getDataFromDB();
-    }
-
-
+    /**
+     * 获取数据库数据
+     */
     private void getDataFromDB() {
 
         mThreadPool.execute(new Runnable() {
@@ -160,48 +237,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    private void initView() {
-
-        mTvMonthOut = (TextView) findViewById(R.id.tv_main_moonOut);
-        mTvMonthIn = (TextView) findViewById(R.id.tv_main_moonIn);
-        mTvMonthLeft = (TextView) findViewById(R.id.tv_main_moonLeft);
-
-        mTvLeastOut = (TextView) findViewById(R.id.tv_main_leastOut);
-        mTvTodayOut = (TextView) findViewById(R.id.tv_main_todayOut);
-        mTvWeekOut = (TextView) findViewById(R.id.tv_main_weekOut);
-
-    }
-
-
-    private void initData() {
-        mThreadPool = ThreadPoolManager.getInstance();
-
-        mCalendar = Calendar.getInstance();
-
-        mDataManager = new ProviderManager(this);
-    }
-
-
-    private void initEven() {
-        findViewById(R.id.ll_main_detail).setOnClickListener(this);
-        findViewById(R.id.img_main_addAccount).setOnClickListener(this);
-        findViewById(R.id.img_main_setting).setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
 
+//            点击设置
             case R.id.img_main_setting:
                 intent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(intent);
                 break;
+
+
+//            点击账单详情
             case R.id.ll_main_detail:
                 intent = new Intent(MainActivity.this, DetailActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.img_main_addAccount:
+
+//            点击添加账单
+            case R.id.rl_main_addAccount:
                 intent = new Intent(MainActivity.this, AddAccountActivity.class);
                 startActivity(intent);
                 break;

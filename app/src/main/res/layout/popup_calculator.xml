@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingBottom="@dimen/calculator_margin_bottom"
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/calculator_margin_left"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
         <com.phone.konka.accountingbook.View.CustomTextView
@@ -42,7 +42,7 @@
             android:gravity="right|center_vertical"
             android:paddingLeft="20dp"
             android:paddingRight="@dimen/calculator_margin_bottom"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
@@ -61,7 +61,7 @@
             android:clickable="true"
             android:gravity="center"
             android:text="1"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
 
@@ -74,7 +74,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="2"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
 
@@ -87,7 +87,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="3"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
 
@@ -100,7 +100,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="+"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
@@ -119,7 +119,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="4"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
         <TextView
@@ -131,7 +131,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="5"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
         <TextView
@@ -143,7 +143,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="6"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
 
         <TextView
@@ -155,7 +155,7 @@
             android:background="@drawable/calculator_bg"
             android:gravity="center"
             android:text="-"
-            android:textColor="@color/calculator"
+            android:textColor="@color/calculator_item"
             android:textSize="@dimen/item_text_big" />
     </LinearLayout>
 
@@ -186,7 +186,7 @@
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="7"
-                    android:textColor="@color/calculator"
+                    android:textColor="@color/calculator_item"
                     android:textSize="@dimen/item_text_big" />
 
                 <TextView
@@ -198,7 +198,7 @@
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="8"
-                    android:textColor="@color/calculator"
+                    android:textColor="@color/calculator_item"
                     android:textSize="@dimen/item_text_big" />
 
                 <TextView
@@ -209,7 +209,7 @@
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="9"
-                    android:textColor="@color/calculator"
+                    android:textColor="@color/calculator_item"
                     android:textSize="@dimen/item_text_big" />
 
             </LinearLayout>
@@ -230,7 +230,7 @@
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="."
-                    android:textColor="@color/calculator"
+                    android:textColor="@color/calculator_item"
                     android:textSize="@dimen/item_text_big" />
 
                 <TextView
@@ -242,7 +242,7 @@
                     android:background="@drawable/calculator_bg"
                     android:gravity="center"
                     android:text="0"
-                    android:textColor="@color/calculator"
+                    android:textColor="@color/calculator_item"
                     android:textSize="@dimen/item_text_big" />
 
                 <ImageView

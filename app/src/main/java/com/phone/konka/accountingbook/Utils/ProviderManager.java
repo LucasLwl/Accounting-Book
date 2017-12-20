@@ -216,6 +216,7 @@ public class ProviderManager {
             nowMonth = cursor.getInt(cursor.getColumnIndex("month"));
             nowDay = cursor.getInt(cursor.getColumnIndex("day"));
 
+//            是否需要新建一个MonthDetailBean，当年、月中有一个不同时，创建新的MonthDetailBean
             if (nowMonth != lastMonth || lastYear != nowYear) {
                 monthBean = new MonthDetailBean();
                 monthBean.setYear(nowYear);
@@ -225,6 +226,8 @@ public class ProviderManager {
                 monthBean.setOut(getMonthOut(nowYear, nowMonth));
                 list.add(monthBean);
             }
+
+//            是否需要新建一个DayDetailBean，当年、月、日有一个不同时创建新的DayDetailBean
             if (nowDay != lastDay || nowMonth != lastMonth || nowYear != lastYear) {
                 dayBean = new DayDetailBean();
                 dayBean.setYear(nowYear);
@@ -237,6 +240,7 @@ public class ProviderManager {
             lastYear = nowYear;
             lastDay = nowDay;
 
+//            记录每条账单信息，每条账单信息对应一个DetailTagBean
             detailBean = new DetailTagBean();
             detailBean.setId(cursor.getInt(cursor.getColumnIndex("_id")));
             detailBean.setTag(cursor.getString(cursor.getColumnIndex("tag")));
@@ -265,22 +269,35 @@ public class ProviderManager {
 
     /**
      * 根据当前时间计算本周的日期
+     * <p>
+     * 每周以星期一开始，星期日结束
      *
      * @return
      */
     private List<Calendar> dateToCurrentWeek() {
 
-        List<Calendar> list = new ArrayList<Calendar>();
+        List<Calendar> list = new ArrayList<>();
 
         Calendar calendar = Calendar.getInstance();
+
+//        获取系统中星期的第一天
         int firstDayOfWeek = calendar.getFirstDayOfWeek();
+
+//        获取当前时间
         long nowTime = calendar.getTimeInMillis();
+
+//        获取当前是星期几
         int date = calendar.get(Calendar.DAY_OF_WEEK);
+
+
+//        判断系统是否以星期日开始
         if (firstDayOfWeek == Calendar.SUNDAY) {
             date--;
             if (date == 0)
                 date = 7;
         }
+
+
         long time = nowTime - date * 24 * 3600000;
         for (int i = 1; i < 8; i++) {
             Calendar cal = Calendar.getInstance();
@@ -289,6 +306,4 @@ public class ProviderManager {
         }
         return list;
     }
-
-
 }

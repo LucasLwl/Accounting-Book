@@ -1,17 +1,25 @@
 package com.phone.konka.accountingbook.Bean;
 
-import android.graphics.Bitmap;
-
-import java.util.Iterator;
-
 /**
+ * 字段数据
+ * <p>
  * Created by 廖伟龙 on 2017/11/20.
  */
 
 public class TagBean {
 
+
+    /**
+     * 字段名称
+     */
     private String text;
+
+
+    /**
+     * 字段图标的ResourcesID
+     */
     private int iconID;
+
 
     public TagBean() {
     }

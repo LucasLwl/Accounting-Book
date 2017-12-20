@@ -4,7 +4,7 @@
 
     <item android:drawable="@drawable/item_press" android:state_pressed="true"></item>
 
-    <item android:drawable="@drawable/item_nor"></item>
+    <item android:drawable="@drawable/item_detail_three_nor"></item>
 
 
 </selector>

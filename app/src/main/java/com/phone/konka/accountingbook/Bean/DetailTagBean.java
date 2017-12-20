@@ -1,34 +1,52 @@
 package com.phone.konka.accountingbook.Bean;
 
 /**
+ * 具体的收支数据
+ * <p>
  * Created by 廖伟龙 on 2017/11/16.
- * <p>
- * <p>
- * 收入详情
  */
 
 public class DetailTagBean {
 
 
+    /**
+     * 数据表中的id
+     */
     private int id;
 
+
+    /**
+     * 年份
+     */
     private int year;
 
+
+    /**
+     * 月份
+     */
     private int month;
 
+
+    /**
+     * 日期
+     */
     private int day;
 
 
     /**
-     * 收入类型
+     * 收入字段
      */
     private String tag;
 
+
+    /**
+     * 收入字段的图标ResourcesID
+     */
     private int iconID;
 
 
     /**
-     * 收入金额
+     * s收支金额
      */
     private double money;
 

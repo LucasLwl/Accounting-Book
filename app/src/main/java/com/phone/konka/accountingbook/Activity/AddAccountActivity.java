@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 添加账单Activity
+ * <p>
  * Created by 廖伟龙 on 2017/11/18.
  */
 
@@ -136,6 +137,9 @@ public class AddAccountActivity extends Activity {
     private static final String OUT_RECOM_TAG = "outRecom";
 
 
+    /**
+     * 线程池
+     */
     private ThreadPoolManager mThreadPool;
 
     @Override
@@ -146,33 +150,6 @@ public class AddAccountActivity extends Activity {
         initState();
 
         initData();
-
-//        显示初始的Fragment
-//        showFragment(FROM_ACTIVITY, ADD_ACCOUNT_FRAGMENT_OUT);
-//        mIndex = ADD_ACCOUNT_FRAGMENT_OUT;
-    }
-
-    private void initState() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-
-            LinearLayout ll = (LinearLayout) findViewById(R.id.ll_addAccount_bar);
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll.getLayoutParams();
-            lp.height = getStatusBarHeight();
-            ll.setLayoutParams(lp);
-        }
-    }
-
-    private int getStatusBarHeight() {
-
-        int result = 0;
-        //获取状态栏高度的资源id
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
     }
 
 
@@ -186,6 +163,7 @@ public class AddAccountActivity extends Activity {
         writeToSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
         writeToSharedPreferences(IN_RECOM_TAG, mInRecomList);
     }
+
 
     /**
      * 监听按下返回键的操作
@@ -211,14 +189,20 @@ public class AddAccountActivity extends Activity {
     }
 
     /**
-     * 返回是支出还是收入标志位
-     * 返回当前显示的fragment标志
-     *
-     * @return
+     * 设置状态栏半透明,实现沉浸式状态栏
      */
-    public int getIndex() {
-        return mIndex;
+    private void initState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+
+            LinearLayout ll = (LinearLayout) findViewById(R.id.ll_addAccount_bar);
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll.getLayoutParams();
+            lp.height = getStatusBarHeight();
+            ll.setLayoutParams(lp);
+        }
     }
+
 
     private void initData() {
 
@@ -247,7 +231,7 @@ public class AddAccountActivity extends Activity {
                 /**
                  * 当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
                  */
-                if (mOutList.size() == 0) {
+                if (mOutList.isEmpty() || mInList.isEmpty() || mOutRecomList.isEmpty() || mInRecomList.isEmpty()) {
                     String[] strArr = getResources().getStringArray(R.array.out_tag_text);
                     TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
 
@@ -284,8 +268,34 @@ public class AddAccountActivity extends Activity {
                 });
             }
         });
+    }
 
 
+    /**
+     * 获取状态栏高度
+     *
+     * @return
+     */
+    private int getStatusBarHeight() {
+
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+
+    /**
+     * 返回是支出还是收入标志位
+     * 返回当前显示的fragment标志
+     *
+     * @return
+     */
+    public int getIndex() {
+        return mIndex;
     }
 
 

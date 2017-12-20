@@ -48,7 +48,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
 
 
     /**
-     * 今天日期
+     * 当前日期
      */
     private String mTodayDate;
 
@@ -70,10 +70,13 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         initEven();
     }
 
+
+    /**
+     * 设置状态栏为半透明,设置沉浸式状态栏
+     */
     private void initState() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
 
             LinearLayout ll = (LinearLayout) findViewById(R.id.ll_setting_bar);
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) ll.getLayoutParams();
@@ -82,6 +85,12 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * 获取状态栏高度
+     *
+     * @return
+     */
     private int getStatusBarHeight() {
 
         int result = 0;
@@ -94,6 +103,9 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     }
 
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
         mThreadPool = ThreadPoolManager.getInstance();
 
@@ -104,6 +116,10 @@ public class SettingActivity extends Activity implements View.OnClickListener {
         mTodayDate = sdf.format(new Date());
     }
 
+
+    /**
+     * 初始化事件
+     */
     private void initEven() {
         findViewById(R.id.img_setting_back).setOnClickListener(this);
         findViewById(R.id.ll_setting_inAccount).setOnClickListener(this);

@@ -17,13 +17,29 @@ import com.phone.konka.accountingbook.Utils.ImageLoader;
 import java.util.List;
 
 /**
+ * 可拖动GridView的适配器
+ * <p>
  * Created by 廖伟龙 on 2017/11/20.
  */
 
 public class DragGridAdapter extends BaseAdapter {
 
+
+    /**
+     * 上下文
+     */
     private Context mContext;
+
+
+    /**
+     * 数据
+     */
     private List<TagBean> mDatas;
+
+
+    /**
+     * 布局加载
+     */
     private LayoutInflater mInflater;
 
 
@@ -39,12 +55,27 @@ public class DragGridAdapter extends BaseAdapter {
     private boolean isDrag;
 
 
+    /**
+     * 标志是已有字段,还是推荐字段
+     */
     private int mIndex;
 
 
+    /**
+     * 删除小图标
+     */
     private final Bitmap DEL_BITMAP;
+
+
+    /**
+     * 添加小图标
+     */
     private final Bitmap ADD_BITMAP;
 
+
+    /**
+     * 图片缓存加载器
+     */
     private ImageLoader mImgLoader;
 
 
@@ -98,7 +129,7 @@ public class DragGridAdapter extends BaseAdapter {
 
         TagBean bean = mDatas.get(position);
         holder.tvTag.setText(bean.getText());
-//        holder.imgTag.setImageBitmap(mImgLoader.getBitmap(bean.getIconID(), holder.imgTag.getWidth(), holder.imgTag.getHeight()));
+
         mImgLoader.getBitmap(bean.getIconID(), holder.imgTag);
         if (mIndex == 0) {
             holder.imgOpera.setImageBitmap(DEL_BITMAP);
@@ -115,7 +146,6 @@ public class DragGridAdapter extends BaseAdapter {
         } else {
             convertView.setVisibility(View.VISIBLE);
         }
-
 
         return convertView;
     }

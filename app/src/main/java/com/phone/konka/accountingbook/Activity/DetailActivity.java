@@ -2,25 +2,21 @@ package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.phone.konka.accountingbook.Adapter.GroupAdapter;
 import com.phone.konka.accountingbook.Bean.MonthDetailBean;
@@ -74,10 +70,17 @@ public class DetailActivity extends Activity implements View.OnClickListener {
      */
     private PopupWindow mPopupWindow;
 
+
     /**
      * 长按的Item位置
      */
     private int mLongClickPos = 0;
+
+
+    /**
+     * 记录长按时,长按的View
+     */
+    private View mLongClickView;
 
 
     @Override
@@ -103,6 +106,13 @@ public class DetailActivity extends Activity implements View.OnClickListener {
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAdapter.dismissPopupWindow();
+    }
+
+
     /**
      * 设置沉浸式状态栏
      * <p>
@@ -121,21 +131,6 @@ public class DetailActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    /**
-     * 获取状态栏高度
-     *
-     * @return
-     */
-    private int getStatusBarHeight() {
-
-        int result = 0;
-        //获取状态栏高度的资源id
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
 
     private void initView() {
         mListView = (ExpandableListView) findViewById(R.id.lv_detail_one);
@@ -196,7 +191,9 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                     int groupPos = ExpandableListView.getPackedPositionGroup(pos);
                     if (childPos == AdapterView.INVALID_POSITION) {
                         mLongClickPos = groupPos;
-                        showPopupWindow(parent, view);
+                        mLongClickView = view;
+                        showPopupWindow(parent);
+                        view.findViewById(R.id.ll_item_detail).setBackgroundResource(R.drawable.item_press);
                     }
                 }
                 return true;
@@ -218,6 +215,22 @@ public class DetailActivity extends Activity implements View.OnClickListener {
 
     }
 
+    /**
+     * 获取状态栏高度
+     *
+     * @return
+     */
+    private int getStatusBarHeight() {
+
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
 
     /**
      * 隐藏删除提示栏
@@ -227,19 +240,13 @@ public class DetailActivity extends Activity implements View.OnClickListener {
             mPopupWindow.dismiss();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mAdapter.dismissPopupWindow();
-    }
 
     /**
      * 显示删除提示栏
      *
      * @param parent
-     * @param view
      */
-    private void showPopupWindow(ViewGroup parent, View view) {
+    private void showPopupWindow(ViewGroup parent) {
 
         if (mPopupWindow == null) {
             Button btn = new Button(this);
@@ -278,11 +285,20 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                     dismissPopupWindow();
                 }
             });
-            mPopupWindow = new PopupWindow(btn, RelativeLayout.LayoutParams.WRAP_CONTENT, 150, true);
+            int height = getWindowManager().getDefaultDisplay().getHeight() / 13;
+            mPopupWindow = new PopupWindow(btn, RelativeLayout.LayoutParams.WRAP_CONTENT, height, true);
             mPopupWindow.setOutsideTouchable(true);
             mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
             mPopupWindow.setTouchable(true);
+            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    mLongClickView.findViewById(R.id.ll_item_detail).setBackgroundResource(R.drawable.item_detail_one_bg);
+                }
+            });
+
         }
+
 
         /**
          * 显示删除提示栏
@@ -290,10 +306,10 @@ public class DetailActivity extends Activity implements View.OnClickListener {
          * 默认显示在长按的Item下方，若下方显示不下，则显示在上方
          */
         if (!mPopupWindow.isShowing()) {
-            if (view.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
-                mPopupWindow.showAsDropDown(view, (view.getWidth() - mPopupWindow.getWidth()) / 2, -(view.getHeight() + mPopupWindow.getHeight()));
+            if (mLongClickView.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
+                mPopupWindow.showAsDropDown(mLongClickView, (mLongClickView.getWidth() - mPopupWindow.getWidth()) / 2, -(mLongClickView.getHeight() + mPopupWindow.getHeight()));
             else {
-                mPopupWindow.showAsDropDown(view, (view.getWidth() - mPopupWindow.getWidth()) / 2, 0);
+                mPopupWindow.showAsDropDown(mLongClickView, (mLongClickView.getWidth() - mPopupWindow.getWidth()) / 2, 0);
             }
         }
     }

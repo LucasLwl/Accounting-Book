@@ -1,8 +1,6 @@
 package com.phone.konka.accountingbook.Utils;
 
 import android.os.Environment;
-import android.os.Looper;
-import android.util.Log;
 
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 
@@ -24,15 +22,32 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * 导入导出Excel文件操作
+ * <p>
  * Created by 廖伟龙 on 2017/11/29.
  */
 
 public class ExcelUtil {
 
+    /**
+     * Excel文件的根路径
+     */
     public static final String BILL_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Bill/";
+
+
+    /**
+     * Excel文件的列字段
+     */
     public static final String[] TAG_NAME = {"year", "month", "day", "tag", "iconID", "money"};
 
 
+    /**
+     * 导出Excel文件
+     *
+     * @param excelName
+     * @param sheetName
+     * @param list
+     */
     public static void writeExcel(final String excelName, final String sheetName, final List<DetailTagBean> list) {
 
         try {
@@ -47,15 +62,22 @@ public class ExcelUtil {
 
             OutputStream os = new FileOutputStream(file);
 
+
+//            对应Excel文件
             Workbook wb = new HSSFWorkbook();
+
+//            表格
             Sheet sheet = wb.createSheet(sheetName);
 
+//            第一列填写字段名称
             Row titleRow = sheet.createRow(0);
             for (int i = 0; i < TAG_NAME.length; i++) {
                 Cell cell = titleRow.createCell(i);
                 cell.setCellValue(TAG_NAME[i]);
             }
 
+
+//            循环每列，填写账单信息
             for (int i = 0; i < list.size(); i++) {
                 Row contentRow = sheet.createRow(i + 1);
                 DetailTagBean bean = list.get(i);
@@ -92,6 +114,12 @@ public class ExcelUtil {
     }
 
 
+    /**
+     * 读取Excel信息
+     *
+     * @param excelName
+     * @return
+     */
     public static List<DetailTagBean> readExcel(String excelName) {
 
         List<DetailTagBean> list = new ArrayList<>();
@@ -105,11 +133,21 @@ public class ExcelUtil {
             }
 
             POIFSFileSystem poi = new POIFSFileSystem(is);
+
+//            对应Excel文件
             HSSFWorkbook wb = new HSSFWorkbook(poi);
+
+//            Excel表
             Sheet sheet = wb.getSheetAt(0);
+
             Iterator<Row> rowIterator = sheet.rowIterator();
+
+//            跳过第一行的字段名称
             if (rowIterator.hasNext())
                 rowIterator.next();
+
+
+//            循环每列，读取Excel表格信息
             while (rowIterator.hasNext()) {
                 DetailTagBean bean = new DetailTagBean();
                 Row row = rowIterator.next();

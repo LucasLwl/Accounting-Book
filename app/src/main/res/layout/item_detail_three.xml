@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    android:background="@drawable/item_detail_three_bg"
     android:paddingLeft="@dimen/detail_item_margin_left"
     android:paddingRight="@dimen/detail_item_margin_right">
 
@@ -43,6 +43,4 @@
         android:paddingRight="20dp"
         android:textColor="@color/item_text"
         android:textSize="@dimen/item_text_small" />
-
-
 </LinearLayout>

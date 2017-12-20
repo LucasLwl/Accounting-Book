@@ -1,8 +1,6 @@
 package com.phone.konka.accountingbook.Fragment;
 
 import android.app.Fragment;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,28 +18,62 @@ import com.phone.konka.accountingbook.Activity.AddAccountActivity;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.ImageLoader;
-import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 import java.util.List;
 
 /**
+ * 添加账单字段的Fragment
+ * <p>
  * Created by 廖伟龙 on 2017/11/20.
  */
 
 public class AddTagFragment extends Fragment implements View.OnClickListener {
 
+    /**
+     * Fragment显示的View
+     */
     private View rootView;
 
+
+    /**
+     * 新增字段的图标
+     */
     private ImageView mImgTag;
+
+
+    /**
+     * 新增字段的名称
+     */
     private EditText mEtTag;
 
+
+    /**
+     * 显示可选图标
+     */
     private GridView mGvTag;
+
+
+    /**
+     * 可选图标适配器
+     */
     private Adapter mAdapter;
 
+
+    /**
+     * 标志是收入还是支出
+     */
     private int mIndex;
 
+
+    /**
+     * 可选图标的resourceId
+     */
     private int mIconID;
 
+
+    /**
+     * 图片缓存加载器
+     */
     private ImageLoader mImgLoader;
 
     @Nullable
@@ -65,20 +97,30 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * 初始化View
+     */
     private void initView() {
 
         mImgTag = (ImageView) rootView.findViewById(R.id.img_addTagFragment_tag);
         mEtTag = (EditText) rootView.findViewById(R.id.et_addTagFragment_tag);
         mGvTag = (GridView) rootView.findViewById(R.id.gv_addTagFragment_tag);
 
+
+    }
+
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+
         TagBean bean = ((AddAccountActivity) getActivity()).mInRecomList.get(0);
         if (bean != null) {
             mImgTag.setImageResource(((AddAccountActivity) getActivity()).mInRecomList.get(0).getIconID());
             mIconID = ((AddAccountActivity) getActivity()).mInRecomList.get(0).getIconID();
         }
-    }
-
-    private void initData() {
 
         mImgLoader = ImageLoader.getInstance(getActivity());
 
@@ -87,6 +129,10 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         mGvTag.setAdapter(mAdapter);
     }
 
+
+    /**
+     * 初始化事件
+     */
     private void initEven() {
 
         rootView.findViewById(R.id.img_addTagFragment_back).setOnClickListener(this);
@@ -105,6 +151,7 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
 
+//            点击保存
             case R.id.img_addTagFragment_save:
 
                 if (mEtTag.getText().toString().isEmpty()) {
@@ -121,6 +168,8 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
                     }
                 }
 
+
+//                点击返回
             case R.id.img_addTagFragment_back:
                 ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
                 break;
@@ -128,7 +177,6 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
     }
 
     class Adapter extends BaseAdapter {
-
 
         private List<TagBean> mlist;
 
@@ -158,7 +206,6 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(100, 100);
                 convertView.setLayoutParams(lp);
             }
-//            ((ImageView) convertView).setImageResource(getItem(position).getIconID());
             mImgLoader.getBitmap(getItem(position).getIconID(), (ImageView) convertView);
             return convertView;
         }

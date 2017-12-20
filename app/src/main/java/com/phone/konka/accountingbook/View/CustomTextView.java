@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -17,6 +16,9 @@ import android.util.TypedValue;
 public class CustomTextView extends android.support.v7.widget.AppCompatTextView {
 
 
+    /**
+     * 文字画笔
+     */
     private Paint mPaint;
 
 
@@ -46,6 +48,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         super(context, attrs, defStyleAttr);
         mDefaultTextSize = getTextSize();
     }
+    
 
 
     /**
@@ -159,7 +162,6 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
      */
     private void refitText(String text, int textWidth) {
 
-        Log.i("ddd", text);
 //        当textView的总宽度大于0时才能显示文字
         if (textWidth > 0) {
 

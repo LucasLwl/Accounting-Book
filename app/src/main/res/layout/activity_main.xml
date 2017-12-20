@@ -17,7 +17,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/main_title_height"
         android:background="@color/title_bar"
         android:orientation="vertical">
 
@@ -40,98 +40,104 @@
                 android:layout_height="@dimen/icon_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/item_margin_right"
                 android:src="@drawable/icon_setting" />
         </RelativeLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="20dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/month_in"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_text_small" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/month_out"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_text_small" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/month_left"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_text_small" />
-        </LinearLayout>
 
 
         <LinearLayout
             android:id="@+id/ll_main_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:paddingTop="10dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_main_moonIn"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/initial"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_text_small" />
+                android:paddingLeft="@dimen/main_title_margin_left"
+                android:paddingRight="@dimen/main_title_margin_right"
+                android:paddingTop="@dimen/item_margin_top">
 
-            <View
-                android:layout_width="@dimen/line_width_nor"
-                android:layout_height="match_parent"
-                android:background="@color/white">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/month_in"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_text_small" />
 
-            </View>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/month_out"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_text_small" />
 
-            <TextView
-                android:id="@+id/tv_main_moonOut"
-                android:layout_width="0dp"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/month_left"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_text_small" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/initial"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_text_small" />
+                android:paddingLeft="@dimen/main_title_margin_left"
+                android:paddingRight="@dimen/main_title_margin_right"
+                android:paddingTop="@dimen/item_margin_top">
 
-            <View
-                android:layout_width="@dimen/line_width_nor"
-                android:layout_height="match_parent"
-                android:background="@color/white">
+                <TextView
+                    android:id="@+id/tv_main_moonIn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/initial"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_text_small" />
 
-            </View>
+                <View
+                    android:layout_width="@dimen/line_width_nor"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
 
-            <TextView
-                android:id="@+id/tv_main_moonLeft"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/initial"
-                android:textColor="@color/white"
-                android:textSize="@dimen/item_text_small" />
+                </View>
+
+                <TextView
+                    android:id="@+id/tv_main_moonOut"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/initial"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_text_small" />
+
+                <View
+                    android:layout_width="@dimen/line_width_nor"
+                    android:layout_height="match_parent"
+                    android:background="@color/white">
+
+                </View>
+
+                <TextView
+                    android:id="@+id/tv_main_moonLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/initial"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_text_small" />
+            </LinearLayout>
         </LinearLayout>
 
 
@@ -139,12 +145,12 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_main_addAccount"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_height"
-        android:background="@color/white">
+        android:background="@drawable/item_bg">
 
         <ImageView
-            android:id="@+id/img_main_addAccount"
             android:layout_width="@dimen/icon_width_big"
             android:layout_height="@dimen/icon_height_big"
             android:layout_alignParentRight="true"

@@ -18,6 +18,11 @@
     <string name="in_account">导入账本</string>
     <string name="about_me">关于我们</string>
 
+    <!--关于我们-->
+    <string name="about_me_client">记账本Android版</string>
+    <string name="about_me_version">版本号:1.0</string>
+    <string name="about_me_update">检查新版本</string>
+
 
     <!--明细-->
     <string name="detail">明细</string>

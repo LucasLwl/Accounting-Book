@@ -1,7 +1,6 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +106,6 @@ public class ChildAdapter extends BaseExpandableListAdapter {
         DayDetailBean bean = mData.get(groupPosition);
         holder.dateView.setDate(bean.getDate() + "");
 
-
         /**
          * 计算每日总的收支、结余情况
          */
@@ -164,7 +162,7 @@ public class ChildAdapter extends BaseExpandableListAdapter {
             holder.lineCircleView.setEnd(false);
         }
 
-        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(), holder.imgIcon.getWidth(), holder.imgIcon.getHeight()));
+        mCache.getBitmap(bean.getIconID(), holder.imgIcon);
 
         holder.tvTag.setText(bean.getTag());
 

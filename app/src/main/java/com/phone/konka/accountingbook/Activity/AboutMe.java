@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import com.phone.konka.accountingbook.R;
 
 /**
+ * 关于我们Activity
+ * <p>
  * Created by 廖伟龙 on 2017/12/6.
  */
 
@@ -24,13 +26,11 @@ public class AboutMe extends Activity implements View.OnClickListener {
 //        设置沉浸式状态栏
         initState();
 
-
         initEvent();
     }
 
     /**
      * 设置沉浸式状态栏
-     *
      */
     private void initState() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -44,6 +44,19 @@ public class AboutMe extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * 初始化点击事件
+     */
+    private void initEvent() {
+        findViewById(R.id.img_aboutMe_back).setOnClickListener(this);
+    }
+
+
+    /**
+     * 获取状态栏高度
+     *
+     * @return
+     */
     private int getStatusBarHeight() {
 
         int result = 0;
@@ -55,9 +68,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
         return result;
     }
 
-    private void initEvent() {
-        findViewById(R.id.img_aboutMe_back).setOnClickListener(this);
-    }
 
     @Override
     public void onClick(View v) {

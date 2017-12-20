@@ -18,6 +18,8 @@ import com.phone.konka.accountingbook.Utils.ImageLoader;
 import java.util.List;
 
 /**
+ * 添加账单选择字段的Adapter
+ * <p>
  * Created by 廖伟龙 on 2017/11/21.
  */
 
@@ -25,18 +27,30 @@ public class TagGridViewAdapter extends BaseAdapter {
 
 
     private Context mContext;
+
+
+    /**
+     * 字段信息
+     */
     private List<TagBean> mList;
+
+
+    /**
+     * 布局加载
+     */
     private LayoutInflater mInflater;
 
+
+    /**
+     * 图片缓存加载器
+     */
     private ImageLoader mCache;
 
+
+    /**
+     * 当前选中的item
+     */
     private int mSelected = 0;
-
-    public void setList(List<TagBean> mList) {
-        this.mList = mList;
-        mSelected = 0;
-    }
-
 
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
         this.mContext = mContext;
@@ -77,25 +91,46 @@ public class TagGridViewAdapter extends BaseAdapter {
 
         TagBean bean = mList.get(position);
         holder.tvText.setText(bean.getText());
-//        holder.imgIcon.setImageBitmap(mCache.getBitmap(bean.getIconID(), holder.imgIcon.getWidth(), holder.imgIcon.getHeight()));
+
         mCache.getBitmap(bean.getIconID(), holder.imgIcon);
 
+//        设置选中item的字体颜色,和选中图标
         if (position == mSelected) {
             holder.imgSelected.setVisibility(View.VISIBLE);
-            holder.tvText.setTextColor(Color.parseColor("#FD9801"));
+            holder.tvText.setTextColor(mContext.getResources().getColor(R.color.item_selected));
         } else {
             holder.imgSelected.setVisibility(View.GONE);
-            holder.tvText.setTextColor(Color.parseColor("#555555"));
+            holder.tvText.setTextColor(mContext.getResources().getColor(R.color.item_text));
         }
-
         return convertView;
     }
 
 
+    /**
+     * 设置字段信息
+     *
+     * @param mList
+     */
+    public void setList(List<TagBean> mList) {
+        this.mList = mList;
+        mSelected = 0;
+    }
+
+    /**
+     * 获取选中的位置
+     *
+     * @return
+     */
     public int getSelected() {
         return mSelected;
     }
 
+
+    /**
+     * 设置选中的位置
+     *
+     * @param selected
+     */
     public void setSelected(int selected) {
         mSelected = selected;
         notifyDataSetChanged();

@@ -6,21 +6,39 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
+ * 直线圆圈View
+ * <p>
  * Created by 廖伟龙 on 2017/12/12.
  */
 
 public class LineCircleView extends android.support.v7.widget.AppCompatTextView {
 
 
+    /**
+     * 是否为最有一个
+     */
     private boolean isEnd;
+
+
+    /**
+     * 是否为第一个
+     */
     private boolean isFirst;
 
     private Paint mPaint;
 
+
+    /**
+     * View内容的有效宽度
+     */
     private int mWidth;
+
+
+    /**
+     * View内容的有效高度
+     */
     private int mHeight;
 
 
@@ -37,11 +55,22 @@ public class LineCircleView extends android.support.v7.widget.AppCompatTextView 
     }
 
 
+    /**
+     * 设置是否为最后一个
+     *
+     * @param end
+     */
     public void setEnd(boolean end) {
         isEnd = end;
         invalidate();
     }
 
+
+    /**
+     * 设置是否为第一个
+     *
+     * @param first
+     */
     public void setFirst(boolean first) {
         isFirst = first;
         invalidate();
@@ -54,6 +83,15 @@ public class LineCircleView extends android.support.v7.widget.AppCompatTextView 
         mWidth = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
         mHeight = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
     }
+
+
+    /**
+     * 若为第一个,则只画圆
+     * 若为最后一个,则画圆,和圆上直线
+     * 若为中间的,则画圆,和圆上,圆下的直线
+     *
+     * @param canvas
+     */
 
     @Override
     protected void onDraw(Canvas canvas) {

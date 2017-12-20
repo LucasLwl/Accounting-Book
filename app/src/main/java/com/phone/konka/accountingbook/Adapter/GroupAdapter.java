@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
@@ -42,15 +43,15 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
 
     /**
-     * 月份账单详情
-     */
-    private List<MonthDetailBean> mData;
-
-
-    /**
      * 上下文
      */
     private Context mContext;
+
+
+    /**
+     * 月份账单详情
+     */
+    private List<MonthDetailBean> mData;
 
 
     /**
@@ -99,7 +100,17 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     private int mGroupPosition = -1;
 
 
+    /**
+     * 记录长按时,长按的View
+     */
+    private View mLongClickView;
+
+
+    /**
+     * 当前年份
+     */
     private int mNowYear;
+
 
     private Handler mHandler = new Handler() {
         @Override
@@ -183,6 +194,9 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         MonthDetailBean monthData = mData.get(groupPosition);
 
 
+        /**
+         * 设置月份前是否需要添加年份
+         */
         if (groupPosition != 0) {
             if (monthData.getYear() == mData.get(groupPosition - 1).getYear()) {
                 holder.tvMonth.setText(monthData.getMonth() + "月");
@@ -205,13 +219,9 @@ public class GroupAdapter extends BaseExpandableListAdapter {
          * 设置父ListView的Divider
          * 第一个不显示
          */
-        if (groupPosition == 0)
-
-        {
+        if (groupPosition == 0) {
             holder.llHead.setVisibility(View.GONE);
-        } else
-
-        {
+        } else {
             holder.llHead.setVisibility(View.VISIBLE);
         }
 
@@ -268,14 +278,16 @@ public class GroupAdapter extends BaseExpandableListAdapter {
                     mChildLongClickPos = ExpandableListView.getPackedPositionChild(pos);
                     mGroupLongClickPos = ExpandableListView.getPackedPositionGroup(pos);
                     mGroupPosition = groupPosition;
-
+                    mLongClickView = view;
                     /**
                      * 显示是否删除账单栏
                      */
                     if (mChildLongClickPos == AdapterView.INVALID_POSITION) {
-                        showPopupWindow(parent, view);
+                        showPopupWindow(parent);
+                        view.findViewById(R.id.ll_item_detail_two).setBackgroundResource(R.drawable.item_press);
                     } else {
-                        showPopupWindow(parent, view);
+                        showPopupWindow(parent);
+                        view.setBackgroundResource(R.drawable.item_press);
                     }
                 }
                 return true;
@@ -297,9 +309,8 @@ public class GroupAdapter extends BaseExpandableListAdapter {
      * 显示是否删除账单栏
      *
      * @param parent
-     * @param view
      */
-    public void showPopupWindow(ViewGroup parent, View view) {
+    public void showPopupWindow(ViewGroup parent) {
 
         /**
          * 如mPopupWindow为空，先创建
@@ -357,10 +368,21 @@ public class GroupAdapter extends BaseExpandableListAdapter {
             });
 
 //            初始化PopupWindow
-            mPopupWindow = new PopupWindow(btn, RelativeLayout.LayoutParams.WRAP_CONTENT, 150, true);
+            int height = ((WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() / 13;
+            mPopupWindow = new PopupWindow(btn, RelativeLayout.LayoutParams.WRAP_CONTENT, height, true);
             mPopupWindow.setOutsideTouchable(true);
             mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
             mPopupWindow.setTouchable(true);
+            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    if (mChildLongClickPos == AdapterView.INVALID_POSITION) {
+                        mLongClickView.findViewById(R.id.ll_item_detail_two).setBackgroundResource(R.drawable.item_detail_two_bg);
+                    } else {
+                        mLongClickView.setBackgroundResource(R.drawable.item_detail_three_bg);
+                    }
+                }
+            });
         }
 
         /**
@@ -369,10 +391,10 @@ public class GroupAdapter extends BaseExpandableListAdapter {
          * 若长按的item下面显示不下，则显示在长按item的上面
          */
         if (!mPopupWindow.isShowing()) {
-            if (view.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
-                mPopupWindow.showAsDropDown(view, (view.getWidth() - mPopupWindow.getWidth()) / 2, -(view.getHeight() + mPopupWindow.getHeight()));
+            if (mLongClickView.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
+                mPopupWindow.showAsDropDown(mLongClickView, (mLongClickView.getWidth() - mPopupWindow.getWidth()) / 2, -(mLongClickView.getHeight() + mPopupWindow.getHeight()));
             else {
-                mPopupWindow.showAsDropDown(view, (view.getWidth() - mPopupWindow.getWidth()) / 2, 0);
+                mPopupWindow.showAsDropDown(mLongClickView, (mLongClickView.getWidth() - mPopupWindow.getWidth()) / 2, 0);
             }
         }
     }

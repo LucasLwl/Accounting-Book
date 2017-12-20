@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +32,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 添加账单的Fragment
+ * <p>
  * Created by 廖伟龙 on 2017/11/18.
  */
 
@@ -44,8 +45,15 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private View rootView;
 
 
+    /**
+     * 显示支出
+     */
     private TextView mTvOut;
 
+
+    /**
+     * 显示收入
+     */
     private TextView mTvIn;
 
 
@@ -64,7 +72,13 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      * 标签数据
      */
     private List<TagBean> mList;
+
+
+    /**
+     * 适配器
+     */
     private TagGridViewAdapter mAdapter;
+
 
     /**
      * 封装带有计算器的PopupWindow
@@ -82,15 +96,18 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      */
     private float mFirstY;
 
+
     /**
      * 手指滑动后的Y位置
      */
     private float mCusY;
 
+
     /**
      * 系统最小滑动距离
      */
     private float mTouchSlop;
+
 
     /**
      * 标志当前为支出还是收入
@@ -100,17 +117,45 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     private int mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
 
 
+    /**
+     * 线程池
+     */
     private ThreadPoolManager mThreadPool;
 
 
+    /**
+     * 数据库操作
+     */
     private ProviderManager mDataManager;
 
+
+    /**
+     * 日历
+     */
     private Calendar mCalendar;
 
+
+    /**
+     * 当前年份
+     */
     private int mYear;
+
+
+    /**
+     * 当前月份
+     */
     private int mMonth;
+
+
+    /**
+     * 当前日期
+     */
     private int mDay;
 
+
+    /**
+     * 选择日期的对话框
+     */
     private DatePickerDialog mDialog;
 
 
@@ -120,7 +165,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
         rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_add_account, null);
         mTouchSlop = ViewConfiguration.get(getActivity()).getScaledTouchSlop();
-
         mCalculator = new PopupCalculator(getActivity());
 
         initView();
@@ -168,6 +212,10 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         }
     }
 
+
+    /**
+     * 初始化View
+     */
     private void initView() {
 
         mTvOut = (TextView) rootView.findViewById(R.id.tv_fragment_out);
@@ -177,6 +225,10 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         mTvDate = (TextView) rootView.findViewById(R.id.tv_fragment_date);
     }
 
+
+    /**
+     * 初始化数据
+     */
     private void initData() {
 
         //初始化线程池
@@ -202,15 +254,18 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         mGvTag.setAdapter(mAdapter);
     }
 
-    public void setmList(List list) {
-        mList = list;
-        mAdapter = new TagGridViewAdapter(getActivity(), mList);
-        mGvTag.setAdapter(mAdapter);
 
-    }
-
-
+    /**
+     * 初始化事件
+     */
     private void initEven() {
+
+
+        mTvIn.setOnClickListener(this);
+        mTvOut.setOnClickListener(this);
+        rootView.findViewById(R.id.tv_fragment_date).setOnClickListener(this);
+        rootView.findViewById(R.id.img_fragment_edit).setOnClickListener(this);
+
 
         /**
          * 设置计算器的保存账单回调
@@ -238,10 +293,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             }
         });
 
-        mTvIn.setOnClickListener(this);
-        mTvOut.setOnClickListener(this);
-        rootView.findViewById(R.id.tv_fragment_date).setOnClickListener(this);
-        rootView.findViewById(R.id.img_fragment_edit).setOnClickListener(this);
 
         /**
          * 监听gridview的触摸事件，用于显示下滑显示计算器，上滑隐藏计算器
@@ -276,7 +327,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         mGvTag.setOnTouchListener(touchListener);
 
         /**
-         * gridview的itme点击事件，用于点击item显示计算器
+         * GridView的itme点击事件，用于点击item显示计算器
          */
         mGvTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -301,13 +352,14 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+//            点击支出
             case R.id.tv_fragment_out:
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN) {
 
                     //设置高亮
                     mTvOut.setAlpha(1.0f);
                     mTvIn.setAlpha(0.3f);
-
 
                     mList = ((AddAccountActivity) getActivity()).mOutList;
                     mAdapter.setList(mList);
@@ -317,12 +369,11 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                         mCalculator.setTagText(mList.get(mAdapter.getSelected()).getText());
                         mCalculator.setTagIcon(mList.get(mAdapter.getSelected()).getIconID());
                     }
-
-
                     mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
                 }
                 break;
 
+//            点击收入
             case R.id.tv_fragment_in:
 
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
@@ -343,6 +394,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                     mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN;
                 }
                 break;
+
+//            点击日期
             case R.id.tv_fragment_date:
 
                 mDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
@@ -358,6 +411,7 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 mDialog.show();
                 break;
 
+//            点击编辑
             case R.id.img_fragment_edit:
                 ((AddAccountActivity) getActivity()).showFragment(mIndex, AddAccountActivity.EDIT_TAG_FRAGMENT);
                 break;

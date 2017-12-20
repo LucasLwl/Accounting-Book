@@ -13,9 +13,10 @@
     </View>
 
     <LinearLayout
+        android:id="@+id/ll_item_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/detail_item_one"
+        android:background="@drawable/item_detail_one_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/detail_item_margin_bottom"

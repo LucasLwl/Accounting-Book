@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.phone.konka.accountingbook.Utils.CalculatorManager;
 
 /**
  * 显示计算器的PopupWindow
+ * <p>
  * <p>
  * Created by 廖伟龙 on 2017/11/21.
  */
@@ -73,15 +75,18 @@ public class PopupCalculator implements View.OnClickListener {
 
         mCalculator = new CalculatorManager(context);
 
+        /**
+         * 初始化显示计算机的PopupWindow,高度为屏幕高度的三分之一
+         */
         mCalView = LayoutInflater.from(context).inflate(R.layout.popup_calculator, null);
-        mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, 650, false);
+        int height = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() / 3;
+        mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, height, false);
         mPopCalculator.setOutsideTouchable(true);
         mPopCalculator.setTouchable(true);
         mPopCalculator.setAnimationStyle(R.style.popupCalculatorStyle);
         initView();
 
     }
-
 
 
     /**

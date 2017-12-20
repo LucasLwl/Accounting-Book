@@ -3,10 +3,9 @@ package com.phone.konka.accountingbook.Bean;
 import java.util.List;
 
 /**
+ * 每月的详情账单数据
+ * <p>
  * Created by 廖伟龙 on 2017/11/16.
- * <p>
- * <p>
- * 月份详情账单
  */
 
 public class MonthDetailBean {
@@ -34,10 +33,8 @@ public class MonthDetailBean {
 
 
     /**
-     * 结余
+     * 当月具体的收支情况
      */
-    private double left;
-
     private List<DayDetailBean> dayList;
 
     public int getYear() {
@@ -72,13 +69,6 @@ public class MonthDetailBean {
         this.out = out;
     }
 
-    public double getLeft() {
-        return left;
-    }
-
-    public void setLeft(double left) {
-        this.left = left;
-    }
 
     public List<DayDetailBean> getDayList() {
         return dayList;
