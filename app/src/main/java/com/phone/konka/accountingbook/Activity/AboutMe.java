@@ -1,14 +1,25 @@
 package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.R;
+import com.phone.konka.accountingbook.Service.UpdateService;
+import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 /**
  * 关于我们Activity
@@ -18,6 +29,10 @@ import com.phone.konka.accountingbook.R;
 
 public class AboutMe extends Activity implements View.OnClickListener {
 
+
+    private ThreadPoolManager mThreadPool;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +41,20 @@ public class AboutMe extends Activity implements View.OnClickListener {
 //        设置沉浸式状态栏
         initState();
 
+        initData();
+
         initEvent();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getIntent().getAction() != null) {
+            Log.i("ddd", getIntent().getAction());
+        }
+        Log.i("ddd", "onResume");
+    }
+
 
     /**
      * 设置沉浸式状态栏
@@ -45,10 +72,18 @@ public class AboutMe extends Activity implements View.OnClickListener {
     }
 
     /**
+     * 初始化数据
+     */
+    private void initData() {
+        mThreadPool = ThreadPoolManager.getInstance();
+    }
+
+    /**
      * 初始化点击事件
      */
     private void initEvent() {
         findViewById(R.id.img_aboutMe_back).setOnClickListener(this);
+        findViewById(R.id.tv_aboutMe_update).setOnClickListener(this);
     }
 
 
@@ -74,6 +109,30 @@ public class AboutMe extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.img_aboutMe_back:
                 finish();
+                break;
+
+            case R.id.tv_aboutMe_update:
+
+                if (Config.serverVersion > Config.localVersion) {
+                    AlertDialog.Builder build = new AlertDialog.Builder(this)
+                            .setMessage("检测到新版本")
+                            .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+
+                                    Intent service = new Intent(AboutMe.this, UpdateService.class);
+                                    AboutMe.this.startService(service);
+                                }
+                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                    build.show();
+                } else {
+                    new AlertDialog.Builder(this).setMessage("当前已是最新版本").show();
+                }
                 break;
         }
     }
