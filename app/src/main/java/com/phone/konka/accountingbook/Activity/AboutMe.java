@@ -2,22 +2,12 @@ package com.phone.konka.accountingbook.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -28,7 +18,6 @@ import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Service.UpdateService;
 import com.phone.konka.accountingbook.Utils.NetworkUtil;
-import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 /**
  * 关于我们Activity
@@ -41,20 +30,11 @@ public class AboutMe extends Activity implements View.OnClickListener {
 
     private TextView mTvCheckUpdate;
 
-    private ThreadPoolManager mThreadPool;
-
     private AlertDialog mStopDownloadDialog;
 
     private AlertDialog mCheckUpdateDialog;
 
     private AlertDialog mNetworkWarnDialog;
-
-    private BroadcastReceiver mReceiver;
-
-    private boolean isDowanload = false;
-
-    private boolean isPause = false;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +63,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -123,21 +102,12 @@ public class AboutMe extends Activity implements View.OnClickListener {
      * 初始化数据
      */
     private void initData() {
-        mThreadPool = ThreadPoolManager.getInstance();
-
-        mReceiver = new NetworkReceiver();
     }
 
     /**
      * 初始化点击事件
      */
     private void initEvent() {
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(mReceiver, filter);
-
-
         findViewById(R.id.img_aboutMe_back).setOnClickListener(this);
         mTvCheckUpdate.setOnClickListener(this);
     }
@@ -168,7 +138,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mTvCheckUpdate.setEnabled(true);
-                            isDowanload = false;
                             startUpdateService(UpdateService.ACTION_STOP_DOWNLOAD);
                         }
                     })
@@ -196,7 +165,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
                                 showNetworkWarnDialog();
                             } else {
                                 mTvCheckUpdate.setEnabled(false);
-                                isDowanload = true;
                                 startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
                             }
                         }
@@ -220,8 +188,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             mTvCheckUpdate.setEnabled(false);
-                            isDowanload = true;
-                            isPause = false;
                             startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
                         }
                     })
@@ -261,39 +227,5 @@ public class AboutMe extends Activity implements View.OnClickListener {
         Intent service = new Intent(this, UpdateService.class);
         service.setAction(action);
         startService(service);
-    }
-
-    public class NetworkReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int type = NetworkUtil.getConnectedType(context);
-
-
-            switch (type) {
-                case ConnectivityManager.TYPE_WIFI:
-                    if (isDowanload && isPause) {
-                        startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
-                        isPause = false;
-                    }
-                    Log.i("ddd", type + "TYPE_WIFI");
-                    break;
-                case ConnectivityManager.TYPE_MOBILE:
-                    if (isDowanload) {
-                        isPause = true;
-                        startUpdateService(UpdateService.ACTION_PAUSE_DOWNLOAD);
-                        showNetworkWarnDialog();
-                    }
-                    Log.i("ddd", type + "TYPE_MOBILE");
-                    break;
-                default:
-                    if (isDowanload) {
-                        isPause = true;
-                        startUpdateService(UpdateService.ACTION_PAUSE_DOWNLOAD);
-                    }
-                    Log.i("ddd", type + "default");
-                    break;
-            }
-        }
     }
 }
