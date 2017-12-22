@@ -4,6 +4,8 @@
 
     <item android:drawable="@drawable/item_press" android:state_pressed="true"></item>
 
+    <item android:drawable="@color/item_press" android:state_enabled="false"></item>
+
     <item android:drawable="@drawable/item_nor"></item>
 
 

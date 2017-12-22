@@ -5,9 +5,15 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +21,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Service.UpdateService;
+import com.phone.konka.accountingbook.Utils.NetworkUtil;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 
 /**
@@ -30,7 +39,21 @@ import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 public class AboutMe extends Activity implements View.OnClickListener {
 
 
+    private TextView mTvCheckUpdate;
+
     private ThreadPoolManager mThreadPool;
+
+    private AlertDialog mStopDownloadDialog;
+
+    private AlertDialog mCheckUpdateDialog;
+
+    private AlertDialog mNetworkWarnDialog;
+
+    private BroadcastReceiver mReceiver;
+
+    private boolean isDowanload = false;
+
+    private boolean isPause = false;
 
 
     @Override
@@ -41,18 +64,34 @@ public class AboutMe extends Activity implements View.OnClickListener {
 //        设置沉浸式状态栏
         initState();
 
+        initView();
+
         initData();
 
         initEvent();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (getIntent().getAction() != null) {
-            Log.i("ddd", getIntent().getAction());
+        if (getIntent().getAction() != null && getIntent().getAction().equals(UpdateService.ACTION_STOP_DOWNLOAD)) {
+            showStopDownloadDialog();
         }
-        Log.i("ddd", "onResume");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getAction() != null && intent.getAction().equals(UpdateService.ACTION_STOP_DOWNLOAD)) {
+            showStopDownloadDialog();
+        }
     }
 
 
@@ -71,19 +110,36 @@ public class AboutMe extends Activity implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * 初始化View
+     */
+    private void initView() {
+        mTvCheckUpdate = (TextView) findViewById(R.id.tv_aboutMe_update);
+    }
+
+
     /**
      * 初始化数据
      */
     private void initData() {
         mThreadPool = ThreadPoolManager.getInstance();
+
+        mReceiver = new NetworkReceiver();
     }
 
     /**
      * 初始化点击事件
      */
     private void initEvent() {
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(mReceiver, filter);
+
+
         findViewById(R.id.img_aboutMe_back).setOnClickListener(this);
-        findViewById(R.id.tv_aboutMe_update).setOnClickListener(this);
+        mTvCheckUpdate.setOnClickListener(this);
     }
 
 
@@ -104,6 +160,82 @@ public class AboutMe extends Activity implements View.OnClickListener {
     }
 
 
+    public void showStopDownloadDialog() {
+
+        if (mStopDownloadDialog == null) {
+            mStopDownloadDialog = new AlertDialog.Builder(this).setMessage("是否取消下载")
+                    .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mTvCheckUpdate.setEnabled(true);
+                            isDowanload = false;
+                            startUpdateService(UpdateService.ACTION_STOP_DOWNLOAD);
+                        }
+                    })
+                    .setNegativeButton("否", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).create();
+        }
+
+        if (!mStopDownloadDialog.isShowing())
+            mStopDownloadDialog.show();
+
+    }
+
+
+    public void showCheckUpdateDialog() {
+        if (mCheckUpdateDialog == null) {
+            mCheckUpdateDialog = new AlertDialog.Builder(this)
+                    .setMessage("检测到新版本")
+                    .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (NetworkUtil.getConnectedType(AboutMe.this) != ConnectivityManager.TYPE_WIFI) {
+                                showNetworkWarnDialog();
+                            } else {
+                                mTvCheckUpdate.setEnabled(false);
+                                isDowanload = true;
+                                startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
+                            }
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).create();
+        }
+        if (!mCheckUpdateDialog.isShowing())
+            mCheckUpdateDialog.show();
+    }
+
+
+    public void showNetworkWarnDialog() {
+        if (mNetworkWarnDialog == null) {
+            mNetworkWarnDialog = new AlertDialog.Builder(AboutMe.this)
+                    .setTitle("流量提醒")
+                    .setMessage("当前网络为非WIFI环境，是否继续使用手机流量下载?")
+                    .setPositiveButton("继续", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mTvCheckUpdate.setEnabled(false);
+                            isDowanload = true;
+                            isPause = false;
+                            startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
+                        }
+                    })
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).create();
+        }
+        if (!mNetworkWarnDialog.isShowing())
+            mNetworkWarnDialog.show();
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -112,28 +244,56 @@ public class AboutMe extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.tv_aboutMe_update:
-
-                if (Config.serverVersion > Config.localVersion) {
-                    AlertDialog.Builder build = new AlertDialog.Builder(this)
-                            .setMessage("检测到新版本")
-                            .setPositiveButton("更新", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-
-                                    Intent service = new Intent(AboutMe.this, UpdateService.class);
-                                    AboutMe.this.startService(service);
-                                }
-                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                    build.show();
+                if (NetworkUtil.isNetworkConnected(this)) {
+                    if (Config.serverVersion > Config.localVersion) {
+                        showCheckUpdateDialog();
+                    } else {
+                        Toast.makeText(this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    new AlertDialog.Builder(this).setMessage("当前已是最新版本").show();
+                    Toast.makeText(this, "网络连接不可用", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    private void startUpdateService(String action) {
+        Intent service = new Intent(this, UpdateService.class);
+        service.setAction(action);
+        startService(service);
+    }
+
+    public class NetworkReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int type = NetworkUtil.getConnectedType(context);
+
+
+            switch (type) {
+                case ConnectivityManager.TYPE_WIFI:
+                    if (isDowanload && isPause) {
+                        startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
+                        isPause = false;
+                    }
+                    Log.i("ddd", type + "TYPE_WIFI");
+                    break;
+                case ConnectivityManager.TYPE_MOBILE:
+                    if (isDowanload) {
+                        isPause = true;
+                        startUpdateService(UpdateService.ACTION_PAUSE_DOWNLOAD);
+                        showNetworkWarnDialog();
+                    }
+                    Log.i("ddd", type + "TYPE_MOBILE");
+                    break;
+                default:
+                    if (isDowanload) {
+                        isPause = true;
+                        startUpdateService(UpdateService.ACTION_PAUSE_DOWNLOAD);
+                    }
+                    Log.i("ddd", type + "default");
+                    break;
+            }
         }
     }
 }
