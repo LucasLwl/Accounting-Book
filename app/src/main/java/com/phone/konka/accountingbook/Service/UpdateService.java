@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -27,6 +30,7 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 /**
  * 下载更新包Service
@@ -67,6 +71,9 @@ public class UpdateService extends Service {
     private static final int MESSAGE_UPDATE_PROGRESS = 1;
 
 
+    /**
+     * 停止下载信息
+     */
     private static final int MESSAGE_STOP_DOWNLOAD = 2;
 
 
@@ -76,9 +83,28 @@ public class UpdateService extends Service {
     private static final int MESSAGE_DOWNLOAD_FINISHED = 3;
 
 
-    private static final int STATE_DOWNLOAD = 0;
-    private static final int STATE_PAUSE = 1;
-    private static final int STATE_STOP = 2;
+    /**
+     * 下载状态
+     */
+    public static final int STATE_DOWNLOAD = 0;
+
+
+    /**
+     * 暂停状态
+     */
+    public static final int STATE_PAUSE = 1;
+
+
+    /**
+     * 停止下载状态
+     */
+    public static final int STATE_STOP = 2;
+
+
+    /**
+     * 下载完成状态
+     */
+    public static final int STATE_FINISHED = 3;
 
 
     /**
@@ -129,15 +155,40 @@ public class UpdateService extends Service {
     private Intent mUpdateIntent;
 
 
+    /**
+     * 安装包总大小
+     */
     private int mContentLength = 0;
 
 
+    /**
+     * 上一秒完成的大小
+     */
+    private int mLastFinishedLength = 0;
+
+
+    /**
+     * 当前完成的大小
+     */
     private int mFinishedLength = 0;
 
 
-    private int mDownloadState = -1;
+    /**
+     * 当前的下载状态
+     */
+    private static int mDownloadState = STATE_STOP;
 
+
+    /**
+     * 网络状态广播接收者
+     */
     private BroadcastReceiver mNetworkReceiver;
+
+
+    /**
+     * Activity的信使
+     */
+    private Messenger mActivityMessenger;
 
 
     private Handler mHandler = new Handler() {
@@ -145,37 +196,95 @@ public class UpdateService extends Service {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
+
+//            安装包文件
+            File file;
+
+
+//            格式化到小数点后一位，用于格式化下载速度
+            DecimalFormat format = new DecimalFormat("0.0");
+
+
             switch (msg.what) {
 
+//                初始化完成
                 case MESSAGE_INIT_FILE:
-                    Log.i("ddd", "开始下载");
+
+//                    开始正式下载
                     mThreadPool.execute(new DownloadTask());
-                    mNotificationManager.notify(notifyID, mBuilder.build());
-
-                    break;
-
-                case MESSAGE_UPDATE_PROGRESS:
                     if (mBuilder != null) {
-                        mBuilder.setContentText(mFinishedLength / 1024 + "M/" + mContentLength / 1024 + "M");
-                        mBuilder.setProgress(100, mFinishedLength * 100 / mContentLength, false);
                         mNotificationManager.notify(notifyID, mBuilder.build());
                     }
                     break;
 
 
+//                更新下载进度
+                case MESSAGE_UPDATE_PROGRESS:
+
+//                    计算下载速度，并格式化
+                    int speech = mFinishedLength - mLastFinishedLength;
+                    mLastFinishedLength = mFinishedLength;
+                    String strSpeech;
+                    if (speech >= 1024 * 1024) {
+                        strSpeech = format.format(speech / (1024d * 1024d)) + " m/s";
+                    } else if (speech >= 1024) {
+                        strSpeech = speech / 1024 + " kb/s";
+                    } else {
+                        strSpeech = speech + " b/s";
+                    }
+
+//                    显示下载进度
+                    if (mBuilder != null) {
+                        mBuilder.setContentText(format.format(mFinishedLength / (1024d * 1024d)) + "M/" +
+                                format.format(mContentLength / (1024d * 1024d)) + "M" + "       " + strSpeech);
+                        mBuilder.setProgress(100, (int) ((100d / mContentLength) * mFinishedLength), false);
+                        mNotificationManager.notify(notifyID, mBuilder.build());
+                    }
+                    break;
+
+//                停止下载
                 case MESSAGE_STOP_DOWNLOAD:
                     mFinishedLength = 0;
+                    mLastFinishedLength = 0;
                     mNotificationManager.cancel(notifyID);
-                    File file = new File(APK_DIR, APK_NAME);
+
+//                    删除安装包文件
+                    file = new File(APK_DIR, APK_NAME);
                     file.delete();
+                    sendStateToActivity();
                     break;
 
+
+//                下载完成
                 case MESSAGE_DOWNLOAD_FINISHED:
-                    mDownloadState = STATE_STOP;
-                    Log.i("ddd", "下载完成");
-                    Toast.makeText(UpdateService.this, "下载完成", Toast.LENGTH_SHORT).show();
-                    break;
+                    mDownloadState = STATE_FINISHED;
+                    mFinishedLength = 0;
+                    mLastFinishedLength = 0;
+                    mNotificationManager.cancel(notifyID);
 
+                    sendStateToActivity();
+
+                    if (mBuilder != null) {
+                        file = new File(APK_DIR, APK_NAME);
+                        Uri uri = Uri.fromFile(file);
+
+
+//                        开启系统安装功能
+                        Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                        installIntent.setDataAndType(uri, "application/vnd.android.package-archive");
+                        mUpdatePendingIntent = PendingIntent.getActivity(UpdateService.this, 0, installIntent, 0);
+
+                        mBuilder.setAutoCancel(true);
+                        mBuilder.setTicker("下载完成");
+                        mBuilder.setContentText("下载完成，点击安装");
+                        mBuilder.setProgress(100, 100, true);
+                        mBuilder.setContentIntent(mUpdatePendingIntent);
+                        mNotificationManager.notify(notifyID, mBuilder.build());
+                    }
+
+                    Log.i("ddd", "下载完成");
+                    stopSelf();
+                    break;
             }
         }
     };
@@ -185,52 +294,24 @@ public class UpdateService extends Service {
         super.onCreate();
 
         initData();
-
         initEven();
-
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mNetworkReceiver);
-    }
-
-    private void initEven() {
-
-        mNetworkReceiver = new NetworkReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(mNetworkReceiver, filter);
-    }
-
-
-    private void initData() {
-
-
-        mThreadPool = ThreadPoolManager.getInstance();
-
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        mUpdateIntent = new Intent(this, AboutMe.class);
-        mUpdateIntent.setAction(ACTION_STOP_DOWNLOAD);
-        mUpdatePendingIntent = PendingIntent.getActivity(this, 0, mUpdateIntent, 0);
-
-        //初始化状态栏通知
-        mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.icon_application)
-                .setContentTitle("记账本")
-                .setContentText("0%")
-                .setTicker("开始下载")
-                .setContentIntent(mUpdatePendingIntent)
-                .setProgress(100, 0, false)
-                .setOngoing(true);
+        Log.i("ddd", "onDestroy");
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+//        获取Activity的信使
+        mActivityMessenger = intent.getParcelableExtra("messenger");
+
 
 //        开始下载
         if (intent.getAction().equals(ACTION_START_DOWNLOAD)) {
@@ -261,6 +342,38 @@ public class UpdateService extends Service {
     }
 
 
+    private void initData() {
+
+
+        mThreadPool = ThreadPoolManager.getInstance();
+
+        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        mUpdateIntent = new Intent(this, AboutMe.class);
+        mUpdateIntent.setAction(ACTION_STOP_DOWNLOAD);
+        mUpdatePendingIntent = PendingIntent.getActivity(this, 0, mUpdateIntent, 0);
+
+        //初始化状态栏通知
+        mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.icon_application)
+                .setContentTitle("记账本")
+                .setContentText("0%")
+                .setTicker("开始下载")
+                .setContentIntent(mUpdatePendingIntent)
+                .setProgress(100, 0, false)
+                .setOngoing(true);
+    }
+
+    private void initEven() {
+
+//        注册网络状态广播
+        mNetworkReceiver = new NetworkReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(mNetworkReceiver, filter);
+    }
+
+
     /**
      * 下载安装包
      */
@@ -280,6 +393,8 @@ public class UpdateService extends Service {
 
 //                设置连接超时
                 conn.setConnectTimeout(5 * 1000);
+
+//                设置下载范围，用于断点下载
                 conn.setRequestProperty("Range", "bytes=" + mFinishedLength + "-" + mContentLength);
                 conn.setUseCaches(false);
 
@@ -297,11 +412,14 @@ public class UpdateService extends Service {
 //                安装包保存的文件
                 File file = new File(dir, APK_NAME);
 
+//                下载文件保存的位置,用于断点下载
                 RandomAccessFile raf = new RandomAccessFile(file, "rwd");
                 raf.seek(mFinishedLength);
 
 
-//                记录开始时间，每个一秒更新一次进度
+                sendStateToActivity();
+
+//                记录开始时间，每秒更新一次进度
                 long startTime = System.currentTimeMillis();
 
                 while ((lenght = is.read(buffer)) != -1) {
@@ -314,15 +432,7 @@ public class UpdateService extends Service {
                         mHandler.sendMessage(msg);
                     }
 
-
-                    if (mDownloadState == STATE_STOP) {
-                        Message msg = mHandler.obtainMessage();
-                        msg.what = MESSAGE_STOP_DOWNLOAD;
-                        mHandler.sendMessage(msg);
-                        break;
-                    }
-
-                    if (mDownloadState == STATE_PAUSE)
+                    if (mDownloadState != STATE_DOWNLOAD)
                         break;
                 }
 
@@ -345,6 +455,9 @@ public class UpdateService extends Service {
     }
 
 
+    /**
+     * 初始化下载大小
+     */
     class InitFileTask implements Runnable {
         @Override
         public void run() {
@@ -381,21 +494,65 @@ public class UpdateService extends Service {
         }
     }
 
+    /**
+     * 开始下载
+     */
     private void startDownloadTask() {
         mDownloadState = STATE_DOWNLOAD;
         mThreadPool.execute(new InitFileTask());
     }
 
+
+    /**
+     * 暂停下载
+     */
     private void pauseDownloadTask() {
         mDownloadState = STATE_PAUSE;
-        Toast.makeText(this, "当前为非WIFI环境，暂停下载", Toast.LENGTH_SHORT).show();
+        mBuilder.setContentText("暂停下载");
+        mBuilder.setProgress(100, 0, true);
+        mNotificationManager.notify(notifyID, mBuilder.build());
+        sendStateToActivity();
     }
 
+
+    /**
+     * 停止下载
+     */
     private void stopDownloadTask() {
         mDownloadState = STATE_STOP;
-        Toast.makeText(UpdateService.this, "终止下载", Toast.LENGTH_SHORT).show();
+        Message msg = mHandler.obtainMessage();
+        msg.what = MESSAGE_STOP_DOWNLOAD;
+        mHandler.sendMessage(msg);
     }
 
+
+    /**
+     * 发送下载状态到Activity
+     */
+    private void sendStateToActivity() {
+        Message msg = Message.obtain();
+        msg.what = mDownloadState;
+        try {
+            mActivityMessenger.send(msg);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 获取下载状态
+     *
+     * @return
+     */
+    public static int getDownloadState() {
+        return mDownloadState;
+    }
+
+
+    /**
+     * 手机网络状态接收器
+     */
     public class NetworkReceiver extends BroadcastReceiver {
 
         @Override
@@ -407,7 +564,6 @@ public class UpdateService extends Service {
                 case ConnectivityManager.TYPE_WIFI:
                     if (mDownloadState == STATE_PAUSE) {
                         Log.i("ddd", "尝试重连");
-//                        startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
                         startDownloadTask();
                     }
                     Log.i("ddd", type + "TYPE_WIFI");
@@ -416,6 +572,7 @@ public class UpdateService extends Service {
                 default:
                     if (mDownloadState == STATE_DOWNLOAD) {
                         pauseDownloadTask();
+                        Toast.makeText(UpdateService.this, "当前为非WIFI环境，暂停下载", Toast.LENGTH_SHORT).show();
                     }
                     Log.i("ddd", type + "default");
                     break;

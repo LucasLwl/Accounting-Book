@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,13 +31,71 @@ import com.phone.konka.accountingbook.Utils.NetworkUtil;
 public class AboutMe extends Activity implements View.OnClickListener {
 
 
+    /**
+     * 显示检查版本更新
+     */
     private TextView mTvCheckUpdate;
 
+
+    /**
+     * 停止下载提示框
+     */
     private AlertDialog mStopDownloadDialog;
 
+
+    /**
+     * 提示更新提示框
+     */
     private AlertDialog mCheckUpdateDialog;
 
+
+    /**
+     * 非WIFI网络提示框
+     */
     private AlertDialog mNetworkWarnDialog;
+
+
+    /**
+     * 信使
+     */
+    private Messenger mMessenger;
+
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            switch (msg.what) {
+
+//                开始下载
+                case UpdateService.STATE_DOWNLOAD:
+                    mTvCheckUpdate.setText("暂停下载");
+                    mTvCheckUpdate.setEnabled(true);
+                    break;
+
+
+//                暂停下载
+                case UpdateService.STATE_PAUSE:
+                    mTvCheckUpdate.setText("继续下载");
+                    mTvCheckUpdate.setEnabled(true);
+                    break;
+
+//                停止下载
+                case UpdateService.STATE_STOP:
+                    mTvCheckUpdate.setText("检查新版本");
+                    mTvCheckUpdate.setEnabled(true);
+                    break;
+
+
+//                下载完成
+                case UpdateService.STATE_FINISHED:
+                    mTvCheckUpdate.setText("下载完成");
+                    mTvCheckUpdate.setEnabled(false);
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +156,11 @@ public class AboutMe extends Activity implements View.OnClickListener {
      */
     private void initView() {
         mTvCheckUpdate = (TextView) findViewById(R.id.tv_aboutMe_update);
+
+
+        Message msg = mHandler.obtainMessage();
+        msg.what = UpdateService.getDownloadState();
+        mHandler.sendMessage(msg);
     }
 
 
@@ -102,6 +168,7 @@ public class AboutMe extends Activity implements View.OnClickListener {
      * 初始化数据
      */
     private void initData() {
+        mMessenger = new Messenger(mHandler);
     }
 
     /**
@@ -130,6 +197,9 @@ public class AboutMe extends Activity implements View.OnClickListener {
     }
 
 
+    /**
+     * 显示停止下载提示框
+     */
     public void showStopDownloadDialog() {
 
         if (mStopDownloadDialog == null) {
@@ -137,7 +207,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
                     .setPositiveButton("是", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            mTvCheckUpdate.setEnabled(true);
                             startUpdateService(UpdateService.ACTION_STOP_DOWNLOAD);
                         }
                     })
@@ -154,6 +223,9 @@ public class AboutMe extends Activity implements View.OnClickListener {
     }
 
 
+    /**
+     * 显示更新提示框
+     */
     public void showCheckUpdateDialog() {
         if (mCheckUpdateDialog == null) {
             mCheckUpdateDialog = new AlertDialog.Builder(this)
@@ -164,7 +236,6 @@ public class AboutMe extends Activity implements View.OnClickListener {
                             if (NetworkUtil.getConnectedType(AboutMe.this) != ConnectivityManager.TYPE_WIFI) {
                                 showNetworkWarnDialog();
                             } else {
-                                mTvCheckUpdate.setEnabled(false);
                                 startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
                             }
                         }
@@ -179,6 +250,9 @@ public class AboutMe extends Activity implements View.OnClickListener {
     }
 
 
+    /**
+     * 显示非WIFi网络提示框
+     */
     public void showNetworkWarnDialog() {
         if (mNetworkWarnDialog == null) {
             mNetworkWarnDialog = new AlertDialog.Builder(AboutMe.this)
@@ -210,22 +284,43 @@ public class AboutMe extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.tv_aboutMe_update:
-                if (NetworkUtil.isNetworkConnected(this)) {
-                    if (Config.serverVersion > Config.localVersion) {
-                        showCheckUpdateDialog();
+
+                String str = mTvCheckUpdate.getText().toString();
+
+                if (str.equals("检查新版本")) {
+                    if (NetworkUtil.isNetworkConnected(this)) {
+                        if (Config.serverVersion > Config.localVersion) {
+                            showCheckUpdateDialog();
+                        } else {
+                            mTvCheckUpdate.setText("当前已是最新版本");
+                            mTvCheckUpdate.setEnabled(false);
+                            Toast.makeText(this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "网络连接不可用", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(this, "网络连接不可用", Toast.LENGTH_SHORT).show();
+                } else if (str.equals("继续下载")) {
+                    if (NetworkUtil.isNetworkConnected(this)) {
+                        startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
+                    } else {
+                        Toast.makeText(this, "网络连接不可用", Toast.LENGTH_SHORT).show();
+                    }
+                } else if (str.equals("暂停下载")) {
+                    startUpdateService(UpdateService.ACTION_PAUSE_DOWNLOAD);
                 }
                 break;
         }
     }
 
+    /**
+     * 开启更新sercive
+     *
+     * @param action 控制service的下载状态
+     */
     private void startUpdateService(String action) {
         Intent service = new Intent(this, UpdateService.class);
         service.setAction(action);
+        service.putExtra("messenger", mMessenger);
         startService(service);
     }
 }

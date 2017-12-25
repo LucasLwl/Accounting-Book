@@ -162,8 +162,20 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
                     bean.setText(mEtTag.getText().toString());
                     bean.setIconID(mIconID);
                     if (mIndex == 0) {
+                        for (TagBean tag : ((AddAccountActivity) getActivity()).mOutList) {
+                            if (tag.getText().equals(bean.getText())) {
+                                Toast.makeText(getActivity(), "该标签已存在", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
                         ((AddAccountActivity) getActivity()).mOutList.add(((AddAccountActivity) getActivity()).mOutList.size() - 1, bean);
                     } else {
+                        for (TagBean tag : ((AddAccountActivity) getActivity()).mInList) {
+                            if (tag.getText().equals(bean.getText())) {
+                                Toast.makeText(getActivity(), "该标签已存在", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
                         ((AddAccountActivity) getActivity()).mInList.add(((AddAccountActivity) getActivity()).mInList.size() - 1, bean);
                     }
                 }
