@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
+import java.util.Map;
+
 /**
  * 自动调整 TextView 文字大小仅显示一行文字
  * <p>
@@ -34,6 +36,12 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     private final float mDefaultTextSize;
 
 
+    /**
+     * 当前TextView实用宽度
+     */
+    private int mAvailableWidth;
+
+
     public CustomTextView(Context context) {
         super(context);
         mDefaultTextSize = getTextSize();
@@ -48,7 +56,6 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
         super(context, attrs, defStyleAttr);
         mDefaultTextSize = getTextSize();
     }
-    
 
 
     /**
@@ -79,8 +86,14 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mAvailableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
-        refitText(setTextType(getText()).toString(), this.getWidth());
+        refitText(setTextType(getText()).toString());
         super.onDraw(canvas);
 
     }
@@ -157,21 +170,17 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
     /**
      * 通过判断textView的实用宽度来改变显示字体的大小，从而一行内显示完字体
      *
-     * @param text      需要显示的字体
-     * @param textWidth textView的总宽度
+     * @param text 需要显示的字体
      */
-    private void refitText(String text, int textWidth) {
+    private void refitText(String text) {
 
 //        当textView的总宽度大于0时才能显示文字
-        if (textWidth > 0) {
+        if (mAvailableWidth > 0) {
 
 //            获取当前文字大小，返回的单位为Px
             mTextSize = getTextSize();
             mPaint = new Paint();
             mPaint.set(this.getPaint());
-
-//            获取textView的实用大小
-            int availableWidth = textWidth - getPaddingLeft() - getPaddingRight();
 
 
 //            测量文本需要的大小
@@ -182,7 +191,7 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
             /**
              * 判断删除字符时，是否可以增大textSize
              */
-            while (textWidths < availableWidth && mTextSize < mDefaultTextSize) {
+            while (textWidths < mAvailableWidth && mTextSize < mDefaultTextSize) {
                 mTextSize++;
                 mPaint.setTextSize(mTextSize);
                 textWidths = mPaint.measureText(text);
@@ -193,14 +202,14 @@ public class CustomTextView extends android.support.v7.widget.AppCompatTextView 
              * 第一种，文字的大小达到了默认大小  不需要处理
              * 第二种，文本需要的大小大于textView实用的大小，则需要将文字大小回退一步
              */
-            if (textWidths > availableWidth)
+            if (textWidths > mAvailableWidth)
                 mTextSize--;
 
 
             /**
              * 判断增加字符时，是否需要减小textSize
              */
-            while (textWidths > availableWidth) {
+            while (textWidths > mAvailableWidth) {
                 mTextSize--;
                 mPaint.setTextSize(mTextSize);
                 textWidths = mPaint.measureText(text);

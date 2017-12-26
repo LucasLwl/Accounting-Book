@@ -32,6 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
 
+import javax.net.ssl.SSLException;
+
 /**
  * 下载更新包Service
  * <p>
@@ -283,6 +285,7 @@ public class UpdateService extends Service {
                     }
 
                     Log.i("ddd", "下载完成");
+
                     stopSelf();
                     break;
             }
@@ -417,8 +420,6 @@ public class UpdateService extends Service {
                 raf.seek(mFinishedLength);
 
 
-                sendStateToActivity();
-
 //                记录开始时间，每秒更新一次进度
                 long startTime = System.currentTimeMillis();
 
@@ -444,6 +445,8 @@ public class UpdateService extends Service {
                 }
                 is.close();
                 raf.close();
+            } catch (SSLException e) {
+                Log.i("ddd", "DownloadTask:  SSLException:    " + e.toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.i("ddd", "DownloadTask" + e.toString());
@@ -499,6 +502,7 @@ public class UpdateService extends Service {
      */
     private void startDownloadTask() {
         mDownloadState = STATE_DOWNLOAD;
+        sendStateToActivity();
         mThreadPool.execute(new InitFileTask());
     }
 
@@ -509,7 +513,6 @@ public class UpdateService extends Service {
     private void pauseDownloadTask() {
         mDownloadState = STATE_PAUSE;
         mBuilder.setContentText("暂停下载");
-        mBuilder.setProgress(100, 0, true);
         mNotificationManager.notify(notifyID, mBuilder.build());
         sendStateToActivity();
     }
@@ -579,4 +582,22 @@ public class UpdateService extends Service {
             }
         }
     }
+
+    public static class InstallPackageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String packageName = intent.getDataString();
+            Log.i("ddd", packageName);
+            if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED) ||
+                    intent.getAction().equals(Intent.ACTION_PACKAGE_REPLACED)) {
+                if (packageName.contains("qq")) {
+                    File file = new File(APK_DIR, APK_NAME);
+                    file.delete();
+                }
+            }
+        }
+    }
 }
+
+

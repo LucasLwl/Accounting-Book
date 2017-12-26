@@ -155,6 +155,10 @@ public class AboutMe extends Activity implements View.OnClickListener {
      * 初始化View
      */
     private void initView() {
+
+
+        ((TextView) findViewById(R.id.tv_aboutMe_version)).setText(Config.localVersion);
+
         mTvCheckUpdate = (TextView) findViewById(R.id.tv_aboutMe_update);
 
 

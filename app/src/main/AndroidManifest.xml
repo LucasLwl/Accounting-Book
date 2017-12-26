@@ -45,6 +45,15 @@
         <service android:name=".Service.UpdateService"></service>
 
 
+        <receiver android:name=".Service.UpdateService$InstallPackageReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name=".Utils.AccountProvider"
             android:authorities="com.phone.konka.accountingbook.Utils.AccountProvider"

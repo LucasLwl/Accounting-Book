@@ -63,13 +63,27 @@
             android:textColor="@color/black"
             android:textSize="@dimen/item_text_big" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/item_margin_top"
-            android:text="@string/about_me_version"
-            android:textColor="@color/item_text"
-            android:textSize="@dimen/item_text_mid" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/about_me_version"
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_mid" />
+
+            <TextView
+                android:id="@+id/tv_aboutMe_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/item_text"
+                android:textSize="@dimen/item_text_mid" />
+        </LinearLayout>
 
 
     </LinearLayout>
