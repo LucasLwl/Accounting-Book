@@ -123,12 +123,12 @@ public class ImageLoader {
      * @param imgView
      */
     public void getBitmap(final int id, final ImageView imgView) {
+        imgView.setTag(id);
 
-        final Bitmap[] bitmap = {null};
-        bitmap[0] = mCache.get(id);
+        Bitmap bitmap = mCache.get(id);
 
-        if (bitmap[0] != null) {
-            imgView.setImageBitmap(bitmap[0]);
+        if (bitmap != null) {
+            imgView.setImageBitmap(bitmap);
             return;
         }
 
@@ -136,19 +136,19 @@ public class ImageLoader {
         /**
          * 当缓存器中没有该图片时，使用线程池异步加载Resource中的图片
          */
-        imgView.setTag(id);
+
         mThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                bitmap[0] = decodeSamplesBitmap(id, imgView.getWidth(), imgView.getHeight());
-                if (bitmap[0] != null) {
-                    mCache.put(id, bitmap[0]);
+                Bitmap bitmap = decodeSamplesBitmap(id, imgView.getWidth(), imgView.getHeight());
+                if (bitmap != null) {
+                    mCache.put(id, bitmap);
                 }
 
 //              加载完，通过发送Message来转到Handler处理
                 Message msg = mHandler.obtainMessage();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("bitmap", bitmap[0]);
+                bundle.putParcelable("bitmap", bitmap);
                 msg.setData(bundle);
                 msg.obj = imgView;
                 msg.arg1 = id;

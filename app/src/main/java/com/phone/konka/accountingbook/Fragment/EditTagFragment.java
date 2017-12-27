@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -213,20 +214,46 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public void onBackPress() {
-        if (mPopupSave == null) {
-            mPopupSave = new PopupWindow(mPopupView, 500, 300, true);
-            mPopupSave.setBackgroundDrawable(new BitmapDrawable());
-            mPopupSave.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    setBackgroundAlpha(1.0f);
-                }
-            });
-
+    private boolean checkDataChange() {
+        if (mIndex == 0) {
+            if (mRecomTagList.size() != ((AddAccountActivity) getActivity()).mOutRecomList.size())
+                return true;
+            else
+                for (int i = 0; i < mRecomTagList.size(); i++)
+                    if (!mRecomTagList.get(i).getText()
+                            .equals(((AddAccountActivity) getActivity()).mOutRecomList.get(i).getText()))
+                        return true;
+        } else {
+            if (mRecomTagList.size() != ((AddAccountActivity) getActivity()).mInRecomList.size())
+                return true;
+            else
+                for (int i = 0; i < mRecomTagList.size(); i++)
+                    if (!mRecomTagList.get(i).getText()
+                            .equals(((AddAccountActivity) getActivity()).mInRecomList.get(i).getText()))
+                        return true;
         }
-        setBackgroundAlpha(0.5f);
-        mPopupSave.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+        return false;
+    }
+
+    public void onBackPress() {
+
+        if (checkDataChange()) {
+            if (mPopupSave == null) {
+                Display display = getActivity().getWindowManager().getDefaultDisplay();
+                mPopupSave = new PopupWindow(mPopupView, display.getWidth() / 2, display.getHeight() / 6, true);
+                mPopupSave.setBackgroundDrawable(new BitmapDrawable());
+                mPopupSave.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        setBackgroundAlpha(1.0f);
+                    }
+                });
+
+            }
+            setBackgroundAlpha(0.5f);
+            mPopupSave.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+        } else
+            ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.EDIT_TAG_FRAGMENT, mIndex);
     }
 
 
@@ -243,7 +270,6 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
             case R.id.img_edit_fragment_save:
 
             case R.id.tv_popup_editFragment_yes:
-
                 addTagBean();
                 if (mIndex == 0) {
                     ((AddAccountActivity) getActivity()).mOutList = mMyTagList;
@@ -260,7 +286,6 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.img_edit_fragment_back:
                 onBackPress();
-                break;
         }
 
     }

@@ -12,6 +12,8 @@ import android.widget.ExpandableListView;
 
 public class CustomExpandableListview extends ExpandableListView {
 
+    private boolean isOnMeasure = false;
+
 
     public CustomExpandableListview(Context context) {
         super(context);
@@ -36,8 +38,19 @@ public class CustomExpandableListview extends ExpandableListView {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        isOnMeasure = true;
         int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
                 MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, expandSpec);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        isOnMeasure = false;
+        super.onLayout(changed, l, t, r, b);
+    }
+
+    public boolean isOnMeasure() {
+        return isOnMeasure;
     }
 }

@@ -1,17 +1,22 @@
 package com.phone.konka.accountingbook.Fragment;
 
 import android.app.Fragment;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
@@ -76,6 +81,12 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
      */
     private ImageLoader mImgLoader;
 
+    /**
+     * 显示是否保存PopupWindow
+     */
+    private PopupWindow mPopupSave;
+    private View mPopupView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -107,7 +118,7 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
         mEtTag = (EditText) rootView.findViewById(R.id.et_addTagFragment_tag);
         mGvTag = (GridView) rootView.findViewById(R.id.gv_addTagFragment_tag);
 
-
+        mPopupView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_edit_fragment_save, null);
     }
 
 
@@ -145,45 +156,83 @@ public class AddTagFragment extends Fragment implements View.OnClickListener {
                 mImgTag.setImageDrawable(((ImageView) view).getDrawable());
             }
         });
+
+        mPopupView.findViewById(R.id.tv_popup_editFragment_no).setOnClickListener(this);
+        mPopupView.findViewById(R.id.tv_popup_editFragment_yes).setOnClickListener(this);
+    }
+
+    public void onBackPress() {
+        if (!mEtTag.getText().toString().isEmpty()) {
+            if (mPopupSave == null) {
+                Display display = getActivity().getWindowManager().getDefaultDisplay();
+                mPopupSave = new PopupWindow(mPopupView, display.getWidth() / 2, display.getHeight() / 6, true);
+                mPopupSave.setBackgroundDrawable(new BitmapDrawable());
+                mPopupSave.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        setBackgroundAlpha(1.0f);
+                    }
+                });
+            }
+            setBackgroundAlpha(0.5f);
+            mPopupSave.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+        } else
+            ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
+    }
+
+    private void setBackgroundAlpha(float alpha) {
+
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = alpha;
+        getActivity().getWindow().setAttributes(lp);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
+            case R.id.tv_popup_editFragment_yes:
+                if (mPopupSave != null && mPopupSave.isShowing()) {
+                    mPopupSave.dismiss();
+                }
 //            点击保存
             case R.id.img_addTagFragment_save:
 
                 if (mEtTag.getText().toString().isEmpty()) {
                     Toast.makeText(getActivity(), "类别名不能为空", Toast.LENGTH_SHORT).show();
-                    break;
                 } else {
                     TagBean bean = new TagBean();
                     bean.setText(mEtTag.getText().toString());
                     bean.setIconID(mIconID);
                     if (mIndex == 0) {
-                        for (TagBean tag : ((AddAccountActivity) getActivity()).mOutList) {
+                        for (TagBean tag : ((AddAccountActivity) getActivity()).mOutList)
                             if (tag.getText().equals(bean.getText())) {
                                 Toast.makeText(getActivity(), "该标签已存在", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
                         ((AddAccountActivity) getActivity()).mOutList.add(((AddAccountActivity) getActivity()).mOutList.size() - 1, bean);
                     } else {
-                        for (TagBean tag : ((AddAccountActivity) getActivity()).mInList) {
+                        for (TagBean tag : ((AddAccountActivity) getActivity()).mInList)
                             if (tag.getText().equals(bean.getText())) {
                                 Toast.makeText(getActivity(), "该标签已存在", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
                         ((AddAccountActivity) getActivity()).mInList.add(((AddAccountActivity) getActivity()).mInList.size() - 1, bean);
                     }
+                    ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
                 }
-
+                break;
+            
+            case R.id.tv_popup_editFragment_no:
+                if (mPopupSave != null && mPopupSave.isShowing()) {
+                    mPopupSave.dismiss();
+                }
+                ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
+                break;
 
 //                点击返回
             case R.id.img_addTagFragment_back:
-                ((AddAccountActivity) getActivity()).showFragment(AddAccountActivity.ADD_TAG_FRAGMENT, mIndex);
+                onBackPress();
                 break;
         }
     }

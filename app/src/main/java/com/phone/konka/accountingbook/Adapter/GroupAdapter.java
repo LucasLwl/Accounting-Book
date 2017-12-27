@@ -1,6 +1,7 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -31,7 +32,12 @@ import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 外层ExpandableListView的适配器
@@ -112,6 +118,9 @@ public class GroupAdapter extends BaseExpandableListAdapter {
     private int mNowYear;
 
 
+    private Map<Integer, Set<Integer>> mChildExpandMap;
+
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -130,6 +139,8 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         mDataManager = new ProviderManager(mContext);
 
         mNowYear = Calendar.getInstance().get(Calendar.YEAR);
+
+        mChildExpandMap = new HashMap<>();
     }
 
     @Override
@@ -177,6 +188,10 @@ public class GroupAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+
+
+        Log.i("ddd", "11111-Group   GroupPos:  " + groupPosition);
+
         GroupViewHolder holder;
         if (convertView == null) {
             holder = new GroupViewHolder();
@@ -190,6 +205,7 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (GroupViewHolder) convertView.getTag();
         }
+
 
         MonthDetailBean monthData = mData.get(groupPosition);
 
@@ -225,11 +241,17 @@ public class GroupAdapter extends BaseExpandableListAdapter {
             holder.llHead.setVisibility(View.VISIBLE);
         }
 
+        if (mChildExpandMap.size() < groupPosition)
+            mChildExpandMap.put(Integer.valueOf(groupPosition), new HashSet<Integer>());
+
         return convertView;
     }
 
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
+
+
+        Log.i("ddd", "11111-Child   GroupPos:  " + groupPosition + "   childPos:   " + childPosition);
 
         final ChildViewHolder holder;
         if (convertView == null) {
@@ -246,6 +268,32 @@ public class GroupAdapter extends BaseExpandableListAdapter {
         ChildAdapter adapter = new ChildAdapter(mContext, data);
         holder.elv.setAdapter(adapter);
 
+
+        holder.elv.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int position) {
+                Set<Integer> set = mChildExpandMap.get(Integer.valueOf(groupPosition));
+                if (set == null)
+                    set = new HashSet<>();
+                set.add(position);
+                mChildExpandMap.put(groupPosition, set);
+            }
+        });
+
+        holder.elv.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int position) {
+                Set set = mChildExpandMap.get(Integer.valueOf(groupPosition));
+                set.remove(Integer.valueOf(position));
+                mChildExpandMap.put(groupPosition, set);
+            }
+        });
+
+
+        Set<Integer> set = mChildExpandMap.get(groupPosition);
+        if (set != null)
+            for (Integer pos : set)
+                holder.elv.expandGroup(pos);
 
         /**
          * 删除第三层的账单，会导致重绘内外两层的ExpandableListView
@@ -350,10 +398,42 @@ public class GroupAdapter extends BaseExpandableListAdapter {
                             if (mChildLongClickPos == AdapterView.INVALID_POSITION) {
                                 mDataManager.deleteData("year = ? and month = ? and day = ?",
                                         new String[]{dayBean.getYear() + "", dayBean.getMonth() + "", dayBean.getDate() + ""});
+
+                                Set<Integer> set = mChildExpandMap.get(mGroupPosition);
+                                if (set != null) {
+                                    Iterator<Integer> iterator = set.iterator();
+                                    while (iterator.hasNext()) {
+                                        int pos = iterator.next();
+                                        if (pos == mGroupLongClickPos)
+                                            iterator.remove();
+                                        else if (pos > mGroupLongClickPos) {
+                                            iterator.remove();
+                                            set.add(pos - 1);
+                                            
+                                        }
+                                    }
+                                }
+
                             } else {
                                 DetailTagBean detailBean = dayBean.getTagList().get(mChildLongClickPos);
                                 mDataManager.deleteData("_id = ?",
                                         new String[]{detailBean.getId() + ""});
+
+                                if (dayBean.getTagList().size() == 1) {
+                                    Set<Integer> set = mChildExpandMap.get(mGroupPosition);
+                                    if (set != null) {
+                                        Iterator<Integer> iterator = set.iterator();
+                                        while (iterator.hasNext()) {
+                                            int pos = iterator.next();
+                                            if (pos == mGroupLongClickPos)
+                                                iterator.remove();
+                                            else if (pos > mGroupLongClickPos) {
+                                                iterator.remove();
+                                                set.add(pos - 1);
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
 //                            从数据表中获取新的账单详情信息

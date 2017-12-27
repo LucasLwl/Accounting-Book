@@ -46,6 +46,23 @@
     <string name="recommend_tag">推荐选项</string>
 
 
+    <string name="calculator_result">0</string>
+    <string name="calculator_one">1</string>
+    <string name="calculator_two">2</string>
+    <string name="calculator_three">3</string>
+    <string name="calculator_four">4</string>
+    <string name="calculator_five">5</string>
+    <string name="calculator_six">6</string>
+    <string name="calculator_seven">7</string>
+    <string name="calculator_eight">8</string>
+    <string name="calculator_nine">9</string>
+    <string name="calculator_zero">0</string>
+    <string name="calculator_ok">OK</string>
+    <string name="calculator_add">+</string>
+    <string name="calculator_sub">-</string>
+    <string name="calculator_point">.</string>
+
+
     <!--支出Tag-->
     <string-array name="out_tag_text">
         <item>餐饮</item>

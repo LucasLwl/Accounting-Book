@@ -173,16 +173,9 @@ public class AddAccountActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (mEditTagFragment != null && !mEditTagFragment.isHidden()) {
-            if (mIndex == 0) {
-                mOutList = mEditTagFragment.getMyTagList();
-                mOutRecomList = mEditTagFragment.getRecomTagList();
-            } else {
-                mInList = mEditTagFragment.getMyTagList();
-                mInRecomList = mEditTagFragment.getRecomTagList();
-            }
-            showFragment(EDIT_TAG_FRAGMENT, mIndex);
+            mEditTagFragment.onBackPress();
         } else if (mAddTagFragment != null && !mAddTagFragment.isHidden()) {
-            showFragment(ADD_TAG_FRAGMENT, mIndex);
+            mAddTagFragment.onBackPress();
         } else {
             super.onBackPressed();
         }

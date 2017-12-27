@@ -73,7 +73,7 @@ public class PopupCalculator implements View.OnClickListener {
 
         mContext = context;
 
-        mCalculator = new CalculatorManager(context);
+        mCalculator = new CalculatorManager(mContext);
 
         /**
          * 初始化显示计算机的PopupWindow,高度为屏幕高度的三分之一

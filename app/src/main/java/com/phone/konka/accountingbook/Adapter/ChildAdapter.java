@@ -1,6 +1,7 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
 import com.phone.konka.accountingbook.Utils.ImageLoader;
+import com.phone.konka.accountingbook.View.CustomExpandableListview;
 import com.phone.konka.accountingbook.View.DateView;
 import com.phone.konka.accountingbook.View.LineCircleView;
 
@@ -90,6 +92,7 @@ public class ChildAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
+
         GroupViewHolder holder;
         if (convertView == null) {
             holder = new GroupViewHolder();
@@ -102,6 +105,12 @@ public class ChildAdapter extends BaseExpandableListAdapter {
         } else {
             holder = (GroupViewHolder) convertView.getTag();
         }
+
+        if (((CustomExpandableListview) parent).isOnMeasure())
+            return convertView;
+
+        Log.i("ddd", "22222-Group   GroupPos:  " + groupPosition);
+
 
         DayDetailBean bean = mData.get(groupPosition);
         holder.dateView.setDate(bean.getDate() + "");
@@ -126,6 +135,9 @@ public class ChildAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+
+        Log.i("ddd", "22222-Child   GroupPos:  " + groupPosition + "   childPos:   " + childPosition);
+
         ChildViewHolder holder;
         if (convertView == null) {
             holder = new ChildViewHolder();

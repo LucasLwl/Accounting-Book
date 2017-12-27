@@ -277,10 +277,10 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                 final DetailTagBean bean;
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
                     bean = new DetailTagBean(mYear, mMonth, mDay, tag, iconID, -money);
-                    Toast.makeText(getActivity(), "支出 " + tag + ":" + DoubleTo2Decimal.doubleTo2Decimal(money) + "已保存", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "支出 " + tag + ":" + DoubleTo2Decimal.doubleTo2Decimal(money) + "已保存", Toast.LENGTH_SHORT).show();
                 } else {
                     bean = new DetailTagBean(mYear, mMonth, mDay, tag, iconID, money);
-                    Toast.makeText(getActivity(), "收入 " + tag + ":" + DoubleTo2Decimal.doubleTo2Decimal(money) + "已保存", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "收入 " + tag + ":" + DoubleTo2Decimal.doubleTo2Decimal(money) + "已保存", Toast.LENGTH_SHORT).show();
                 }
                 mThreadPool.execute(new Runnable() {
                     @Override
