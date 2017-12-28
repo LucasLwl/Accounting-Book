@@ -28,8 +28,8 @@
     <dimen name="divider_height">10dp</dimen>
 
 
-    <!--verticalSpacing-->
-    <dimen name="verticalSpacing">10dp</dimen>
+    <!--grid_view_padding-->
+    <dimen name="grid_view_item_padding">5dp</dimen>
 
 
     <!--title Height-->

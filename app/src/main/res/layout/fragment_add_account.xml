@@ -61,8 +61,7 @@
         android:id="@+id/gv_fragment_tag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="5"
-        android:verticalSpacing="@dimen/verticalSpacing">
+        android:numColumns="5">
 
     </GridView>
 

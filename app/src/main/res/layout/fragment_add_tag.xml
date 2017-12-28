@@ -74,9 +74,17 @@
     <GridView
         android:id="@+id/gv_addTagFragment_tag"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/item_margin_top"
         android:gravity="center"
-        android:numColumns="5"
-        android:verticalSpacing="@dimen/verticalSpacing"></GridView>
+        android:numColumns="5"></GridView>
+
+    <TextView
+        android:id="@+id/tv_addTag_noIcon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_icon"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_text_big" />
 </LinearLayout>

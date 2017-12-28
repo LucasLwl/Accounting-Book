@@ -116,31 +116,32 @@ public class AddAccountActivity extends Activity {
     /**
      * 存储收入Tag的key
      */
-    private static final String IN_TAG = "in";
+    public static final String IN_TAG = "in";
 
 
     /**
      * 存储支出Tag的key
      */
-    private static final String OUT_TAG = "out";
+    public static final String OUT_TAG = "out";
 
 
     /**
      * 存储收入推荐Tag的key
      */
-    private static final String IN_RECOM_TAG = "inRecom";
+    public static final String IN_RECOM_TAG = "inRecom";
 
 
     /**
      * 存储支出推荐Tag的key
      */
-    private static final String OUT_RECOM_TAG = "outRecom";
+    public static final String OUT_RECOM_TAG = "outRecom";
 
 
     /**
      * 线程池
      */
     private ThreadPoolManager mThreadPool;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,11 +158,7 @@ public class AddAccountActivity extends Activity {
     protected void onStop() {
         super.onStop();
 
-        //存储Tag的信息
-        writeToSharedPreferences(OUT_TAG, mOutList);
-        writeToSharedPreferences(IN_TAG, mInList);
-        writeToSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
-        writeToSharedPreferences(IN_RECOM_TAG, mInRecomList);
+
     }
 
 
@@ -224,7 +221,7 @@ public class AddAccountActivity extends Activity {
                 /**
                  * 当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
                  */
-                if (mOutList.isEmpty() || mInList.isEmpty() || mOutRecomList.isEmpty() || mInRecomList.isEmpty()) {
+                if (mOutList.isEmpty() && mInList.isEmpty() && mOutRecomList.isEmpty() && mInRecomList.isEmpty()) {
                     String[] strArr = getResources().getStringArray(R.array.out_tag_text);
                     TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
 
@@ -250,6 +247,12 @@ public class AddAccountActivity extends Activity {
                         mOutRecomList.add(bean);
                         mInRecomList.add(bean);
                     }
+
+                    //存储Tag的信息
+                    writeToSharedPreferences(OUT_TAG, mOutList);
+                    writeToSharedPreferences(IN_TAG, mInList);
+                    writeToSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
+                    writeToSharedPreferences(IN_RECOM_TAG, mInRecomList);
                 }
 
                 runOnUiThread(new Runnable() {
@@ -301,17 +304,21 @@ public class AddAccountActivity extends Activity {
     public void readFromSharedPreferences(String key, List<TagBean> list) {
         SharedPreferences spf = getSharedPreferences(TAG_NAME, MODE_PRIVATE);
         String str = spf.getString(key, "");
-        try {
-            JSONObject jo = new JSONObject(str);
-            for (int i = 0; i < jo.length() / 2; i++) {
-                TagBean bean = new TagBean();
-                bean.setText(jo.getString("text" + i));
-                bean.setIconID(jo.getInt("icon" + i));
-                list.add(bean);
+
+        if (str != null && !str.equals("")) {
+            try {
+                JSONObject jo = new JSONObject(str);
+                for (int i = 0; i < jo.length() / 2; i++) {
+                    TagBean bean = new TagBean();
+                    bean.setText(jo.getString("text" + i));
+                    bean.setIconID(jo.getInt("icon" + i));
+                    list.add(bean);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.i("ddd", "readFromSharedPreferences:  " + e.toString());
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.i("ddd", "readFromSharedPreferences:  " + e.toString());
         }
     }
 

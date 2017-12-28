@@ -131,6 +131,9 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
         mGvMyTag = (DragGridView) rootView.findViewById(R.id.dgv_edit_mytag);
         mGvRecomTag = (DragGridView) rootView.findViewById(R.id.dgv_edit_recomtag);
 
+        mGvMyTag.setEmptyView(rootView.findViewById(R.id.tv_editTag_noTag));
+        mGvRecomTag.setEmptyView(rootView.findViewById(R.id.tv_editTag_noRecom));
+
         mPopupView = LayoutInflater.from(getActivity()).inflate(R.layout.popup_edit_fragment_save, null);
 
     }
@@ -176,8 +179,7 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
         mGvMyTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                mRecomTagList.add(mMyTagList.get(position));
-                mMyTagList.remove(position);
+                mRecomTagList.add(mMyTagList.remove(position));
                 mMyTagAdapter.notifyDataSetChanged();
                 mRecomTagAdapter.notifyDataSetChanged();
             }
@@ -186,8 +188,7 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
         mGvRecomTag.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                mMyTagList.add(mRecomTagList.get(position));
-                mRecomTagList.remove(position);
+                mMyTagList.add(mRecomTagList.remove(position));
                 mMyTagAdapter.notifyDataSetChanged();
                 mRecomTagAdapter.notifyDataSetChanged();
             }
@@ -274,9 +275,17 @@ public class EditTagFragment extends Fragment implements View.OnClickListener {
                 if (mIndex == 0) {
                     ((AddAccountActivity) getActivity()).mOutList = mMyTagList;
                     ((AddAccountActivity) getActivity()).mOutRecomList = mRecomTagList;
+
+                    //=保存Tag式数据
+                    ((AddAccountActivity) getActivity()).writeToSharedPreferences(AddAccountActivity.OUT_TAG, mMyTagList);
+                    ((AddAccountActivity) getActivity()).writeToSharedPreferences(AddAccountActivity.OUT_RECOM_TAG, mRecomTagList);
                 } else {
                     ((AddAccountActivity) getActivity()).mInList = mMyTagList;
                     ((AddAccountActivity) getActivity()).mInRecomList = mRecomTagList;
+
+                    //保存Tag式数据
+                    ((AddAccountActivity) getActivity()).writeToSharedPreferences(AddAccountActivity.IN_TAG, mMyTagList);
+                    ((AddAccountActivity) getActivity()).writeToSharedPreferences(AddAccountActivity.IN_RECOM_TAG, mRecomTagList);
                 }
             case R.id.tv_popup_editFragment_no:
                 if (mPopupSave != null && mPopupSave.isShowing()) {

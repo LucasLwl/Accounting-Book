@@ -12,6 +12,10 @@ import android.widget.ExpandableListView;
 
 public class CustomExpandableListview extends ExpandableListView {
 
+
+    /**
+     * 标志位，是否在OnMeasure
+     */
     private boolean isOnMeasure = false;
 
 
@@ -44,12 +48,19 @@ public class CustomExpandableListview extends ExpandableListView {
         super.onMeasure(widthMeasureSpec, expandSpec);
     }
 
+
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         isOnMeasure = false;
         super.onLayout(changed, l, t, r, b);
     }
 
+
+    /**
+     * 获取是否在onMeasure
+     * @return
+     */
     public boolean isOnMeasure() {
         return isOnMeasure;
     }

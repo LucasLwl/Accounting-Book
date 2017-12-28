@@ -39,11 +39,14 @@
     <!--新增Tag-->
     <string name="add_tag">新增类别</string>
     <string name="hint">请输入类别名称</string>
+    <string name="no_icon">无图片</string>
 
     <!--编辑Tag-->
     <string name="edit_tag">编辑</string>
     <string name="my_tag">我的选项</string>
     <string name="recommend_tag">推荐选项</string>
+    <string name="no_tag">无选项</string>
+    <string name="no_recom">暂无推荐</string>
 
 
     <string name="calculator_result">0</string>

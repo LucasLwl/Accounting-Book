@@ -20,6 +20,7 @@ public class AppContext extends Application {
 
     public void initVersion() {
         try {
+
             Config.localVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
             Config.serverVersion = 2;
         } catch (PackageManager.NameNotFoundException e) {

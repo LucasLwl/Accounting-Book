@@ -106,6 +106,12 @@ public class ChildAdapter extends BaseExpandableListAdapter {
             holder = (GroupViewHolder) convertView.getTag();
         }
 
+
+        /**
+         * 判断当前是否处于onMeasure状态，是则直接返回
+         * 直到onLayout后才设置具体显示
+         * 减少多次onMeasure调用getView的影响
+         */
         if (((CustomExpandableListview) parent).isOnMeasure())
             return convertView;
 
@@ -136,7 +142,6 @@ public class ChildAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        Log.i("ddd", "22222-Child   GroupPos:  " + groupPosition + "   childPos:   " + childPosition);
 
         ChildViewHolder holder;
         if (convertView == null) {
@@ -153,6 +158,17 @@ public class ChildAdapter extends BaseExpandableListAdapter {
             holder = (ChildViewHolder) convertView.getTag();
         }
 
+
+        /**
+         * 判断当前是否处于onMeasure状态，是则直接返回
+         * 直到onLayout后才设置具体显示
+         * 减少多次onMeasure调用getView的影响
+         */
+        if (((CustomExpandableListview) parent).isOnMeasure())
+            return convertView;
+
+
+        Log.i("ddd", "22222-Child   GroupPos:  " + groupPosition + "   childPos:   " + childPosition);
 
         DetailTagBean bean = mData.get(groupPosition).getTagList().get(childPosition);
 

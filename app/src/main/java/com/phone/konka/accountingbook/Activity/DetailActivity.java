@@ -199,20 +199,6 @@ public class DetailActivity extends Activity implements View.OnClickListener {
                 return true;
             }
         });
-
-//        /**
-//         * 默认设置外层ExpandableListView每次只能有一个Child展开
-//         */
-//        mListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-//            @Override
-//            public void onGroupExpand(int groupPosition) {
-//                for (int i = 0; i < mAdapter.getGroupCount(); i++)
-//                    if (groupPosition != i)
-//                        mListView.collapseGroup(i);
-//            }
-//        });
-
-
     }
 
     /**
