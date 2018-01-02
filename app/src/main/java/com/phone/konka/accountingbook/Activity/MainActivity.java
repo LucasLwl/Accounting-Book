@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -106,26 +104,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
      */
     private double weekOut;
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-            if (msg.what == 0) {
-                mTvMonthIn.setText(DoubleTo2Decimal.doubleTo2Decimal(monthIn));
-
-                mTvMonthOut.setText(DoubleTo2Decimal.doubleTo2Decimal(monthOut));
-
-                mTvMonthLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(monthIn - monthOut));
-
-                mTvTodayOut.setText(DoubleTo2Decimal.doubleTo2Decimal(dayOut));
-
-                mTvLeastOut.setText(DoubleTo2Decimal.doubleTo2Decimal(leastOut));
-
-                mTvWeekOut.setText(DoubleTo2Decimal.doubleTo2Decimal(weekOut));
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +183,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     /**
      * 获取状态栏高度
      *
-     * @return
+     * @return 状态栏高度
      */
     private int getStatusBarHeight() {
 
@@ -232,10 +210,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         mCalendar.get(Calendar.MONTH) + 1, mCalendar.get(Calendar.DAY_OF_MONTH));
                 leastOut = mDataManager.getLeastOut();
                 weekOut = mDataManager.getWeekOut();
-                mHandler.sendEmptyMessage(0);
+//                mHandler.sendEmptyMessage(0);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTvMonthIn.setText(DoubleTo2Decimal.doubleTo2Decimal(monthIn));
+
+                        mTvMonthOut.setText(DoubleTo2Decimal.doubleTo2Decimal(monthOut));
+
+                        mTvMonthLeft.setText(DoubleTo2Decimal.doubleTo2Decimal(monthIn - monthOut));
+
+                        mTvTodayOut.setText(DoubleTo2Decimal.doubleTo2Decimal(dayOut));
+
+                        mTvLeastOut.setText(DoubleTo2Decimal.doubleTo2Decimal(leastOut));
+
+                        mTvWeekOut.setText(DoubleTo2Decimal.doubleTo2Decimal(weekOut));
+                    }
+                });
+
             }
         });
     }
+
 
     @Override
     public void onClick(View v) {

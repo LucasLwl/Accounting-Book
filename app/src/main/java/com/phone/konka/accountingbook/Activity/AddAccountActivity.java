@@ -137,12 +137,6 @@ public class AddAccountActivity extends Activity {
     public static final String OUT_RECOM_TAG = "outRecom";
 
 
-    /**
-     * 线程池
-     */
-    private ThreadPoolManager mThreadPool;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,7 +191,10 @@ public class AddAccountActivity extends Activity {
     private void initData() {
 
 
-        mThreadPool = ThreadPoolManager.getInstance();
+        /*
+      线程池
+     */
+        ThreadPoolManager mThreadPool = ThreadPoolManager.getInstance();
 
         mOutList = new ArrayList<>();
         mInList = new ArrayList<>();
@@ -209,18 +206,14 @@ public class AddAccountActivity extends Activity {
             @Override
             public void run() {
 
-                /**
-                 * 获取用户Tag的信息
-                 */
+//             获取用户Tag的信息
                 readFromSharedPreferences(OUT_TAG, mOutList);
                 readFromSharedPreferences(IN_TAG, mInList);
                 readFromSharedPreferences(OUT_RECOM_TAG, mOutRecomList);
                 readFromSharedPreferences(IN_RECOM_TAG, mInRecomList);
 
 
-                /**
-                 * 当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
-                 */
+//            当sharedPreferences中没有数据时，代表用户初始使用，获取默认的数据
                 if (mOutList.isEmpty() && mInList.isEmpty() && mOutRecomList.isEmpty() && mInRecomList.isEmpty()) {
                     String[] strArr = getResources().getStringArray(R.array.out_tag_text);
                     TypedArray ta = getResources().obtainTypedArray(R.array.out_tag_icon);
@@ -247,6 +240,7 @@ public class AddAccountActivity extends Activity {
                         mOutRecomList.add(bean);
                         mInRecomList.add(bean);
                     }
+                    ta.recycle();
 
                     //存储Tag的信息
                     writeToSharedPreferences(OUT_TAG, mOutList);
@@ -270,7 +264,7 @@ public class AddAccountActivity extends Activity {
     /**
      * 获取状态栏高度
      *
-     * @return
+     * @return 状态栏高度
      */
     private int getStatusBarHeight() {
 
@@ -288,7 +282,7 @@ public class AddAccountActivity extends Activity {
      * 返回是支出还是收入标志位
      * 返回当前显示的fragment标志
      *
-     * @return
+     * @return 标志位
      */
     public int getIndex() {
         return mIndex;
@@ -296,16 +290,16 @@ public class AddAccountActivity extends Activity {
 
 
     /**
-     * 读取啥redPreferences中的Tag数据
+     * 读取redPreferences中的Tag数据
      *
-     * @param key
-     * @param list
+     * @param key  key
+     * @param list 数据
      */
     public void readFromSharedPreferences(String key, List<TagBean> list) {
         SharedPreferences spf = getSharedPreferences(TAG_NAME, MODE_PRIVATE);
         String str = spf.getString(key, "");
 
-        if (str != null && !str.equals("")) {
+        if (!str.equals("")) {
             try {
                 JSONObject jo = new JSONObject(str);
                 for (int i = 0; i < jo.length() / 2; i++) {
@@ -326,8 +320,8 @@ public class AddAccountActivity extends Activity {
     /**
      * 向sharedPreferences写入Tag数据
      *
-     * @param key
-     * @param list
+     * @param key  key
+     * @param list 数据
      */
     public void writeToSharedPreferences(String key, List<TagBean> list) {
 
@@ -339,7 +333,7 @@ public class AddAccountActivity extends Activity {
                 jo.put("icon" + i, list.get(i).getIconID());
             }
             editor.putString(key, jo.toString());
-            editor.commit();
+            editor.apply();
         } catch (JSONException e) {
             e.printStackTrace();
             Log.i("ddd", "writeToSharedPreferences:  " + e.toString());

@@ -21,6 +21,7 @@
             android:id="@+id/img_addAccount_item_selected"
             android:layout_width="@dimen/icon_width_small"
             android:layout_height="@dimen/icon_height_small"
+            android:visibility="gone"
             android:layout_alignBottom="@+id/img_addAccount_item"
             android:layout_alignRight="@+id/img_addAccount_item"
             android:src="@drawable/icon_selected" />

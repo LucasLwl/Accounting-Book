@@ -177,10 +177,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.img_detail_back).setOnClickListener(this);
 
 
-        /**
-         * 外层ExpandableListView的Group长按事件
-         *
-         */
+//        外层ExpandableListView的Group长按事件
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -204,7 +201,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
     /**
      * 获取状态栏高度
      *
-     * @return
+     * @return 状态栏高度
      */
     private int getStatusBarHeight() {
 
@@ -230,7 +227,7 @@ public class DetailActivity extends Activity implements View.OnClickListener {
     /**
      * 显示删除提示栏
      *
-     * @param parent
+     * @param parent 父View
      */
     private void showPopupWindow(ViewGroup parent) {
 
@@ -286,11 +283,8 @@ public class DetailActivity extends Activity implements View.OnClickListener {
         }
 
 
-        /**
-         * 显示删除提示栏
-         *
-         * 默认显示在长按的Item下方，若下方显示不下，则显示在上方
-         */
+//        显示删除提示栏
+//        默认显示在长按的Item下方，若下方显示不下，则显示在上方
         if (!mPopupWindow.isShowing()) {
             if (mLongClickView.getBottom() + mPopupWindow.getHeight() > parent.getHeight())
                 mPopupWindow.showAsDropDown(mLongClickView, (mLongClickView.getWidth() - mPopupWindow.getWidth()) / 2, -(mLongClickView.getHeight() + mPopupWindow.getHeight()));

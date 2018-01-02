@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
     <application
-        android:name=".Application.AppContext"
         android:allowBackup="true"
         android:icon="@drawable/icon_application"
         android:label="@string/app_name"
@@ -38,7 +37,7 @@
             android:name=".Activity.SettingActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".Activity.AboutMe"
+            android:name=".Activity.AboutMeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
 

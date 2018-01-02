@@ -1,8 +1,6 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
-import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,16 +45,26 @@ public class TagGridViewAdapter extends BaseAdapter {
     private ImageLoader mCache;
 
 
+    private int mTextNormalColor;
+
+
+    private int mTextSelectedColor;
+
+
     /**
      * 当前选中的item
      */
     private int mSelected = 0;
+
 
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
         mInflater = LayoutInflater.from(mContext);
         mCache = ImageLoader.getInstance(mContext);
+
+        mTextNormalColor = mContext.getResources().getColor(R.color.item_text);
+        mTextSelectedColor = mContext.getResources().getColor(R.color.item_selected);
     }
 
 
@@ -86,6 +94,7 @@ public class TagGridViewAdapter extends BaseAdapter {
             holder.imgSelected = (ImageView) convertView.findViewById(R.id.img_addAccount_item_selected);
             convertView.setTag(holder);
         } else {
+
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -97,10 +106,10 @@ public class TagGridViewAdapter extends BaseAdapter {
 //        设置选中item的字体颜色,和选中图标
         if (position == mSelected) {
             holder.imgSelected.setVisibility(View.VISIBLE);
-            holder.tvText.setTextColor(mContext.getResources().getColor(R.color.item_selected));
+            holder.tvText.setTextColor(mTextSelectedColor);
         } else {
             holder.imgSelected.setVisibility(View.GONE);
-            holder.tvText.setTextColor(mContext.getResources().getColor(R.color.item_text));
+            holder.tvText.setTextColor(mTextNormalColor);
         }
         return convertView;
     }
@@ -136,7 +145,7 @@ public class TagGridViewAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    class ViewHolder {
+    private class ViewHolder {
         TextView tvText;
         ImageView imgIcon;
         ImageView imgSelected;

@@ -19,7 +19,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.phone.konka.accountingbook.Activity.AboutMe;
+import com.phone.konka.accountingbook.Activity.AboutMeActivity;
 import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.NetworkUtil;
@@ -352,7 +352,7 @@ public class UpdateService extends Service {
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        mUpdateIntent = new Intent(this, AboutMe.class);
+        mUpdateIntent = new Intent(this, AboutMeActivity.class);
         mUpdateIntent.setAction(ACTION_STOP_DOWNLOAD);
         mUpdatePendingIntent = PendingIntent.getActivity(this, 0, mUpdateIntent, 0);
 

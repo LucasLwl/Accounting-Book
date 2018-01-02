@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.Scroller;
 
 import com.phone.konka.accountingbook.R;
 
@@ -63,6 +64,7 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
         mTextRect = new Rect(0, 0, mWidth, mHeight);
 
     }
+
 
 
     /**

@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.phone.konka.accountingbook.Activity.AddAccountActivity;
 import com.phone.konka.accountingbook.Activity.DetailActivity;
@@ -22,7 +21,6 @@ import com.phone.konka.accountingbook.Adapter.TagGridViewAdapter;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
-import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
 import com.phone.konka.accountingbook.Utils.ProviderManager;
 import com.phone.konka.accountingbook.Utils.ThreadPoolManager;
 import com.phone.konka.accountingbook.View.PopupCalculator;
@@ -87,11 +85,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
 
     /**
-     * 鉴定GridView的手指滑动情况，用于控制计算器的显示
-     */
-    private View.OnTouchListener touchListener;
-
-    /**
      * 手指按下的Y位置
      */
     private float mFirstY;
@@ -151,12 +144,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
      * 当前日期
      */
     private int mDay;
-
-
-    /**
-     * 选择日期的对话框
-     */
-    private DatePickerDialog mDialog;
 
 
     @Nullable
@@ -297,7 +284,8 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         /**
          * 监听gridview的触摸事件，用于显示下滑显示计算器，上滑隐藏计算器
          */
-        touchListener = new View.OnTouchListener() {
+
+        View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -341,7 +329,6 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                     mCalculator.showPopCalculator(rootView);
                     mCalculator.setTagText(mList.get(position).getText());
                     mCalculator.setTagIcon(mList.get(position).getIconID());
-
                 }
             }
         });
@@ -398,12 +385,13 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 //            点击日期
             case R.id.tv_fragment_date:
 
-                mDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+
+                DatePickerDialog mDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
-                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        mYear = i;
-                        mMonth = ++i1;
-                        mDay = i2;
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        mYear = year;
+                        mMonth = ++month;
+                        mDay = day;
                         mTvDate.setText(mMonth + "月" + mDay + "日");
                     }
                 }, mYear, mMonth - 1, mDay);

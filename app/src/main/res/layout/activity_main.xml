@@ -42,6 +42,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/item_margin_right"
                 android:src="@drawable/icon_setting" />
+
+            <!-- -->
         </RelativeLayout>
 
 
@@ -157,6 +159,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/item_margin_right"
             android:src="@drawable/icon_main_add" />
+
+        <!--android:src="@drawable/icon_main_add"-->
     </RelativeLayout>
 
 
@@ -180,6 +184,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/item_margin_left"
                 android:src="@drawable/icon_least_out" />
+
+            <!-- -->
 
             <TextView
                 android:id="@+id/textView"
@@ -224,6 +230,8 @@
                 android:layout_marginLeft="@dimen/item_margin_left"
                 android:src="@drawable/icon_today_out" />
 
+            <!-- -->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -262,6 +270,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/item_margin_left"
             android:src="@drawable/icon_week_out" />
+
+        <!--  -->
 
         <TextView
             android:layout_width="wrap_content"

@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.LruCache;
 import android.widget.ImageView;
 
@@ -78,17 +79,21 @@ public class ImageLoader {
         maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 
 //        初始化存储器，以kb单位
-        mCache = new LruCache<Integer, Bitmap>(maxMemory / 4) {
+        mCache = new LruCache<Integer, Bitmap>(maxMemory / 16) {
             @Override
             protected int sizeOf(Integer key, Bitmap value) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    Log.i("ddd", "value: " + value.getAllocationByteCount() / 1024);
                     return value.getAllocationByteCount() / 1024;
+
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+                    Log.i("ddd", "value: " + value.getByteCount() / 1024);
                     return value.getByteCount() / 1024;
                 }
 
+                Log.i("ddd", "value: " + value.getRowBytes() * value.getHeight() / 1024);
                 return value.getRowBytes() * value.getHeight() / 1024;
             }
         };

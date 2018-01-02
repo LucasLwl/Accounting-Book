@@ -22,13 +22,15 @@ import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Service.UpdateService;
 import com.phone.konka.accountingbook.Utils.NetworkUtil;
 
+import java.lang.ref.WeakReference;
+
 /**
  * 关于我们Activity
  * <p>
  * Created by 廖伟龙 on 2017/12/6.
  */
 
-public class AboutMe extends Activity implements View.OnClickListener {
+public class AboutMeActivity extends Activity implements View.OnClickListener {
 
 
     /**
@@ -62,6 +64,7 @@ public class AboutMe extends Activity implements View.OnClickListener {
 
 
     private Handler mHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -186,7 +189,7 @@ public class AboutMe extends Activity implements View.OnClickListener {
     /**
      * 获取状态栏高度
      *
-     * @return
+     * @return 状态栏高度
      */
     private int getStatusBarHeight() {
 
@@ -236,7 +239,7 @@ public class AboutMe extends Activity implements View.OnClickListener {
                     .setPositiveButton("更新", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (NetworkUtil.getConnectedType(AboutMe.this) != ConnectivityManager.TYPE_WIFI) {
+                            if (NetworkUtil.getConnectedType(AboutMeActivity.this) != ConnectivityManager.TYPE_WIFI) {
                                 showNetworkWarnDialog();
                             } else {
                                 startUpdateService(UpdateService.ACTION_START_DOWNLOAD);
@@ -258,7 +261,7 @@ public class AboutMe extends Activity implements View.OnClickListener {
      */
     public void showNetworkWarnDialog() {
         if (mNetworkWarnDialog == null) {
-            mNetworkWarnDialog = new AlertDialog.Builder(AboutMe.this)
+            mNetworkWarnDialog = new AlertDialog.Builder(AboutMeActivity.this)
                     .setTitle("流量提醒")
                     .setMessage("当前网络为非WIFI环境，是否继续使用手机流量下载?")
                     .setPositiveButton("继续", new DialogInterface.OnClickListener() {

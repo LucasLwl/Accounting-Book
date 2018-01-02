@@ -8,9 +8,9 @@ import android.os.Environment;
 
 public class Config {
 
-    public static int localVersion = 0;
+    public static int localVersion = 1;
 
-    public static int serverVersion = 0;
+    public static int serverVersion = 2;
 
 
     public static final String BASE_DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Accounting Book";

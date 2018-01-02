@@ -89,7 +89,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
     /**
      * 获取状态栏高度
      *
-     * @return
+     * @return 状态栏高度
      */
     private int getStatusBarHeight() {
 
@@ -199,12 +199,14 @@ public class SettingActivity extends Activity implements View.OnClickListener {
             path = uri.getPath();
         } else if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
             Cursor cursor = getContentResolver().query(uri, new String[]{MediaStore.Images.ImageColumns.DATA}, null, null, null);
-            if (cursor != null)
+            if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
                     if (index >= 0)
                         path = cursor.getString(index);
                 }
+                cursor.close();
+            }
         }
         return path;
     }
@@ -279,7 +281,7 @@ public class SettingActivity extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.ll_setting_aboutMe:
-                Intent intent1 = new Intent(SettingActivity.this, AboutMe.class);
+                Intent intent1 = new Intent(SettingActivity.this, AboutMeActivity.class);
                 startActivity(intent1);
                 break;
         }

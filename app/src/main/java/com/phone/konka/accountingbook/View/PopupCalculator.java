@@ -1,6 +1,10 @@
 package com.phone.konka.accountingbook.View;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,7 +85,7 @@ public class PopupCalculator implements View.OnClickListener {
         mCalView = LayoutInflater.from(context).inflate(R.layout.popup_calculator, null);
         int height = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight() / 3;
         mPopCalculator = new PopupWindow(mCalView, ViewGroup.LayoutParams.MATCH_PARENT, height, false);
-        mPopCalculator.setOutsideTouchable(true);
+        mPopCalculator.setOutsideTouchable(false);
         mPopCalculator.setTouchable(true);
         mPopCalculator.setAnimationStyle(R.style.popupCalculatorStyle);
         initView();

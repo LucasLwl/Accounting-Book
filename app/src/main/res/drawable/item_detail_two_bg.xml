@@ -4,7 +4,10 @@
 
     <item android:drawable="@drawable/item_press" android:state_pressed="true"></item>
 
-    <item android:drawable="@drawable/item_detail_two_nor"></item>
-
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/detail_item_two"></solid>
+        </shape>
+    </item>
 
 </selector>
