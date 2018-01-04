@@ -15,8 +15,8 @@ import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.DoubleTo2Decimal;
 import com.phone.konka.accountingbook.Utils.ImageLoader;
 import com.phone.konka.accountingbook.View.CustomExpandableListview;
-import com.phone.konka.accountingbook.View.DateView;
-import com.phone.konka.accountingbook.View.LineCircleView;
+import com.phone.konka.accountingbook.View.DateTextView;
+import com.phone.konka.accountingbook.View.LineCircleTextView;
 
 import java.util.List;
 
@@ -97,7 +97,7 @@ public class ChildAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             holder = new GroupViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_detail_two, null);
-            holder.dateView = (DateView) convertView.findViewById(R.id.dv_two_date);
+            holder.dateTextView = (DateTextView) convertView.findViewById(R.id.dv_two_date);
             holder.tvIn = (TextView) convertView.findViewById(R.id.tv_two_in);
             holder.tvOut = (TextView) convertView.findViewById(R.id.tv_two_out);
             holder.tvLeft = (TextView) convertView.findViewById(R.id.tv_two_left);
@@ -119,7 +119,7 @@ public class ChildAdapter extends BaseExpandableListAdapter {
 
 
         DayDetailBean bean = mData.get(groupPosition);
-        holder.dateView.setDate(bean.getDate() + "");
+        holder.dateTextView.setDate(bean.getDate() + "");
 
         /**
          * 计算每日总的收支、结余情况
@@ -148,7 +148,7 @@ public class ChildAdapter extends BaseExpandableListAdapter {
             holder = new ChildViewHolder();
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_detail_three, null);
 
-            holder.lineCircleView = (LineCircleView) convertView.findViewById(R.id.img_detail_date);
+            holder.lineCircleTextView = (LineCircleTextView) convertView.findViewById(R.id.img_detail_date);
             holder.imgIcon = (ImageView) convertView.findViewById(R.id.img_detail_tag);
             holder.tvTag = (TextView) convertView.findViewById(R.id.tv_detail_tag);
             holder.tvMoney = (TextView) convertView.findViewById(R.id.tv_detail_money);
@@ -176,18 +176,18 @@ public class ChildAdapter extends BaseExpandableListAdapter {
          * 设置该item是否为第一个
          */
         if (childPosition == 0) {
-            holder.lineCircleView.setFirst(true);
+            holder.lineCircleTextView.setFirst(true);
         } else {
-            holder.lineCircleView.setFirst(false);
+            holder.lineCircleTextView.setFirst(false);
         }
 
         /**
          * 设置该item是否为最后一个
          */
         if (getChildrenCount(groupPosition) == childPosition + 1) {
-            holder.lineCircleView.setEnd(true);
+            holder.lineCircleTextView.setEnd(true);
         } else {
-            holder.lineCircleView.setEnd(false);
+            holder.lineCircleTextView.setEnd(false);
         }
 
         mCache.getBitmap(bean.getIconID(), holder.imgIcon);
@@ -215,14 +215,14 @@ public class ChildAdapter extends BaseExpandableListAdapter {
     }
 
     class GroupViewHolder {
-        DateView dateView;
+        DateTextView dateTextView;
         TextView tvIn;
         TextView tvOut;
         TextView tvLeft;
     }
 
     class ChildViewHolder {
-        LineCircleView lineCircleView;
+        LineCircleTextView lineCircleTextView;
         ImageView imgIcon;
         TextView tvTag;
         TextView tvMoney;

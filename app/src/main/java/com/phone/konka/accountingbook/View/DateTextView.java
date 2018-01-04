@@ -2,13 +2,10 @@ package com.phone.konka.accountingbook.View;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.widget.Scroller;
 
 import com.phone.konka.accountingbook.R;
 
@@ -18,7 +15,7 @@ import com.phone.konka.accountingbook.R;
  * Created by 廖伟龙 on 2017/12/6.
  */
 
-public class DateView extends android.support.v7.widget.AppCompatTextView {
+public class DateTextView extends android.support.v7.widget.AppCompatTextView {
 
     /**
      * 显示的日期
@@ -42,15 +39,15 @@ public class DateView extends android.support.v7.widget.AppCompatTextView {
     private int mHeight;
 
 
-    public DateView(Context context) {
+    public DateTextView(Context context) {
         this(context, null);
     }
 
-    public DateView(Context context, @Nullable AttributeSet attrs) {
+    public DateTextView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DateView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public DateTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

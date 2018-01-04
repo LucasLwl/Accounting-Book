@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/detail_item_margin_left"
     android:paddingRight="@dimen/detail_item_margin_right">
 
-    <com.phone.konka.accountingbook.View.LineCircleView
+    <com.phone.konka.accountingbook.View.LineCircleTextView
         android:id="@+id/img_detail_date"
         android:layout_width="0dp"
         android:layout_height="@dimen/icon_height"

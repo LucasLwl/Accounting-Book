@@ -26,7 +26,7 @@
         android:paddingBottom="@dimen/detail_item_margin_bottom"
         android:paddingTop="@dimen/detail_item_margin_bottom">
 
-        <com.phone.konka.accountingbook.View.DateView
+        <com.phone.konka.accountingbook.View.DateTextView
             android:id="@+id/dv_two_date"
             android:layout_width="0dp"
             android:layout_height="@dimen/icon_height"
