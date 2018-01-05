@@ -1,10 +1,6 @@
 package com.phone.konka.accountingbook.View;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ClipDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -231,7 +227,7 @@ public class PopupCalculator implements View.OnClickListener {
                 String res = mCalculator.pressOK();
                 if (res.equals("save")) {
                     mListener.addAccount(getTagText(), mIconID, Double.parseDouble(mTvRes.getText().toString()));
-                    mTvRes.setText("");
+                    mTvRes.setText("0");
                 } else {
                     mTvRes.setText(res);
                 }

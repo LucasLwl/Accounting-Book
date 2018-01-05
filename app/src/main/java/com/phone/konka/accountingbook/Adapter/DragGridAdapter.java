@@ -143,6 +143,7 @@ public class DragGridAdapter extends BaseAdapter {
         convertView.clearAnimation();
         if (isDrag && dragPos == position) {
             convertView.setVisibility(View.INVISIBLE);
+            isDrag = false;
         } else {
             convertView.setVisibility(View.VISIBLE);
         }
@@ -158,9 +159,7 @@ public class DragGridAdapter extends BaseAdapter {
      * @param isDrag 是否为拖动状态
      */
     public void exchangePosition(int oldPos, int newPos, boolean isDrag) {
-        TagBean data = mDatas.get(oldPos);
-        mDatas.remove(oldPos);
-        mDatas.add(newPos, data);
+        mDatas.add(newPos, mDatas.remove(oldPos));
         this.isDrag = isDrag;
         dragPos = newPos;
         notifyDataSetChanged();

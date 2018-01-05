@@ -146,7 +146,7 @@ public class CalculatorManager {
                 calculate();
             }
             return left + operator + right;
-        } else if (!left.equals("") && !left.equals("0")) {
+        } else if (!left.equals("") && Double.parseDouble(left) != 0) {
             if (!left.contains("-")) {
                 left = "";
                 return "save";
@@ -178,6 +178,9 @@ public class CalculatorManager {
         } else if (!left.equals("")) {
             left = left.substring(0, left.length() - 1);
         }
+
+        if (left.equals(""))
+            left = "0";
         return left + operator + right;
     }
 
@@ -187,10 +190,10 @@ public class CalculatorManager {
      * @return
      */
     public String delAll() {
-        left = "";
+        left = "0";
         right = "";
         operator = "";
-        return "";
+        return left;
     }
 
 
@@ -211,13 +214,16 @@ public class CalculatorManager {
 
 
         //去掉小数点后的0
-        StringBuffer sb = new StringBuffer(left);
-        while (sb.lastIndexOf("0") == sb.length() - 1)
-            sb.deleteCharAt(sb.lastIndexOf("0"));
-        if (sb.indexOf(".") == sb.length() - 1)
-            sb.deleteCharAt(sb.length() - 1);
 
-        left = sb.toString();
+        if (left.length() > 1) {
+            StringBuffer sb = new StringBuffer(left);
+            while (sb.lastIndexOf("0") == sb.length() - 1)
+                sb.deleteCharAt(sb.lastIndexOf("0"));
+            if (sb.indexOf(".") == sb.length() - 1)
+                sb.deleteCharAt(sb.length() - 1);
+
+            left = sb.toString();
+        }
         operator = "";
         right = "";
     }

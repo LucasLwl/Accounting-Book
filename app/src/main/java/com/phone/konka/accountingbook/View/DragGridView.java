@@ -23,7 +23,7 @@ import com.phone.konka.accountingbook.R;
 
 /**
  * 可拖动Item位置的GridView
- *
+ * <p>
  * Created by 廖伟龙 on 2017/11/20.
  */
 
@@ -66,15 +66,15 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
 
 
     /**
-     * 当前拖动的View的位置
+     * View被拖到的位置
      */
-    private int mCusDragPos;
+    private int mDragContentPos;
 
 
     /**
-     * View被拖到的位置
+     * View视图被拖到的位置
      */
-    private int mDragPos;
+    private int mDragViewPos;
 
 
     /**
@@ -157,7 +157,7 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
              * 获取手指活动在GridView的哪个位置，或者在GridView外
              */
             int dropPos = pointToPosition((int) ev.getX(), (int) ev.getY());
-            if (dropPos == mDragPos || dropPos == GridView.INVALID_POSITION) {
+            if (dropPos == mDragViewPos || dropPos == GridView.INVALID_POSITION) {
                 return;
             }
             itemMove(dropPos);
@@ -172,8 +172,8 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
      */
     private void itemMove(int dropPos) {
         TranslateAnimation translate;
-        if (dropPos < mDragPos) {
-            for (int i = dropPos; i < mDragPos; i++) {
+        if (dropPos < mDragViewPos) {
+            for (int i = dropPos; i < mDragViewPos; i++) {
                 View view = getChildAt(i);
                 View nextView = getChildAt(i + 1);
                 float width = (nextView.getLeft() - view.getLeft()) * 1f / view.getWidth();
@@ -183,13 +183,13 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
                 translate.setInterpolator(new LinearInterpolator());
                 translate.setFillAfter(true);
                 translate.setDuration(300);
-                if (i == mDragPos - 1) {
+                if (i == mDragViewPos - 1) {
                     translate.setAnimationListener(animationListener);
                 }
                 view.startAnimation(translate);
             }
         } else {
-            for (int i = mDragPos + 1; i <= dropPos; i++) {
+            for (int i = mDragViewPos + 1; i <= dropPos; i++) {
                 View view = this.getChildAt(i);
                 View preView = this.getChildAt(i - 1);
                 float width = (preView.getLeft() - view.getLeft()) * 1f / view.getWidth();
@@ -210,7 +210,7 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
             }
         }
 //        移动完成后，标志的位置
-        mDragPos = dropPos;
+        mDragViewPos = dropPos;
     }
 
     /**
@@ -224,11 +224,12 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
         @Override
         public void onAnimationEnd(Animation animation) {
             ListAdapter adapter = getAdapter();
-            if (adapter != null && mDragPos != mCusDragPos && adapter instanceof DragGridAdapter) {
-                ((DragGridAdapter) adapter).exchangePosition(mCusDragPos, mDragPos, true);
-                mCusDragPos = mDragPos;
+            if (adapter != null && mDragViewPos != mDragContentPos && adapter instanceof DragGridAdapter) {
+                ((DragGridAdapter) adapter).exchangePosition(mDragContentPos, mDragViewPos, true);
+                mDragContentPos = mDragViewPos;
             }
         }
+
         @Override
         public void onAnimationRepeat(Animation animation) {
         }
@@ -246,8 +247,8 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
             mDragViewlp = null;
         }
         mode = MODE_NORMAL;
-        if (mDragPos == mCusDragPos || mDragPos == GridView.INVALID_POSITION) {
-            getChildAt(mCusDragPos).setVisibility(View.VISIBLE);
+        if (mDragViewPos == mDragContentPos || mDragViewPos == GridView.INVALID_POSITION) {
+            getChildAt(mDragContentPos).setVisibility(View.VISIBLE);
         }
         /**
          *  拖动后迅速松开手指的情况，既在移动动画未结束之前
@@ -255,14 +256,15 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
         else {
             ListAdapter adapter = getAdapter();
             if (adapter != null && adapter instanceof DragGridAdapter) {
-                ((DragGridAdapter) adapter).exchangePosition(mCusDragPos, mDragPos, false);
-                mCusDragPos = mDragPos;
+                ((DragGridAdapter) adapter).exchangePosition(mDragContentPos, mDragViewPos, false);
+                mDragContentPos = mDragViewPos;
             }
         }
     }
 
     /**
      * item的长点击事件，用于拖起item
+     *
      * @param parent
      * @param view
      * @param position
@@ -277,8 +279,8 @@ public class DragGridView extends GridView implements AdapterView.OnItemLongClic
         }
 
         mCusDragView = view;
-        mCusDragPos = position;
-        mDragPos = position;
+        mDragContentPos = position;
+        mDragViewPos = position;
         mdX = mEvX - view.getLeft() - this.getLeft();
         mdY = mEvY - view.getTop() - this.getTop();
         initWindow();

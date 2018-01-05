@@ -45,28 +45,24 @@
         android:textColor="@color/item_text"
         android:textSize="@dimen/item_text_big" />
 
-    <LinearLayout
+    <com.phone.konka.accountingbook.View.DragGridView
+        android:id="@+id/dgv_edit_mytag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:numColumns="5"></com.phone.konka.accountingbook.View.DragGridView>
 
-        <com.phone.konka.accountingbook.View.DragGridView
-            android:id="@+id/dgv_edit_mytag"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:numColumns="5"></com.phone.konka.accountingbook.View.DragGridView>
 
-        <TextView
-            android:id="@+id/tv_editTag_noTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_tag"
-            android:textColor="@color/black"
-            android:textSize="@dimen/item_text_big" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_editTag_noTag"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_tag"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_text_big" />
 
 
     <View
@@ -82,29 +78,23 @@
         android:textColor="@color/item_text"
         android:textSize="@dimen/item_text_big" />
 
-    <LinearLayout
+
+    <com.phone.konka.accountingbook.View.DragGridView
+        android:id="@+id/dgv_edit_recomtag"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:numColumns="5"></com.phone.konka.accountingbook.View.DragGridView>
 
-        <com.phone.konka.accountingbook.View.DragGridView
-            android:id="@+id/dgv_edit_recomtag"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:numColumns="5"></com.phone.konka.accountingbook.View.DragGridView>
-
-        <TextView
-            android:id="@+id/tv_editTag_noRecom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_recom"
-            android:textColor="@color/black"
-            android:textSize="@dimen/item_text_big" />
-
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/tv_editTag_noRecom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/no_recom"
+        android:textColor="@color/black"
+        android:textSize="@dimen/item_text_big" />
 
 </LinearLayout>
