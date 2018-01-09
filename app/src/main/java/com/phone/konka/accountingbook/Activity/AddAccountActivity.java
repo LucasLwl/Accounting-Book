@@ -365,32 +365,32 @@ public class AddAccountActivity extends Activity {
         switch (to) {
             case ADD_ACCOUNT_FRAGMENT_IN:
             case ADD_ACCOUNT_FRAGMENT_OUT:
+                hideAllFragment();
                 if (mAddAccountFragment == null) {
                     mAddAccountFragment = new AddAccountFragment();
                     transaction.add(R.id.fl_addAccount_content, mAddAccountFragment);
                 }
-                hideAllFragment();
                 transaction.show(mAddAccountFragment);
                 transaction.commit();
                 break;
 
             case EDIT_TAG_FRAGMENT:
+                hideAllFragment();
                 if (mEditTagFragment == null) {
                     mEditTagFragment = new EditTagFragment();
                     transaction.add(R.id.fl_addAccount_content, mEditTagFragment);
                 }
-                hideAllFragment();
                 transaction.show(mEditTagFragment);
                 mIndex = from;
                 transaction.commit();
                 break;
 
             case ADD_TAG_FRAGMENT:
+                hideAllFragment();
                 if (mAddTagFragment == null) {
                     mAddTagFragment = new AddTagFragment();
                     transaction.add(R.id.fl_addAccount_content, mAddTagFragment);
                 }
-                hideAllFragment();
                 transaction.show(mAddTagFragment);
                 mIndex = from;
                 transaction.commit();

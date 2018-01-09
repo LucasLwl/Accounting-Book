@@ -1,6 +1,8 @@
 package com.phone.konka.accountingbook.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +59,9 @@ public class TagGridViewAdapter extends BaseAdapter {
     private int mSelected = 0;
 
 
+    private int mIndex = 0;
+
+
     public TagGridViewAdapter(Context mContext, List<TagBean> mList) {
         this.mContext = mContext;
         this.mList = mList;
@@ -103,6 +108,13 @@ public class TagGridViewAdapter extends BaseAdapter {
 
         mCache.getBitmap(bean.getIconID(), holder.imgIcon);
 
+
+        if (mIndex == 0)
+            holder.imgIcon.setColorFilter(Color.parseColor("#aa000000"), PorterDuff.Mode.DST_IN );
+        else
+            holder.imgIcon.clearColorFilter();
+
+
 //        设置选中item的字体颜色,和选中图标
         if (position == mSelected) {
             holder.imgSelected.setVisibility(View.VISIBLE);
@@ -111,6 +123,8 @@ public class TagGridViewAdapter extends BaseAdapter {
             holder.imgSelected.setVisibility(View.GONE);
             holder.tvText.setTextColor(mTextNormalColor);
         }
+
+
         return convertView;
     }
 
@@ -120,9 +134,15 @@ public class TagGridViewAdapter extends BaseAdapter {
      *
      * @param mList
      */
-    public void setList(List<TagBean> mList) {
+    public void setList(List<TagBean> mList, int index) {
+        mIndex = index;
         this.mList = mList;
-        mSelected = 0;
+        if (mList.size() > 1)
+            mSelected = 0;
+        else
+            mSelected = -1;
+
+        notifyDataSetChanged();
     }
 
     /**

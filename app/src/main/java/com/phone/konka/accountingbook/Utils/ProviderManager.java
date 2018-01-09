@@ -134,9 +134,10 @@ public class ProviderManager {
      *
      * @return
      */
-    public double getLeastOut() {
+    public double getLeastOut(int year, int month, int day) {
         double res = 0;
-        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"money"}, "money < ?", new String[]{"0"}, "year,month,day");
+        Cursor cursor = mContext.getContentResolver().query(mUri, new String[]{"money"}, "money < ? and  year = ? and month = ? and day = ?",
+                new String[]{"0", String.valueOf(year), String.valueOf(month), String.valueOf(day)}, null);
         if (cursor.moveToLast()) {
             res = cursor.getDouble(cursor.getColumnIndex("money"));
         }

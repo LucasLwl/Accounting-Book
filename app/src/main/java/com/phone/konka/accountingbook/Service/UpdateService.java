@@ -112,7 +112,7 @@ public class UpdateService extends Service {
     /**
      * 安装包下载路径
      */
-    private static final String APK_DIR = Config.BASE_DIR + "/APK";
+    private static final String APK_DIR = Config.APP_DIR + "/APK";
 
 
     /**
@@ -246,6 +246,9 @@ public class UpdateService extends Service {
 
 //                停止下载
                 case MESSAGE_STOP_DOWNLOAD:
+
+
+
                     mFinishedLength = 0;
                     mLastFinishedLength = 0;
                     mNotificationManager.cancel(notifyID);
@@ -254,6 +257,8 @@ public class UpdateService extends Service {
                     file = new File(APK_DIR, APK_NAME);
                     file.delete();
                     sendStateToActivity();
+
+                    stopSelf();
                     break;
 
 
@@ -476,6 +481,8 @@ public class UpdateService extends Service {
 
                 mContentLength = conn.getContentLength();
 
+                Log.i("ddd", "" + mContentLength);
+
                 //安装包保存的路径
                 File dir = new File(APK_DIR);
                 if (!dir.exists())
@@ -492,6 +499,7 @@ public class UpdateService extends Service {
                 conn.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
+                stopDownloadTask();
                 Log.i("ddd", "InitFileTask" + e.toString());
             }
         }

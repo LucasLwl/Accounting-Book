@@ -43,8 +43,8 @@
         android:gravity="center">
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/icon_width_app"
+            android:layout_height="@dimen/icon_height_app"
             android:src="@drawable/icon_application" />
 
     </LinearLayout>
@@ -81,6 +81,7 @@
                 android:id="@+id/tv_aboutMe_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:textColor="@color/item_text"
                 android:textSize="@dimen/item_text_mid" />
         </LinearLayout>

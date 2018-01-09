@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +23,6 @@ import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Service.UpdateService;
 import com.phone.konka.accountingbook.Utils.NetworkUtil;
-
-import java.lang.ref.WeakReference;
 
 /**
  * 关于我们Activity
@@ -159,7 +159,16 @@ public class AboutMeActivity extends Activity implements View.OnClickListener {
      */
     private void initView() {
 
-        ((TextView) findViewById(R.id.tv_aboutMe_version)).setText(String.valueOf(Config.localVersion));
+
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            String versionName = info.versionName;
+            ((TextView) findViewById(R.id.tv_aboutMe_version)).setText(versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         mTvCheckUpdate = (TextView) findViewById(R.id.tv_aboutMe_update);
 
@@ -295,13 +304,25 @@ public class AboutMeActivity extends Activity implements View.OnClickListener {
 
                 if (str.equals("检查新版本")) {
                     if (NetworkUtil.isNetworkConnected(this)) {
-                        if (Config.serverVersion > Config.localVersion) {
-                            showCheckUpdateDialog();
-                        } else {
-                            mTvCheckUpdate.setText("当前已是最新版本");
-                            mTvCheckUpdate.setEnabled(false);
-                            Toast.makeText(this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+
+                        try {
+                            PackageManager manager = this.getPackageManager();
+                            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+                            String versionName = info.versionName;
+
+                            if (versionName.equals("5.1.1")) {
+                                showCheckUpdateDialog();
+                            } else {
+                                mTvCheckUpdate.setText("当前已是最新版本");
+                                mTvCheckUpdate.setEnabled(false);
+                                Toast.makeText(this, "当前已是最新版本", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
+
+
                     } else {
                         Toast.makeText(this, "网络连接不可用", Toast.LENGTH_SHORT).show();
                     }

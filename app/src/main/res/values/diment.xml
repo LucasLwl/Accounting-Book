@@ -19,6 +19,12 @@
     <dimen name="icon_width_big">40dp</dimen>
     <dimen name="icon_height_big">40dp</dimen>
 
+    <dimen name="icon_width_super">50dp</dimen>
+    <dimen name="icon_height_super">50dp</dimen>
+
+    <dimen name="icon_width_app">100dp</dimen>
+    <dimen name="icon_height_app">100dp</dimen>
+
 
     <!--line-->
     <dimen name="line_width_nor">1dp</dimen>
@@ -38,6 +44,7 @@
 
 
     <!--item margin-->
+    <dimen name="item_margin">15dp</dimen>
     <dimen name="item_margin_left">15dp</dimen>
     <dimen name="item_margin_right">15dp</dimen>
     <dimen name="item_margin_top">15dp</dimen>
@@ -61,4 +68,9 @@
     <dimen name="main_title_height">200dp</dimen>
     <dimen name="main_title_margin_left">30dp</dimen>
     <dimen name="main_title_margin_right">30dp</dimen>
+
+
+    <!--import setting-->
+    <dimen name="dir_bar_height">40dp</dimen>
+    <dimen name="dir_margin_left">10dp</dimen>
 </resources>

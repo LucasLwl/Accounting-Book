@@ -208,7 +208,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 monthOut = mDataManager.getMonthOut(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH) + 1);
                 dayOut = mDataManager.getDayOut(mCalendar.get(Calendar.YEAR),
                         mCalendar.get(Calendar.MONTH) + 1, mCalendar.get(Calendar.DAY_OF_MONTH));
-                leastOut = mDataManager.getLeastOut();
+                leastOut = mDataManager.getLeastOut(mCalendar.get(Calendar.YEAR),
+                        mCalendar.get(Calendar.MONTH) + 1, mCalendar.get(Calendar.DAY_OF_MONTH));
                 weekOut = mDataManager.getWeekOut();
 //                mHandler.sendEmptyMessage(0);
 

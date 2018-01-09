@@ -17,6 +17,9 @@
     <string name="out_account">导出账本</string>
     <string name="in_account">导入账本</string>
     <string name="about_me">关于我们</string>
+    <string name="import_excel">导入设置</string>
+    <string name="base_dir">内部存储空间 ></string>
+    <string name="no_file">没有文件</string>
 
     <!--关于我们-->
     <string name="about_me_client">记账本Android版</string>

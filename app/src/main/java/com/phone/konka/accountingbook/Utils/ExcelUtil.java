@@ -1,7 +1,8 @@
 package com.phone.konka.accountingbook.Utils;
 
-import android.os.Environment;
+import android.util.Log;
 
+import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.Bean.DetailTagBean;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -32,7 +33,7 @@ public class ExcelUtil {
     /**
      * Excel文件的根路径
      */
-    public static final String BILL_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Bill/";
+    public static final String BILL_PATH = Config.APP_DIR + "/Bill/";
 
 
     /**
@@ -126,12 +127,7 @@ public class ExcelUtil {
         List<DetailTagBean> list = new ArrayList<>();
 
         try {
-            InputStream is;
-            if (excelName.indexOf(BILL_PATH) != -1) {
-                is = new FileInputStream(excelName);
-            } else {
-                is = new FileInputStream(BILL_PATH + excelName);
-            }
+            InputStream is = new FileInputStream(excelName);
 
             POIFSFileSystem poi = new POIFSFileSystem(is);
 
@@ -180,6 +176,7 @@ public class ExcelUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.i("ddd", e.toString());
         }
         return list;
     }

@@ -97,7 +97,7 @@ public class CalculatorManager {
     public String addOperator(String op) {
 
 //        先判断左操作数是否为空
-        if (left.equals("")) {
+        if (left.equals("") || left.equals("-")) {
 //            Toast.makeText(mContext, "请先输入数字", Toast.LENGTH_SHORT).show();
         }
 //        在判断右操作数是否为空  不空则进行运算，空则修改操作符
@@ -144,19 +144,33 @@ public class CalculatorManager {
         if (!operator.equals("")) {
             if (!right.equals("")) {
                 calculate();
+            } else {
+                operator = "";
             }
             return left + operator + right;
-        } else if (!left.equals("") && Double.parseDouble(left) != 0) {
-            if (!left.contains("-")) {
-                left = "";
-                return "save";
-            } else {
+        } else if (left.contains("-")) {
+            if (!left.equals("-"))
                 Toast.makeText(mContext, "金额不能为负", Toast.LENGTH_SHORT).show();
-            }
+            return left;
+        } else if (Double.parseDouble(left) == 0) {
+            Toast.makeText(mContext, "金额不能为0", Toast.LENGTH_SHORT).show();
+            return left;
         } else {
-            Toast.makeText(mContext, "金额不能为空", Toast.LENGTH_SHORT).show();
+            left = "0";
+            return "save";
         }
-        return left;
+
+
+//        else if (!left.equals("") && Double.parseDouble(left) != 0) {
+//            if (!left.contains("-")) {
+//                left = "";
+//                return "save";
+//            } else {
+//                Toast.makeText(mContext, "金额不能为负", Toast.LENGTH_SHORT).show();
+//            }
+//        } else {
+//            Toast.makeText(mContext, "金额不能为空", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     /**
@@ -213,17 +227,13 @@ public class CalculatorManager {
             left = lBig.subtract(rBig).toString();
 
 
-        //去掉小数点后的0
+        //去掉小数点后无效的0
 
-        if (left.length() > 1) {
-            StringBuffer sb = new StringBuffer(left);
-            while (sb.lastIndexOf("0") == sb.length() - 1)
-                sb.deleteCharAt(sb.lastIndexOf("0"));
-            if (sb.indexOf(".") == sb.length() - 1)
-                sb.deleteCharAt(sb.length() - 1);
-
-            left = sb.toString();
+        if (left.indexOf(".") > 0) {
+            left = left.replaceAll("0+?$", "");
+            left = left.replaceAll("[.]$", "");
         }
+
         operator = "";
         right = "";
     }

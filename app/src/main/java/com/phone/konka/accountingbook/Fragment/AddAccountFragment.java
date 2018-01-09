@@ -182,8 +182,13 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             } else {
                 mList = ((AddAccountActivity) getActivity()).mInList;
             }
-            mAdapter.setList(mList);
-            mAdapter.notifyDataSetChanged();
+            mAdapter.setList(mList, mIndex);
+
+            if (mList.size() > 1) {
+                mCalculator.showPopCalculator(rootView);
+                mCalculator.setTagText(mList.get(0).getText());
+                mCalculator.setTagIcon(mList.get(0).getIconID());
+            }
         }
 
         super.onHiddenChanged(hidden);
@@ -239,6 +244,12 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
         mAdapter = new TagGridViewAdapter(getActivity(), mList);
 
         mGvTag.setAdapter(mAdapter);
+
+        if (mList.size() > 1) {
+            mCalculator.showPopCalculator(rootView);
+            mCalculator.setTagText(mList.get(0).getText());
+            mCalculator.setTagIcon(mList.get(0).getIconID());
+        }
     }
 
 
@@ -295,15 +306,16 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        mCusY = event.getY();
-                        if (mCusY - mFirstY > mTouchSlop) {
-                            mCalculator.showPopCalculator(rootView);
-                            mCalculator.setTagText(mList.get(mAdapter.getSelected()).getText());
-                            mCalculator.setTagIcon(mList.get(mAdapter.getSelected()).getIconID());
-                        } else if (mFirstY - mCusY > mTouchSlop) {
-                            mCalculator.dismissPopCalculator();
+                        if (mList.size() > 1) {
+                            mCusY = event.getY();
+                            if (mCusY - mFirstY > mTouchSlop) {
+                                mCalculator.showPopCalculator(rootView);
+                                mCalculator.setTagText(mList.get(mAdapter.getSelected()).getText());
+                                mCalculator.setTagIcon(mList.get(mAdapter.getSelected()).getIconID());
+                            } else if (mFirstY - mCusY > mTouchSlop) {
+                                mCalculator.dismissPopCalculator();
+                            }
                         }
-
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -344,19 +356,22 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
             case R.id.tv_fragment_out:
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN) {
 
+                    mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
                     //设置高亮
                     mTvOut.setAlpha(1.0f);
                     mTvIn.setAlpha(0.3f);
 
                     mList = ((AddAccountActivity) getActivity()).mOutList;
-                    mAdapter.setList(mList);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.setList(mList, mIndex);
 
-                    if (mCalculator.isPopCalculatorShow()) {
+                    if (mList.size() == 1)
+                        mCalculator.dismissPopCalculator();
+                    else {
+                        mCalculator.showPopCalculator(rootView);
                         mCalculator.setTagText(mList.get(mAdapter.getSelected()).getText());
                         mCalculator.setTagIcon(mList.get(mAdapter.getSelected()).getIconID());
                     }
-                    mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT;
+
                 }
                 break;
 
@@ -365,20 +380,23 @@ public class AddAccountFragment extends Fragment implements View.OnClickListener
 
                 if (mIndex == AddAccountActivity.ADD_ACCOUNT_FRAGMENT_OUT) {
 
+                    mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN;
+
                     //设置高亮
                     mTvOut.setAlpha(0.3f);
                     mTvIn.setAlpha(1.0f);
 
                     mList = ((AddAccountActivity) getActivity()).mInList;
-                    mAdapter.setList(mList);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.setList(mList, mIndex);
 
-                    if (mCalculator.isPopCalculatorShow()) {
+                    if (mList.size() == 1)
+                        mCalculator.dismissPopCalculator();
+                    else {
+                        mCalculator.showPopCalculator(rootView);
                         mCalculator.setTagText(mList.get(mAdapter.getSelected()).getText());
                         mCalculator.setTagIcon(mList.get(mAdapter.getSelected()).getIconID());
                     }
 
-                    mIndex = AddAccountActivity.ADD_ACCOUNT_FRAGMENT_IN;
                 }
                 break;
 
