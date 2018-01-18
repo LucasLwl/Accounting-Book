@@ -13,8 +13,7 @@ public class Config {
 
     public static final String APP_DIR = BASE_DIR + "/Accounting Book";
 
-    public static final String URL_PATH = "https://sz-ctfs.ftn.qq.com/ftn_handler/9a66b2bebe8ab2e4aa705e2dc9e893c73f650bb6daec8a857dae137c2d06d3d670baaac466c3493dfd20c93d98dd5e108f641054f7be089c5a3c5b8d2bdcbcb1/app-release.apk";
-
+    public static final String URL_PATH = "http://sz-ctfs.ftn.qq.com/ftn_handler/2eecc98cc2fcdeee3c605c3fa264396191cdabc146eed5458b2e009327626a9ebac51f45e6a59f432243c6a68805fcc7e75dbdd24e20550ec3e6d4391c9cacb5/app-release.apk";
 
 
 }

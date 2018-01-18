@@ -226,6 +226,9 @@ public class ImportExcelActivity extends Activity implements View.OnClickListene
 
         File file = new File(dir);
 
+        if (!file.exists())
+            file.mkdirs();
+
 //        过滤隐藏文件
         mFiles = file.listFiles(new FileFilter() {
             @Override
@@ -235,6 +238,7 @@ public class ImportExcelActivity extends Activity implements View.OnClickListene
         });
 
 //        进行排序
+
         Arrays.sort(mFiles, new Comparator<File>() {
             @Override
             public int compare(File f1, File f2) {

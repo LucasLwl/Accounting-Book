@@ -42,7 +42,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".Activity.ImportExcelActivity"></activity>
+        <activity
+            android:name=".Activity.ImportExcelActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service android:name=".Service.UpdateService"></service>
 

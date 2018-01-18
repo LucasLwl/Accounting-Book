@@ -28,6 +28,7 @@ import com.phone.konka.accountingbook.Bean.TagBean;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Utils.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
