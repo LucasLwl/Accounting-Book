@@ -164,7 +164,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void initData() {
         mThreadPool = ThreadPoolManager.getInstance();
 
-        mCalendar = Calendar.getInstance();
 
         mDataManager = new ProviderManager(this);
     }
@@ -200,6 +199,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * 获取数据库数据
      */
     private void getDataFromDB() {
+
+        mCalendar = Calendar.getInstance();
 
         mThreadPool.execute(new Runnable() {
             @Override

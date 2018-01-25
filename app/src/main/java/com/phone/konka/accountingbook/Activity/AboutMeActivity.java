@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.phone.konka.accountingbook.Base.Config;
 import com.phone.konka.accountingbook.R;
 import com.phone.konka.accountingbook.Service.UpdateService;
 import com.phone.konka.accountingbook.Utils.NetworkUtil;

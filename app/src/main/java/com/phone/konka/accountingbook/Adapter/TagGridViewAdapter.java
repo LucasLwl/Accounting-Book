@@ -110,7 +110,7 @@ public class TagGridViewAdapter extends BaseAdapter {
 
 
         if (mIndex == 0)
-            holder.imgIcon.setColorFilter(Color.parseColor("#aa000000"), PorterDuff.Mode.DST_IN );
+            holder.imgIcon.setColorFilter(Color.parseColor("#99000000"), PorterDuff.Mode.DST_IN);
         else
             holder.imgIcon.clearColorFilter();
 
